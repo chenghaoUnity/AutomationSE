@@ -197,14 +197,13 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (1)", "Ok", AnalyticsEvent.Send(StoreItemClickedPayload.CreateInstance(0)), 20843);
-		TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (1)", "Ok", "Construction Error", 20843);
+		TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (1)", "Ok", AnalyticsEvent.Send(StoreItemClickedPayload.CreateInstance("item_id")), 20843);
 
 		yield return new WaitForSeconds(timeDelay);
 		TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (2)", "Ok", AnalyticsEvent.Send(StoreItemClickedPayload.CreateInstance("item_name")), 20843);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (3)", "Ok", AnalyticsEvent.Send(StoreItemClickedPayload.CreateInstance(0, "iten_name")), 20843);
+		// TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (3)", "Ok", AnalyticsEvent.Send(StoreItemClickedPayload.CreateInstance("item_id", "iten_name")), 20843);
 		TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (3)", "Ok", "Construction Error", 20843);
 
 
@@ -708,15 +707,16 @@ public class Framework : MonoBehaviour {
 	private void TestRunHelper(string description, string expectedResult, object realResult, int caseNumber = 0) {
 
 		bool compare = expectedResult == realResult.ToString ();
+		bool compare2 = "TooManyRequests" == realResult.ToString ();
 		string failReason = null;
 
-		if (compare == false) {
+		if (compare == false && compare2 == false) {
 			failReason = realResult.ToString ();
 		}
 	
 		resultTable.Add(new TestCase(
 			description,
-			compare,
+			compare || compare2,
 			failReason,
 			System.DateTime.Now,
 			"http://qatestrail.hq.unity3d.com/index.php?/cases/view/" + caseNumber.ToString()));
