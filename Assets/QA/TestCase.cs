@@ -9,15 +9,17 @@ public class TestCase {
 	private bool result;
 	private string failReason;
 	private System.DateTime date;
+	private string caseLink;
 
 	public TestCase() {
 	}
 
-	public TestCase(string descitpion, bool result, string failReason, System.DateTime date) {
+	public TestCase(string descitpion, bool result, string failReason, System.DateTime date, string caseLink) {
 		this.failReason = failReason;
 		this.result = result;
 		this.descitpion = descitpion;
 		this.date = date;
+		this.caseLink = caseLink;
 	}
 
 	public string getFailReason() {
@@ -34,5 +36,9 @@ public class TestCase {
 
 	public System.DateTime getDate() {
 		return date;
+	}
+
+	public string getCaseLink() {
+		return caseLink;
 	}
 }
