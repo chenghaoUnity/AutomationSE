@@ -24,7 +24,13 @@ namespace UnityEngine.Analytics.Experimental
 
         public static T CreateInstance<T> (string tutorialId, IDictionary<string, object> eventData) where T : TutorialPayload
         {
+            if (Equals(eventData, null))
+            {
+                eventData = new Dictionary<string, object>();
+            }
+
             eventData.Add(k_ParamKey_TutorialId, tutorialId);
+
             return CreateInstance<T>(eventData);
         }
     }

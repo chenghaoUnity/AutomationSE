@@ -46,18 +46,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Demo\Scripts\SEDemo.cs" />
-     <Compile Include="Assets\Demo\Scripts\SEDemoEngagement.cs" />
-     <Compile Include="Assets\Demo\Scripts\SEDemoFTUE.cs" />
-     <Compile Include="Assets\Demo\Scripts\SEDemoMonetization.cs" />
-     <Compile Include="Assets\Demo\Scripts\SEDemoNavigation.cs" />
-     <Compile Include="Assets\Demo\Scripts\SEDemoProgression.cs" />
-     <Compile Include="Assets\Demo\Scripts\UI\ButtonContainer.cs" />
-     <Compile Include="Assets\Demo\Scripts\UI\PanelContainer.cs" />
-     <Compile Include="Assets\Demo\Scripts\UI\VersionInfoText.cs" />
      <Compile Include="Assets\QA\Framework.cs" />
+     <Compile Include="Assets\QA\SimpleLine.cs" />
      <Compile Include="Assets\QA\TestCase.cs" />
      <Compile Include="Assets\Services\Analytics\AnalyticsEvent.cs" />
+     <Compile Include="Assets\Services\Analytics\AnalyticsEventEnums.cs" />
      <Compile Include="Assets\Services\Analytics\AnalyticsEventPayload.cs" />
      <Compile Include="Assets\Services\Analytics\AnalyticsEventPayloadException.cs" />
      <Compile Include="Assets\Services\Analytics\AnalyticsEventTracker.cs" />
@@ -67,15 +60,16 @@
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\Abstract\CurrencyPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\Abstract\GamePayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\Abstract\LevelPayload.cs" />
+     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\Abstract\ResourcePayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\Abstract\TutorialPayload.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\AchievementSharedPayload.cs" />
+     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\AchievementStepPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\AchievementUnlockedPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\AdCompletePayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\AdOfferPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\AdSkipPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\AdStartPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\ChatMessageSentPayload.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\CurrencyPurchasedPayload.cs" />
+     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\CurrencyAcquiredPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\CurrencySpentPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\CutsceneSkipPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\GameOverPayload.cs" />
@@ -83,16 +77,18 @@
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\LevelCompletePayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\LevelFailPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\LevelQuitPayload.cs" />
+     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\LevelSkipPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\LevelStartPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\LevelUpPayload.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\MainMenuPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\PostAdActionPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\PostInstallActionPayload.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\PushNotificationClickedPayload.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\PushNotificationEnabledPayload.cs" />
+     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\PushNotificationClickPayload.cs" />
+     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\PushNotificationEnablePayload.cs" />
+     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\ResourceAcquiredPayload.cs" />
+     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\ResourceSpentPayload.cs" />
+     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\ScreenVisitPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\SocialSharePayload.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\StateNodePayload.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\StoreItemClickedPayload.cs" />
+     <Compile Include="Assets\Services\Analytics\StandardEventPayloads\StoreItemClickPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\StoreOpenedPayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\TutorialCompletePayload.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEventPayloads\TutorialSkipPayload.cs" />
@@ -105,9 +101,6 @@
      <None Include="Assets\PlayServicesResolver\Editor\play-services-resolver.txt" />
      <None Include="Assets\Plugins\Android\Firebase\AndroidManifest.xml" />
      <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-app-unity\maven-metadata.xml" />
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>/Applications/Unity 5.5.0f3/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity 5.5.0f3/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -122,9 +115,6 @@
  </Reference>
  <Reference Include="UnityEngine.HoloLens">
  <HintPath>/Applications/Unity 5.5.0f3/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Purchasing">
- <HintPath>/Applications/Unity 5.5.0f3/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.VR">
  <HintPath>/Applications/Unity 5.5.0f3/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>

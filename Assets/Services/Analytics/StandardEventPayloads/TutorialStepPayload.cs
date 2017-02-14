@@ -6,12 +6,12 @@ using UnityEngine;
 namespace UnityEngine.Analytics.Experimental
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "TutorialStepPayload.asset", menuName = "Analytics Events/Tutorial Step")]
+    [CreateAssetMenu(fileName = "TutorialStepPayload.asset", menuName = "Analytics Events/First-Time User Experience/Tutorial Step")]
     public class TutorialStepPayload : TutorialPayload
     {
         public static readonly string standardEventName = "tutorial_step";
 
-        static readonly string k_ParamKey_StepId = "step_id";
+        static readonly string k_ParamKey_StepIndex = "step_index";
 
         public override string eventName
         {
@@ -20,53 +20,37 @@ namespace UnityEngine.Analytics.Experimental
 
         public string stepId
         {
-            get { return GetParam<string>(k_ParamKey_StepId); }
-            set { SetParam(k_ParamKey_StepId, value); }
+            get { return GetParam<string>(k_ParamKey_StepIndex); }
+            set { SetParam(k_ParamKey_StepIndex, value); }
         }
 
         protected override void ValidatePayload ()
         {
-            if (!HasParam(k_ParamKey_StepId))
-            {
-                OnValidationFailed(
-                    string.Format(
-                        k_ErrorFormat_RequiredParamNotSet,
-                        k_ParamKey_StepId
-                    )
-                );
-            }
+            base.ValidatePayload();
+
+            ValidateDataKeyExists(k_ParamKey_StepIndex);
         }
 
         protected override void ValidateDataField (string key, object value)
         {
             base.ValidateDataField(key, value);
 
-            if (key == k_ParamKey_StepId)
+            if (key == k_ParamKey_StepIndex)
             {
                 ValidateDataValueType<string>(key, value);
             }
         }
 
-        new public static TutorialStepPayload CreateInstance (string stepId)
+        public static TutorialStepPayload CreateInstance (int stepIndex, string tutorialId, IDictionary<string, object> eventData)
         {
-            return CreateInstance(stepId, new Dictionary<string, object>());
-        }
+            if (Equals(eventData, null))
+            {
+                eventData = new Dictionary<string, object>();
+            }
 
-        new public static TutorialStepPayload CreateInstance (string stepId, IDictionary<string, object> eventParams)
-        {
-            eventParams.Add(k_ParamKey_StepId, stepId);
-            return CreateInstance<TutorialStepPayload>(eventParams);
-        }
+            eventData.Add(k_ParamKey_StepIndex, stepIndex);
 
-        public static TutorialStepPayload CreateInstance (string stepId, string tutorialId)
-        {
-            return CreateInstance(stepId, tutorialId, new Dictionary<string, object>());
-        }
-
-        public static TutorialStepPayload CreateInstance (string stepId, string tutorialId, IDictionary<string, object> eventParams)
-        {
-            eventParams.Add(k_ParamKey_StepId, stepId);
-            return CreateInstance<TutorialStepPayload>(tutorialId, eventParams);
+            return CreateInstance<TutorialStepPayload>(tutorialId, eventData);
         }
     }
 }

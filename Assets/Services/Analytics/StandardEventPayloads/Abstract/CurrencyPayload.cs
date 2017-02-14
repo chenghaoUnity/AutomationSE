@@ -8,9 +8,9 @@ namespace UnityEngine.Analytics.Experimental
     public abstract class CurrencyPayload : AnalyticsEventPayload
     {
         protected static string k_ParamKey_ItemId = "item_id";
+        protected static string k_ParamKey_ItemName = "item_name";
         protected static string k_ParamKey_Amount = "amount";
-        protected static string k_ParamKey_Balance = "balance";
-        protected static string k_ParamKey_Source = "source";
+        protected static string k_ParamKey_NewBalance = "new_balance";
         protected static string k_ParamKey_Type = "type";
 
         public string itemId
@@ -19,58 +19,85 @@ namespace UnityEngine.Analytics.Experimental
             set { SetParam(k_ParamKey_ItemId, value); }
         }
 
-        public int amount
+        public string itemName
         {
-            get { return GetParam<int>(k_ParamKey_Amount); }
+            get { return GetParam<string>(k_ParamKey_ItemName); }
+            set { SetParam(k_ParamKey_ItemName, value); }
+        }
+
+        public object amount
+        {
+            get { return GetParam<object>(k_ParamKey_Amount); }
             set { SetParam(k_ParamKey_Amount, value); }
         }
 
-        public int balance
+        public object newBalance
         {
-            get { return GetParam<int>(k_ParamKey_Balance); }
-            set { SetParam(k_ParamKey_Balance, value); }
+            get { return GetParam<object>(k_ParamKey_NewBalance); }
+            set { SetParam(k_ParamKey_NewBalance, value); }
         }
 
-        public string source
+        public ItemType type
         {
-            get { return GetParam<string>(k_ParamKey_Source); }
-            set { SetParam(k_ParamKey_Source, value); }
+            get { return (GetParam<string>(k_ParamKey_Type) == GetStandardParamValue(ItemType.Premium)) ? ItemType.Premium : ItemType.Soft; }
+            set { SetParam(k_ParamKey_Type, GetStandardParamValue(value)); }
         }
 
-        public string type
+        protected override void ValidatePayload ()
         {
-            get { return GetParam<string>(k_ParamKey_Type); }
-            set { SetParam(k_ParamKey_Type, value); }
+            base.ValidatePayload();
+
+            ValidateAtLeastOneDataKeyExists(k_ParamKey_ItemId, k_ParamKey_ItemName);
+            ValidateAllDataKeysExist(k_ParamKey_Amount, k_ParamKey_NewBalance, k_ParamKey_Type);
+            ValidateItemType(k_ParamKey_Type);
         }
 
         protected override void ValidateDataField (string key, object value)
         {
             base.ValidateDataField(key, value);
 
-            if (key == k_ParamKey_Amount || key == k_ParamKey_Balance)
-            {
-                ValidateDataValueType<int>(key, value);
-            }
-            else if (key == k_ParamKey_ItemId || key == k_ParamKey_Source || key == k_ParamKey_Type)
+            if (key == k_ParamKey_ItemId || key == k_ParamKey_ItemName || key == k_ParamKey_Type)
             {
                 ValidateDataValueType<string>(key, value);
             }
+            else if (key == k_ParamKey_Amount || key == k_ParamKey_NewBalance)
+            {
+                ValidateDataValueType<decimal>(key, value);
+            }
         }
 
-        public static T CreateInstance<T> (
-            string itemId,
-            int amount,
-            int balance,
-            string source,
-            string type,
-            IDictionary<string, object> eventData
-            ) where T : CurrencyPayload
+        public static T CreateInstance<T> (int amount, int newBalance, ItemType type, string itemId, string itemName, IDictionary<string, object> eventData)
+            where T : CurrencyPayload
         {
+            return CreateInstance<T>((object)amount, (object)newBalance, type, itemId, itemName, eventData);
+        }
+
+        public static T CreateInstance<T> (float amount, float newBalance, ItemType type, string itemId, string itemName, IDictionary<string, object> eventData)
+            where T : CurrencyPayload
+        {
+            return CreateInstance<T>((object)amount, (object)newBalance, type, itemId, itemName, eventData);
+        }
+
+        public static T CreateInstance<T> (decimal amount, decimal newBalance, ItemType type, string itemId, string itemName, IDictionary<string, object> eventData)
+            where T : CurrencyPayload
+        {
+            return CreateInstance<T>((object)amount, (object)newBalance, type, itemId, itemName, eventData);
+        }
+
+        protected static T CreateInstance<T> (object amount, object newBalance, ItemType type, string itemId, string itemName, IDictionary<string, object> eventData) 
+            where T : CurrencyPayload
+        {
+            if (Equals(eventData, null))
+            {
+                eventData = new Dictionary<string, object>();
+            }
+
             eventData.Add(k_ParamKey_ItemId, itemId);
+            eventData.Add(k_ParamKey_ItemName, itemName);
             eventData.Add(k_ParamKey_Amount, amount);
-            eventData.Add(k_ParamKey_Balance, balance);
-            eventData.Add(k_ParamKey_Source, source);
-            eventData.Add(k_ParamKey_Type, type);
+            eventData.Add(k_ParamKey_NewBalance, newBalance);
+            eventData.Add(k_ParamKey_Type, GetStandardParamValue(type));
+
             return CreateInstance<T>(eventData);
         }
     }

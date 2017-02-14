@@ -6,7 +6,7 @@ using UnityEngine;
 namespace UnityEngine.Analytics.Experimental
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "AdStartPayload.asset", menuName = "Analytics Events/Ad Start")]
+    [CreateAssetMenu(fileName = "AdStartPayload.asset", menuName = "Analytics Events/Monetization and Game Economy/Ad Start")]
     public class AdStartPayload : AdPayload
     {
         public static readonly string standardEventName = "ad_start";
@@ -16,14 +16,14 @@ namespace UnityEngine.Analytics.Experimental
             get { return standardEventName; }
         }
 
-        new public static AdStartPayload CreateInstance (string placementId)
+        public static AdStartPayload CreateInstance(bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null)
         {
-            return CreateInstance(placementId, new Dictionary<string, object>());
+            return CreateInstance<AdStartPayload>(rewarded, advertisingNetwork, placementId, eventData);
         }
 
-        new public static AdStartPayload CreateInstance (string placementId, IDictionary<string, object> eventData)
+        public static AdStartPayload CreateInstance(bool rewarded, AdvertisingNetwork advertisingNetwork = AdvertisingNetwork.None, string placementId = null, IDictionary<string, object> eventData = null)
         {
-            return CreateInstance<AdStartPayload>(placementId, eventData);
+            return CreateInstance<AdStartPayload>(rewarded, advertisingNetwork, placementId, eventData);
         }
     }
 }

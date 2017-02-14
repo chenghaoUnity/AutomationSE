@@ -6,56 +6,49 @@ using UnityEngine;
 namespace UnityEngine.Analytics.Experimental
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "CutsceneSkipPayload.asset", menuName = "Analytics Events/Cutscene Skip")]
+    [CreateAssetMenu(fileName = "CutsceneSkipPayload.asset", menuName = "Analytics Events/App Navigation/Cutscene Skip")]
     public class CutsceneSkipPayload : AnalyticsEventPayload
     {
         public static readonly string standardEventName = "cutscene_skip";
 
-        static readonly string k_ParamKey_ElementId = "element_id";
+        static readonly string k_ParamKey_SceneName = "scene_name";
 
         public override string eventName
         {
             get { return standardEventName; }
         }
 
-        public string elementId 
+        public string sceneName 
         { 
-            get { return GetParam<string>(k_ParamKey_ElementId); } 
-            set { SetParam(k_ParamKey_ElementId, value); } 
+            get { return GetParam<string>(k_ParamKey_SceneName); } 
+            set { SetParam(k_ParamKey_SceneName, value); } 
         }
 
         protected override void ValidatePayload ()
         {
             base.ValidatePayload();
 
-            if (!HasParam(k_ParamKey_ElementId))
-            {
-                OnValidationFailed(
-                    string.Format(
-                        k_ErrorFormat_RequiredParamNotSet,
-                        k_ParamKey_ElementId
-                    )
-                );
-            }
+            ValidateDataKeyExists(k_ParamKey_SceneName);
         }
 
         protected override void ValidateDataField(string key, object value)
         {
-            if (key == k_ParamKey_ElementId)
+            if (key == k_ParamKey_SceneName)
             {
                 ValidateDataValueType<string>(key, value);
             }
         }
 
-        new public static CutsceneSkipPayload CreateInstance(string elementId)
+        new public static CutsceneSkipPayload CreateInstance(string sceneName, IDictionary<string, object> eventData)
         {
-            return CreateInstance(elementId, new Dictionary<string, object>());
-        }
+            if (Equals(eventData, null))
+            {
+                eventData = new Dictionary<string, object>();
+            }
 
-        new public static CutsceneSkipPayload CreateInstance(string elementId, IDictionary<string, object> eventParams)
-        {
-            eventParams.Add(k_ParamKey_ElementId, elementId);
-            return CreateInstance<CutsceneSkipPayload>(eventParams);
+            eventData.Add(k_ParamKey_SceneName, sceneName);
+
+            return CreateInstance<CutsceneSkipPayload>(eventData);
         }
     }
 }

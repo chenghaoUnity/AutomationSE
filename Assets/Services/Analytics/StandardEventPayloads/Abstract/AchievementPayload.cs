@@ -19,15 +19,7 @@ namespace UnityEngine.Analytics.Experimental
         {
             base.ValidatePayload();
 
-            if (!HasParam(k_ParamKey_AchievementId))
-            {
-                OnValidationFailed(
-                    string.Format(
-                        k_ErrorFormat_RequiredParamNotSet,
-                        k_ParamKey_AchievementId
-                    )
-                );
-            }
+            ValidateDataKeyExists(k_ParamKey_AchievementId);
         }
 
         protected override void ValidateDataField (string key, object value)
@@ -42,7 +34,13 @@ namespace UnityEngine.Analytics.Experimental
 
         public static T CreateInstance<T> (string achievementId, IDictionary<string, object> eventData) where T : AchievementPayload
         {
+            if (Equals(eventData, null))
+            {
+                eventData = new Dictionary<string, object>();
+            }
+
             eventData.Add(k_ParamKey_AchievementId, achievementId);
+
             return CreateInstance<T>(eventData);
         }
     }

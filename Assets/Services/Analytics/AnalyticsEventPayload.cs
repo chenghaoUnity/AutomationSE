@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -99,6 +100,94 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
+        /// Validates that the key exists in payload data.
+        /// </summary>
+        /// <param name="key">Key.</param>
+        protected void ValidateDataKeyExists (string key)
+        {
+            if (!HasParam(key))
+            {
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, key));
+            }
+        }
+
+        /// <summary>
+        /// Validates that at least one key exists payload data.
+        /// </summary>
+        /// <param name="keys">Keys.</param>
+        protected void ValidateAtLeastOneDataKeyExists (params string[] keys)
+        {
+            bool keyExists = false;
+
+            for (int i = 0; i < keys.Length; i++)
+            {
+                keyExists |= HasParam(keys[i]);
+            }
+
+            if (!keyExists)
+            {
+                string message = "";
+
+                for (int i = 0; i < keys.Length; i++)
+                {
+                    message += keys[i];
+
+                    if (keys.Length > 1)
+                    {
+                        message += (keys.Length > 2) ? ", " : " ";
+
+                        if (i == keys.Length - 1)
+                        {
+                            message += "or ";
+                        }
+                    }
+                }
+
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, message));
+            }
+        }
+
+        /// <summary>
+        /// Validates all data keys exist in payload data.
+        /// </summary>
+        /// <param name="keys">Keys.</param>
+        protected void ValidateAllDataKeysExist (params string[] keys)
+        {
+            int missingKeyCount = 0;
+
+            for (int i = 0; i < keys.Length; i++)
+            {
+                if (!HasParam(keys[i])) missingKeyCount++;
+            }
+
+            if (missingKeyCount > 0)
+            {
+                string message = "";
+                int msgKeyCount = 0;
+
+                for (int i = 0; i < keys.Length; i++)
+                {
+                    if (HasParam(keys[i])) continue;
+
+                    message += keys[i];
+                    msgKeyCount++;
+
+                    if (missingKeyCount > 1)
+                    {
+                        message += (missingKeyCount > 2) ? ", " : " ";
+
+                        if (msgKeyCount == missingKeyCount - 1)
+                        {
+                            message += "and ";
+                        }
+                    }
+                }
+
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, message));
+            }
+        }
+
+        /// <summary>
         /// Validates the type of the value being set in payload data.
         /// </summary>
         /// <param name="key">Key.</param>
@@ -109,6 +198,143 @@ namespace UnityEngine.Analytics.Experimental
             if (!(value is T))
             {
                 OnValidationFailed(string.Format(k_ErrorFormat_InvalidType, key, typeof(T)));
+            }
+        }
+
+        /// <summary>
+        /// Validates the value of the store type.
+        /// </summary>
+        /// <param name="storeType">Store type value.</param>
+        protected void ValidateStoreType (string storeType)
+        {
+            if (storeType != "premium" && storeType != "soft")
+            {
+                OnValidationFailed("Store type must be either 'premium' or 'soft'.");
+            }
+        }
+
+        /// <summary>
+        /// Validates the value of the item type.
+        /// </summary>
+        /// <param name="itemType">Item type value.</param>
+        protected void ValidateItemType (string itemType)
+        {
+            if (itemType != "premium" && itemType != "soft")
+            {
+                OnValidationFailed("Item type must be either 'premium' or 'soft'.");
+            }
+        }
+
+        /// <summary>
+        /// Gets the standard parameter string value.
+        /// </summary>
+        /// <returns>The standard parameter string value.</returns>
+        /// <param name="type">Type.</param>
+        protected static string GetStandardParamValue (StoreType type)
+        {
+            return type.ToString().ToLower();
+        }
+
+        /// <summary>
+        /// Gets the standard parameter string value.
+        /// </summary>
+        /// <returns>The standard parameter string value.</returns>
+        /// <param name="type">Type.</param>
+        protected static string GetStandardParamValue (ItemType type)
+        {
+            return type.ToString().ToLower();
+        }
+
+        /// <summary>
+        /// Gets the standard parameter string value.
+        /// </summary>
+        /// <returns>The standard parameter string value.</returns>
+        /// <param name="itemSource">Item source.</param>
+        protected static string GetStandardParamValue (ItemSource itemSource)
+        {
+            switch (itemSource)
+            {
+                case ItemSource.None:               return null;
+                case ItemSource.RewardedAd:         return "rewarded_ad";
+                case ItemSource.TimedReward:        return "timed_reward";
+                case ItemSource.SocialReward:       return "social_reward";
+                default: return itemSource.ToString().ToLower();
+            }
+        }
+
+        /// <summary>
+        /// Gets the standard parameter string value.
+        /// </summary>
+        /// <returns>The standard parameter string value.</returns>
+        /// <param name="authorizationNetwork">Authorization network.</param>
+        protected static string GetStandardParamValue (AuthorizationNetwork authorizationNetwork)
+        {
+            switch (authorizationNetwork)
+            {
+                case AuthorizationNetwork.None:     return null;
+                default: return authorizationNetwork.ToString().ToLower();
+            }
+        }
+
+        /// <summary>
+        /// Gets the standard parameter string value.
+        /// </summary>
+        /// <returns>The standard parameter string value.</returns>
+        /// <param name="socialNetwork">Social network.</param>
+        protected static string GetStandardParamValue (SocialNetwork socialNetwork)
+        {
+            switch (socialNetwork)
+            {
+                case SocialNetwork.None:            return null;
+                case SocialNetwork.GooglePlus:      return "google_plus";
+                default: return socialNetwork.ToString().ToLower();
+            }
+        }
+
+        /// <summary>
+        /// Gets the standard parameter string value.
+        /// </summary>
+        /// <returns>The standard parameter string value.</returns>
+        /// <param name="shareType">Share type.</param>
+        protected static string GetStandardParamValue (ShareType shareType)
+        {
+            switch (shareType)
+            {
+                case ShareType.None:                return null;
+                case ShareType.Text:                return "text_only";
+                default: return shareType.ToString().ToLower();
+            }
+        }
+
+        /// <summary>
+        /// Gets the standard parameter string value.
+        /// </summary>
+        /// <returns>The standard parameter string value.</returns>
+        /// <param name="screenType">Screen type.</param>
+        protected static string GetStandardParamValue (ScreenName screenType)
+        {
+            switch (screenType)
+            {
+                case ScreenName.None:               return null;
+                case ScreenName.MainMenu:           return "main_menu";
+                case ScreenName.IAPPromo:           return "iap_promo";
+                case ScreenName.CrossPromo:         return "cross_promo";
+                case ScreenName.FeaturePromo:       return "feature_promo";
+                default: return screenType.ToString().ToLower();
+            }
+        }
+
+        /// <summary>
+        /// Gets the standard parameter string value.
+        /// </summary>
+        /// <returns>The standard parameter string value.</returns>
+        /// <param name="advertisingNetwork">Advertising Network type.</param>
+        protected static string GetStandardParamValue(AdvertisingNetwork advertisingNetwork)
+        {
+            switch (advertisingNetwork)
+            {
+                case AdvertisingNetwork.None: return null;
+                default: return advertisingNetwork.ToString().ToLower();
             }
         }
 
@@ -277,9 +503,33 @@ namespace UnityEngine.Analytics.Experimental
         /// </summary>
         public AnalyticsResult Send ()
         {
+            var eventData = GetEventData();
+            for (int i = 0; i < eventData.Count; i++)
+            {
+                var field = eventData.ElementAt(i);
+                if(Equals(field.Value, null))
+                {
+                    eventData.Remove(field.Key);
+                }
+            }
+
             ValidatePayload();
 
-            return Analytics.CustomEvent(string.Concat(k_StandardEventPrefix, eventName), GetEventData());
+            var result = Analytics.CustomEvent(string.Concat(k_StandardEventPrefix, eventName), eventData);
+
+            if (result == AnalyticsResult.Ok)
+            {
+                if(AnalyticsEvent.debugMode)
+                {
+                    Debug.LogFormat("Successfully sent '{0}' (Result: {1}).", GetType(), result);
+                }
+            }
+            else
+            {
+                Debug.LogErrorFormat("Failed to send '{0}' (Result: {1}).", GetType(), result);
+            }
+
+            return result;
         }
 
         IEnumerator IEnumerable.GetEnumerator ()

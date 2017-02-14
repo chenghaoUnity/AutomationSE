@@ -6,7 +6,7 @@ using UnityEngine;
 namespace UnityEngine.Analytics.Experimental
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "AchievementUnlockedPayload.asset", menuName = "Analytics Events/Achievement Unlocked")]
+    [CreateAssetMenu(fileName = "AchievementUnlockedPayload.asset", menuName = "Analytics Events/User Engagement and Social/Achievement Unlocked")]
     public class AchievementUnlockedPayload : AchievementPayload
     {
         public static readonly string standardEventName = "achievement_unlocked";
@@ -14,11 +14,6 @@ namespace UnityEngine.Analytics.Experimental
         public override string eventName
         {
             get { return standardEventName; }
-        }
-
-        new public static AchievementUnlockedPayload CreateInstance (string achievementId)
-        {
-            return CreateInstance(achievementId, new Dictionary<string, object>());
         }
 
         new public static AchievementUnlockedPayload CreateInstance (string achievementId, IDictionary<string, object> eventData)

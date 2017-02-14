@@ -38,20 +38,38 @@ namespace UnityEngine.Analytics.Experimental
 
         public static T CreateInstance<T> (int levelIndex, IDictionary<string, object> eventData) where T : GamePayload
         {
+            if (Equals(eventData, null))
+            {
+                eventData = new Dictionary<string, object>();
+            }
+
             eventData.Add(k_ParamKey_LevelIndex, levelIndex);
+
             return CreateInstance<T>(eventData);
         }
 
         public static T CreateInstance<T> (string levelName, IDictionary<string, object> eventData) where T : GamePayload
         {
+            if (Equals(eventData, null))
+            {
+                eventData = new Dictionary<string, object>();
+            }
+
             eventData.Add(k_ParamKey_LevelName, levelName);
+
             return CreateInstance<T>(eventData);
         }
 
         public static T CreateInstance<T> (int levelIndex, string levelName, IDictionary<string, object> eventData) where T : GamePayload
         {
+            if (Equals(eventData, null))
+            {
+                eventData = new Dictionary<string, object>();
+            }
+
             eventData.Add(k_ParamKey_LevelIndex, levelIndex);
             eventData.Add(k_ParamKey_LevelName, levelName);
+
             return CreateInstance<T>(eventData);
         }
     }

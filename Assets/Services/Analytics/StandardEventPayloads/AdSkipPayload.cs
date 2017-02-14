@@ -6,7 +6,7 @@ using UnityEngine;
 namespace UnityEngine.Analytics.Experimental
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "AdSkipPayload.asset", menuName = "Analytics Events/Ad Skip")]
+    [CreateAssetMenu(fileName = "AdSkipPayload.asset", menuName = "Analytics Events/Monetization and Game Economy/Ad Skip")]
     public class AdSkipPayload : AdPayload
     {
         public static readonly string standardEventName = "ad_skip";
@@ -16,14 +16,14 @@ namespace UnityEngine.Analytics.Experimental
             get { return standardEventName; }
         }
 
-        new public static AdSkipPayload CreateInstance (string placementId)
+        public static AdSkipPayload CreateInstance(bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null)
         {
-            return CreateInstance(placementId, new Dictionary<string, object>());
+            return CreateInstance<AdSkipPayload>(rewarded, advertisingNetwork, placementId, eventData);
         }
 
-        new public static AdSkipPayload CreateInstance (string placementId, IDictionary<string, object> eventData)
+        public static AdSkipPayload CreateInstance(bool rewarded, AdvertisingNetwork advertisingNetwork = AdvertisingNetwork.None, string placementId = null, IDictionary<string, object> eventData = null)
         {
-            return CreateInstance<AdSkipPayload>(placementId, eventData);
+            return CreateInstance<AdSkipPayload>(rewarded, advertisingNetwork, placementId, eventData);
         }
     }
 }

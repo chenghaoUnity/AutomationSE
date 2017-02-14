@@ -8,7 +8,6 @@ using Firebase.Unity.Editor;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using System.IO;
-using UnityEngine;
 using UnityEngine.Analytics.Experimental;
 using System;
 
@@ -48,7 +47,6 @@ public class Framework : MonoBehaviour {
 		testSuite.Add (test06 ());
 		testSuite.Add (test07 ());
 		testSuite.Add (test08 ());
-		testSuite.Add (test09 ());
 		testSuite.Add (test10 ());
 		testSuite.Add (test11 ());
 		testSuite.Add (test12 ());
@@ -89,8 +87,6 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-
 		TestRunHelper (runOrder.ToString("D2") + " Check if version number is correct", "0.0.0", AnalyticsEvent.sdkVersion, 20660);
 
 		if (runOrder < maxTest) {
@@ -103,13 +99,19 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check post_install_action event (1)", "Ok", AnalyticsEvent.Send(PostInstallActionPayload.CreateInstance ()), 20661);
-		TestRunHelper (runOrder.ToString("D2") + " Check post_install_action event (1)", "Ok", "Construction Error", 20661);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check post_install_action event (1)", "Ok", AnalyticsEvent.PostInstallAction(), 20661);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check post_install_action event (1)", "Ok", e, 20661);
+		}
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check post_install_action event (2)", "Ok", AnalyticsEvent.Send(PostInstallActionPayload.CreateInstance ("action_id")), 20661);
-		TestRunHelper (runOrder.ToString("D2") + " Check post_install_action event (2)", "Ok", "Construction Error", 20661);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check post_install_action event (2)", "Ok", AnalyticsEvent.PostInstallAction("action_id"), 20661);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check post_install_action event (2)", "Ok", e, 20661);
+		}
+			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -119,13 +121,20 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check tutorial_start event (1)", "Ok", AnalyticsEvent.Send(TutorialStartPayload.CreateInstance()), 20662);
-		TestRunHelper (runOrder.ToString("D2") + " Check tutorial_start event (1)", "Ok", "Construction Error", 20662);
+		yield return new WaitForSeconds(timeDelay); 
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_start event (1)", "Ok", AnalyticsEvent.TutorialStart(), 20662);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString ("D2") + " Check tutorial_start event (1)", "Ok", e, 20662);
+		}
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check tutorial_start event (2)", "Ok", AnalyticsEvent.Send(TutorialStartPayload.CreateInstance("tutorial_id")), 20662);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_start event (2)", "Ok", AnalyticsEvent.TutorialStart("tutorial_id"), 20662);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check tutorial_start event (2)", "Ok", e, 20662);
+		}
+			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -135,14 +144,20 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check tutorial_step event (1)", "Ok", AnalyticsEvent.Send(TutorialStepPayload.CreateInstance(0)), 20663);
-		TestRunHelper (runOrder.ToString("D2") + " Check tutorial_step event (1)", "Ok", "Construction Error", 20663);
-
-		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check tutorial_step event (2)", "Ok", AnalyticsEvent.Send(TutorialStepPayload.CreateInstance(0, "tutorial_id")), 20663);
-		TestRunHelper (runOrder.ToString("D2") + " Check tutorial_step event (2)", "Ok", "Construction Error", 20663);
+		yield return new WaitForSeconds(timeDelay); 
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_step event (1)", "Ok", AnalyticsEvent.TutorialStep(0), 20663);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check tutorial_step event (1)", "Ok", e, 20663);
+		}
 			
+		yield return new WaitForSeconds(timeDelay);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_step event (2)", "Ok", AnalyticsEvent.TutorialStep(0, "tutorial_id"), 20663);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check tutorial_step event (2)", "Ok", e, 20663);
+		}
+
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -153,12 +168,19 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check tutorial_complete event (1)", "Ok", AnalyticsEvent.Send(TutorialCompletePayload.CreateInstance()), 20840);
-		TestRunHelper (runOrder.ToString("D2") + " Check tutorial_complete event (1)", "Ok", "Construction Error", 20840);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_complete event (1)", "Ok", AnalyticsEvent.TutorialComplete(), 20840);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check tutorial_complete event (1)", "Ok", e, 20840);
+		}
+			
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check tutorial_complete event (2)", "Ok", AnalyticsEvent.Send(TutorialCompletePayload.CreateInstance("tutorial_id")), 20840);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_complete event (2)", "Ok", AnalyticsEvent.TutorialComplete("tutorial_id"), 20840);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check tutorial_complete event (2)", "Ok", e, 20840);
+		}
+			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -169,12 +191,19 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check tutorial_skip event (1)", "Ok", AnalyticsEvent.Send(TutorialSkipPayload.CreateInstance()), 20841);
-		TestRunHelper (runOrder.ToString("D2") + " Check tutorial_skip event (1)", "Ok", "Construction Error", 20841);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_skip event (1)", "Ok", AnalyticsEvent.TutorialSkip(), 20841);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check tutorial_skip event (1)", "Ok", e, 20841);
+		}
+			
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check tutorial_skip event (2)", "Ok", AnalyticsEvent.Send(TutorialSkipPayload.CreateInstance("tutorial_id")), 20841);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_skip event (2)", "Ok", AnalyticsEvent.TutorialSkip("tutorial_id"), 20841);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check tutorial_skip event (2)", "Ok", e, 20841);
+		}
+			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -185,8 +214,12 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check store_opened event", "Ok", AnalyticsEvent.Send(StoreOpenedPayload.CreateInstance("Soft")), 20842);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check store_opened event", "Ok", AnalyticsEvent.StoreOpened(StoreType.Soft), 20842);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check store_opened event", "Ok", e, 20842);
+		}
+			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -197,50 +230,43 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (1)", "Ok", AnalyticsEvent.Send(StoreItemClickedPayload.CreateInstance("item_id")), 20843);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (1)", "Ok", AnalyticsEvent.StoreItemClick("item_id"), 20843);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check store_item_clicked event (1)", "Ok", e, 20843);
+		}
+			
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (2)", "Ok", AnalyticsEvent.Send(StoreItemClickedPayload.CreateInstance("item_name")), 20843);
-
-		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (3)", "Ok", AnalyticsEvent.Send(StoreItemClickedPayload.CreateInstance("item_id", "iten_name")), 20843);
-		TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (3)", "Ok", "Construction Error", 20843);
-
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (2)", "Ok", AnalyticsEvent.StoreItemClick("item_id", "iten_name"), 20843);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check store_item_clicked event (2)", "Ok", e, 20843);
+		}
+			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
 	}
-
-	public IEnumerator test09() {
-		runOrder++;
-		showProgess (runOrder);
-
-		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check Transaction event", "Ok", AnalyticsEvent.Send(TransactionPayload.CreateInstance("bundle_purchase", 2.1f)), 20844);
-		TestRunHelper (runOrder.ToString("D2") + " Check Transaction event", "Ok", "Cannot find Transaction payload", 20844);
-
-		if (runOrder < maxTest) {
-			yield return StartCoroutine (testSuite [runOrder]);
-		} 
-	}
-
+		
 	public IEnumerator test10() {
 		runOrder++;
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", AnalyticsEvent.Send(CurrencyAcquiredPayload.CreateInstance("item_id", 2.1f, "source", 2.2f, "type", "reward_source")), 20845);
-		TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", "Cannot find currency_acquired payload", 20845);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", AnalyticsEvent.CurrencyAcquired(1, 2, ItemType.Soft, ItemSource.Earned, "item_id"), 20845);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", e, 20845);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (2)", "Ok", AnalyticsEvent.Send(CurrencyAcquiredPayload.CreateInstance("item_name", 2.1f, "source", 2.2f, "type", "reward_source")), 20845);
-		TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (2)", "Ok", "Cannot find currency_acquired payload", 20845);
-
-		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (3)", "Ok", AnalyticsEvent.Send(CurrencyAcquiredPayload.CreateInstance("item_id", "item_name", 2.1f, "source", 2.2f, "type", "reward_source")), 20845);
-		TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (3)", "Ok", "Cannot find currency_acquired payload", 20845);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (2)", "Ok", AnalyticsEvent.CurrencyAcquired(1, 2, ItemType.Soft, ItemSource.Earned, "item_id", "item_name"), 20845);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check currency_acquired event (2)", "Ok", e, 20845);
+		}
+			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -251,17 +277,19 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check currency_spent event (1)", "Ok", AnalyticsEvent.Send(CurrencySpentPayload.CreateInstance("item_id", 2.1f, "type", 2.2f)), 20846);
-		TestRunHelper (runOrder.ToString("D2") + " Check currency_spent event (1)", "Ok", "Construction Error", 20846);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check currency_spent event (1)", "Ok", AnalyticsEvent.CurrencySpent(1, 2, ItemType.Soft, "item_id"), 20846);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check currency_spent event (1)", "Ok", e, 20846);
+		}
+			
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check currency_spent event (2)", "Ok", AnalyticsEvent.Send(CurrencySpentPayload.CreateInstance("item_name", 2.1f, "type", 2.2f)), 20846);
-		TestRunHelper (runOrder.ToString("D2") + " Check currency_spent event (2)", "Ok", "Construction Error", 20846);
-
-		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check currency_spent event (3)", "Ok", AnalyticsEvent.Send(CurrencySpentPayload.CreateInstance("item_id", "item_name", 2.1f, "type", 2.2f)), 20846);
-		TestRunHelper (runOrder.ToString("D2") + " Check currency_spent event (3)", "Ok", "Construction Error", 20846);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check currency_spent event (2)", "Ok", AnalyticsEvent.CurrencySpent(1, 2, ItemType.Soft, "item_id", "item_name"), 20846);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check currency_spent event (2)", "Ok", e, 20846);
+		}
+			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -272,17 +300,20 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check resource_acquired event (1)", "Ok", AnalyticsEvent.Send(ResourceAcquiredPayload.CreateInstance("item_id", 2.1f, 2.2f)), 20847);
-		TestRunHelper (runOrder.ToString("D2") + " Check resource_acquired event (1)", "Ok", "Cannot find resource_acquired payload", 20847);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check resource_acquired event (1)", "Ok", AnalyticsEvent.ResourceAcquired(1, 2, "item_id"), 20847);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check resource_acquired event (1)", "Ok", e, 20847);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check resource_acquired event (2)", "Ok", AnalyticsEvent.Send(ResourceAcquiredPayload.CreateInstance("item_name", 2.1f, 2.2f)), 20847);
-		TestRunHelper (runOrder.ToString("D2") + " Check resource_acquired event (2)", "Ok", "Cannot find resource_acquired payload", 20847);
-
-		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check resource_acquired event (3)", "Ok", AnalyticsEvent.Send(ResourceAcquiredPayload.CreateInstance("item_id", "item_name", 2.1f, 2.2f)), 20847);
-		TestRunHelper (runOrder.ToString("D2") + " Check resource_acquired event (3)", "Ok", "Cannot find resource_acquired payload", 20847);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check resource_acquired event (2)", "Ok", AnalyticsEvent.ResourceAcquired(1, 2, "item_id", "item_name"), 20847);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check resource_acquired event (2)", "Ok", e, 20847);
+		}
+			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -293,17 +324,20 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check resource_spent event (1)", "Ok", AnalyticsEvent.Send(ResourceAcquiredPayload.CreateInstance("item_id", 2.1f, 2.2f)), 20848);
-		TestRunHelper (runOrder.ToString("D2") + " Check resource_spent event (1)", "Ok", "Cannot find resource_spent payload", 20848);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check resource_spent event (1)", "Ok", AnalyticsEvent.ResourceSpent(1, 2, "item_id"), 20848);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check resource_spent event (1)", "Ok", e, 20848);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check resource_spent event (2)", "Ok", AnalyticsEvent.Send(ResourceAcquiredPayload.CreateInstance("item_name", 2.1f, 2.2f)), 20848);
-		TestRunHelper (runOrder.ToString("D2") + " Check resource_spent event (2)", "Ok", "Cannot find resource_spent payload", 20848);
-
-		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check resource_spent event (3)", "Ok", AnalyticsEvent.Send(ResourceAcquiredPayload.CreateInstance("item_id", "item_name", 2.1f, 2.2f)), 20848);
-		TestRunHelper (runOrder.ToString("D2") + " Check resource_spent event (3)", "Ok", "Cannot find resource_spent payload", 20848);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check resource_spent event (2)", "Ok", AnalyticsEvent.ResourceSpent(1, 2, "item_id", "item_name"), 20848);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check resource_spent event (2)", "Ok", e, 20848);
+		}
+			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -314,18 +348,36 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", AnalyticsEvent.Send(AdOfferPayload.CreateInstance()), 20849);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", "Construction Error", 20849);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", AnalyticsEvent.AdOffer(true, null, null, null), 20849);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", e, 20849);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (2)", "Ok", AnalyticsEvent.Send(AdOfferPayload.CreateInstance("network")), 20849);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (2)", "Ok", AnalyticsEvent.AdOffer(true, "network"), 20849);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_offer event (2)", "Ok", e, 20849);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (3)", "Ok", AnalyticsEvent.Send(AdOfferPayload.CreateInstance("placement_id")), 20849);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (3)", "Ok", AnalyticsEvent.AdOffer(true, "network", "placementID"), 20849);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_offer event (3)", "Ok", e, 20849);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (4)", "Ok", AnalyticsEvent.Send(AdOfferPayload.CreateInstance("network", "placement_id")), 20849);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (4)", "Ok", "Construction Error", 20849);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (4)", "Ok", AnalyticsEvent.AdOffer(true, null, "placementID"), 20849);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_offer event (4)", "Ok", e, 20849);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -337,18 +389,36 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", AnalyticsEvent.Send(AdStartPayload.CreateInstance()), 20850);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", "Construction Error", 20850);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", AnalyticsEvent.AdStart(true, null, null, null), 20850);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", e, 20850);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (2)", "Ok", AnalyticsEvent.Send(AdStartPayload.CreateInstance("network")), 20850);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (2)", "Ok", AnalyticsEvent.AdStart(true, "network"), 20850);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_start event (2)", "Ok", e, 20850);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (3)", "Ok", AnalyticsEvent.Send(AdStartPayload.CreateInstance("placement_id")), 20850);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (3)", "Ok", AnalyticsEvent.AdStart(true, "network", "placementID"), 20850);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_start event (3)", "Ok", e, 20850);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (4)", "Ok", AnalyticsEvent.Send(AdStartPayload.CreateInstance("network", "placement_id")), 20850);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (4)", "Ok", "Construction Error", 20850);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (4)", "Ok", AnalyticsEvent.AdStart(true, null, "placementID"), 20850);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_start event (4)", "Ok", e, 20850);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -360,18 +430,36 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", AnalyticsEvent.Send(AdCompletePayload.CreateInstance()), 20851);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", "Construction Error", 20851);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", AnalyticsEvent.AdComplete(true, null, null, null), 20851);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", e, 20851);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (2)", "Ok", AnalyticsEvent.Send(AdCompletePayload.CreateInstance("network")), 20851);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (2)", "Ok", AnalyticsEvent.AdComplete(true, "network"), 20851);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_complete event (2)", "Ok", e, 20851);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (3)", "Ok", AnalyticsEvent.Send(AdCompletePayload.CreateInstance("placement_id")), 20851);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (3)", "Ok", AnalyticsEvent.AdComplete(true, "network", "placementID"), 20851);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_complete event (3)", "Ok", e, 20851);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (4)", "Ok", AnalyticsEvent.Send(AdCompletePayload.CreateInstance("network", "placement_id")), 20851);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (4)", "Ok", "Construction Error", 20851);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (4)", "Ok", AnalyticsEvent.AdComplete(true, null, "placementID"), 20851);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_complete event (4)", "Ok", e, 20851);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -383,18 +471,36 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", AnalyticsEvent.Send(AdSkipPayload.CreateInstance()), 20852);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", "Construction Error", 20852);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", AnalyticsEvent.AdSkip(true, null, null, null), 20852);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", e, 20852);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (2)", "Ok", AnalyticsEvent.Send(AdSkipPayload.CreateInstance("network")), 20852);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (2)", "Ok", AnalyticsEvent.AdSkip(true, "network"), 20852);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_skip event (2)", "Ok", e, 20852);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (3)", "Ok", AnalyticsEvent.Send(AdSkipPayload.CreateInstance("placement_id")), 20852);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (3)", "Ok", AnalyticsEvent.AdSkip(true, "network", "placementID"), 20852);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_skip event (3)", "Ok", e, 20852);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (4)", "Ok", AnalyticsEvent.Send(AdSkipPayload.CreateInstance("network", "placement_id")), 20852);
-		TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (4)", "Ok", "Construction Error", 20852);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (4)", "Ok", AnalyticsEvent.AdSkip(true, null, "placementID"), 20852);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check ad_skip event (4)", "Ok", e, 20852);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -406,18 +512,36 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (1)", "Ok", AnalyticsEvent.Send(PostAdActionPayload.CreateInstance()), 20853);
-		TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (1)", "Ok", "Construction Error", 20853);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (1)", "Ok", AnalyticsEvent.PostAdAction(true), 20853);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check post_ad_action event (1)", "Ok", e, 20853);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (2)", "Ok", AnalyticsEvent.Send(PostAdActionPayload.CreateInstance("network")), 20853);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (2)", "Ok", AnalyticsEvent.PostAdAction(true, "network"), 20853);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check post_ad_action event (2)", "Ok", e, 20853);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (3)", "Ok", AnalyticsEvent.Send(PostAdActionPayload.CreateInstance("placement_id")), 20853);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (3)", "Ok", AnalyticsEvent.PostAdAction(true, "network", "placementID"), 20853);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check post_ad_action event (3)", "Ok", e, 20853);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (4)", "Ok", AnalyticsEvent.Send(PostAdActionPayload.CreateInstance("network", "placement_id")), 20853);
-		TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (4)", "Ok", "Construction Error", 20853);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (4)", "Ok", AnalyticsEvent.PostAdAction(true, null, "placementID"), 20853);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check post_ad_action event (4)", "Ok", e, 20853);
+		}
+			
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -429,8 +553,12 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check screen_visit event", "Ok", AnalyticsEvent.Send(ScreenVisitPayload.CreateInstance("screen_name")), 20854);
-		TestRunHelper (runOrder.ToString("D2") + " Check screen_visit event", "Ok", "Cannot find screen_visit payload", 20854);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check screen_visit event", "Ok", AnalyticsEvent.ScreenVisit(ScreenName.Achievements), 20854);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check screen_visit event", "Ok", e, 20854);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -442,7 +570,12 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check cutscene_skip event", "Ok", AnalyticsEvent.Send(CutsceneSkipPayload.CreateInstance ("scene_name")), 20855);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check cutscene_skip event", "Ok", AnalyticsEvent.CutsceneSkip("scene_name"), 20855);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check cutscene_skip event", "Ok", e, 20855);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -454,8 +587,12 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check game_start event", "Ok", AnalyticsEvent.Send(GameStartPayload.CreateInstance()), 20856);
-		TestRunHelper (runOrder.ToString("D2") + " Check game_start event", "Ok", "Construction Error", 20856);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check game_start event", "Ok", AnalyticsEvent.GameStart(), 20856);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check game_start event", "Ok", e, 20856);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -467,17 +604,36 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay); 
-		// TestRunHelper (runOrder.ToString("D2") + " Check game_over event (1)", "Ok", AnalyticsEvent.Send(GameOverPayload.CreateInstance()), 20857);
-		TestRunHelper (runOrder.ToString("D2") + " Check game_over event (1)", "Ok", "Construction Error", 20857);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check game_over event (1)", "Ok", AnalyticsEvent.GameOver(), 20857);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check game_over event (1)", "Ok", e, 20857);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check game_over event (2)", "Ok", AnalyticsEvent.Send(GameOverPayload.CreateInstance(0)), 20857);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check game_over event (2)", "Ok", AnalyticsEvent.GameOver(0), 20857);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check game_over event (2)", "Ok", e, 20857);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check game_over event (3)", "Ok", AnalyticsEvent.Send(GameOverPayload.CreateInstance("level_name")), 20857);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check game_over event (3)", "Ok", AnalyticsEvent.GameOver("level_name"), 20857);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check game_over event (3)", "Ok", e, 20857);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check game_over event (4)", "Ok", AnalyticsEvent.Send(GameOverPayload.CreateInstance(0, "level_name")), 20857);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check game_over event (4)", "Ok", AnalyticsEvent.GameOver(0, "level_name"), 20857);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check game_over event (4)", "Ok", e, 20857);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -489,13 +645,28 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_start event (1)", "Ok", AnalyticsEvent.Send(LevelStartPayload.CreateInstance (0)), 20858);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_start event (1)", "Ok", AnalyticsEvent.LevelStart(0), 20858);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_start event (1)", "Ok", e, 20858);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_start event (2)", "Ok", AnalyticsEvent.Send(LevelStartPayload.CreateInstance ("level_name")), 20858);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_start event (2)", "Ok", AnalyticsEvent.LevelStart ("level_name"), 20858);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_start event (2)", "Ok", e, 20858);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_start event (3)", "Ok", AnalyticsEvent.Send(LevelStartPayload.CreateInstance (0, "level_name")), 20858);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_start event (3)", "Ok", AnalyticsEvent.LevelStart (0, "level_name"), 20858);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_start event (3)", "Ok", e, 20858);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -507,13 +678,28 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_complete event (1)", "Ok", AnalyticsEvent.Send(LevelCompletePayload.CreateInstance (0)), 20859);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_complete event (1)", "Ok", AnalyticsEvent.LevelComplete(0), 20859);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_complete event (1)", "Ok", e, 20859);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_complete event (2)", "Ok", AnalyticsEvent.Send(LevelCompletePayload.CreateInstance ("level_name")), 20859);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_complete event (2)", "Ok", AnalyticsEvent.LevelComplete ("level_name"), 20859);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_complete event (2)", "Ok", e, 20859);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_complete event (3)", "Ok", AnalyticsEvent.Send(LevelCompletePayload.CreateInstance (0, "level_name")), 20859);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_complete event (3)", "Ok", AnalyticsEvent.LevelComplete (0, "level_name"), 20859);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_complete event (3)", "Ok", e, 20859);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -525,13 +711,28 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_fail event (1)", "Ok", AnalyticsEvent.Send(LevelFailPayload.CreateInstance (0)), 20860);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_fail event (1)", "Ok", AnalyticsEvent.LevelFail (0), 20860);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_fail event (1)", "Ok", e, 20860);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_fail event (2)", "Ok", AnalyticsEvent.Send(LevelFailPayload.CreateInstance ("level_name")), 20860);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_fail event (2)", "Ok", AnalyticsEvent.LevelFail ("level_name"), 20860);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_fail event (2)", "Ok", e, 20860);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_fail event (3)", "Ok", AnalyticsEvent.Send(LevelFailPayload.CreateInstance (0, "level_name")), 20860);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_fail event (3)", "Ok", AnalyticsEvent.LevelFail (0, "level_name"), 20860);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_fail event (3)", "Ok", e, 20860);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -543,13 +744,28 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_quit event (1)", "Ok", AnalyticsEvent.Send(LevelQuitPayload.CreateInstance (0)), 20861);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_quit event (1)", "Ok", AnalyticsEvent.LevelQuit (0), 20861);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_quit event (1)", "Ok", e, 20861);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_quit event (2)", "Ok", AnalyticsEvent.Send(LevelQuitPayload.CreateInstance ("level_name")), 20861);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_quit event (2)", "Ok", AnalyticsEvent.LevelQuit ("level_name"), 20861);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_quit event (2)", "Ok", e, 20861);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_quit event (3)", "Ok", AnalyticsEvent.Send(LevelQuitPayload.CreateInstance (0, "level_name")), 20861);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_quit event (3)", "Ok", AnalyticsEvent.LevelQuit (0, "level_name"), 20861);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_quit event (3)", "Ok", e, 20861);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -561,16 +777,28 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay); 
-		// TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (1)", "Ok", AnalyticsEvent.Send(LevelSkipPayload.CreateInstance (0)), 20862);
-		TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (1)", "Ok", "Cannot find level_skip payload", 20862);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (1)", "Ok", AnalyticsEvent.LevelSkip (0), 20862);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_skip event (1)", "Ok", e, 20862);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		// TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (2)", "Ok", AnalyticsEvent.Send(LevelSkipPayload.CreateInstance ("level_name")), 20862);
-		TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (2)", "Ok", "Cannot find level_skip payload", 20862);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (2)", "Ok", AnalyticsEvent.LevelSkip ("level_name"), 20862);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_skip event (2)", "Ok", e, 20862);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		// TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (3)", "Ok", AnalyticsEvent.Send(LevelSkipPayload.CreateInstance (0, "level_name")), 20862);
-		TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (3)", "Ok", "Cannot find level_skip payload", 20862);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (3)", "Ok", AnalyticsEvent.LevelSkip (0, "level_name"), 20862);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_skip event (3)", "Ok", e, 20862);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -582,23 +810,28 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay); 
-		// TestRunHelper (runOrder.ToString("D2") + " Check level_up event (1)", "Ok", AnalyticsEvent.Send(LevelUpPayload.CreateInstance (0, 1)), 20863);
-		TestRunHelper (runOrder.ToString("D2") + " Check level_up event (1)", "Ok", "Construction Error", 20863);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_up event (1)", "Ok", AnalyticsEvent.LevelUp (0, 1), 20863);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_up event (1)", "Ok", e, 20863);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		// TestRunHelper (runOrder.ToString("D2") + " Check level_up event (2)", "Ok", AnalyticsEvent.Send(LevelUpPayload.CreateInstance (0, "new_level_name")), 20863);
-		TestRunHelper (runOrder.ToString("D2") + " Check level_up event (2)", "Ok", "Construction Error", 20863);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_up event (2)", "Ok", AnalyticsEvent.LevelUp  ("old_level_name", "new_level_name"), 20863);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_up event (2)", "Ok", e, 20863);
+		}
+
 
 		yield return new WaitForSeconds(timeDelay); 
-		TestRunHelper (runOrder.ToString("D2") + " Check level_up event (3)", "Ok", AnalyticsEvent.Send(LevelUpPayload.CreateInstance ("old_level_name", "new_level_name")), 20863);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check level_up event (3)", "Ok", AnalyticsEvent.LevelUp(0, "old_level_name", 1, "new_level_name"), 20863);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check level_up event (3)", "Ok", e, 20863);
+		}
 
-		yield return new WaitForSeconds(timeDelay); 
-		// TestRunHelper (runOrder.ToString("D2") + " Check level_up event (4)", "Ok", AnalyticsEvent.Send(LevelUpPayload.CreateInstance ("old_level_name", 1)), 20863);
-		TestRunHelper (runOrder.ToString("D2") + " Check level_up event (4)", "Ok", "Construction Error", 20863);
-
-		yield return new WaitForSeconds(timeDelay); 
-		// TestRunHelper (runOrder.ToString("D2") + " Check level_up event (5)", "Ok", AnalyticsEvent.Send(LevelUpPayload.CreateInstance (0, "old_level_name", 1, "new_level_name")), 20863);
-		TestRunHelper (runOrder.ToString("D2") + " Check level_up event (5)", "Ok", "Construction Error", 20863);
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -610,8 +843,12 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check push_notification_enable event", "Ok", AnalyticsEvent.Send(PushNotificationEnabledPayload.CreateInstance ()), 20864);
-		TestRunHelper (runOrder.ToString("D2") + " Check push_notification_enable event", "Ok", "Construction Error", 20864);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check push_notification_enable event", "Ok", AnalyticsEvent.PushNotificationEnable(), 20864);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check push_notification_enable event", "Ok", e, 20864);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -623,7 +860,12 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check push_notification_click event", "Ok", AnalyticsEvent.Send(PushNotificationClickedPayload.CreateInstance("message_id")), 20865);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check push_notification_click event", "Ok", AnalyticsEvent.PushNotificationClick("message_id"), 20865);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check push_notification_click event", "Ok", e, 20865);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -635,8 +877,12 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check chat_msg_sent event", "Ok", AnalyticsEvent.Send(ChatMessageSentPayload.CreateInstance()), 20866);
-		TestRunHelper (runOrder.ToString("D2") + " Check chat_msg_sent event", "Ok", "Construction Error", 20866);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check chat_msg_sent event", "Ok", AnalyticsEvent.ChatMessageSent(), 20866);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check chat_msg_sent event", "Ok", e, 20866);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -648,7 +894,12 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds (timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check achievement_unlock event", "Ok", AnalyticsEvent.Send(AchievementUnlockedPayload.CreateInstance ("achievement_id")), 20867);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check achievement_unlock event", "Ok", AnalyticsEvent.AchievementUnlock("achievement_id"), 20867);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check achievement_unlock event", "Ok", e, 20867);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -661,8 +912,12 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay); 
-		// TestRunHelper (runOrder.ToString("D2") + " Check achievement_step event", "Ok", AnalyticsEvent.Send(AchievementStepPayload.CreateInstance (0, "achievement_id")), 20868);
-		TestRunHelper (runOrder.ToString("D2") + " Check achievement_step event", "Ok", "Cannot find achievement_step payload", 20868);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check achievement_step event", "Ok", AnalyticsEvent.AchievementStep(0, "achievement_id"), 20868);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check achievement_step event", "Ok", e, 20868);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -674,8 +929,12 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay); 
-		// TestRunHelper (runOrder.ToString("D2") + " Check user_signup event", "Ok", AnalyticsEvent.Send(UserSignupPayload.CreateInstance("authorization_network")), 20869);
-		TestRunHelper (runOrder.ToString("D2") + " Check user_signup event", "Ok", "Construction Error", 20869);
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check user_signup event", "Ok", AnalyticsEvent.UserSignup(AuthorizationNetwork.Facebook), 20869);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check user_signup event", "Ok", e, 20869);
+		}
+
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -687,9 +946,12 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		// TestRunHelper (runOrder.ToString("D2") + " Check social_share event", "Ok", AnalyticsEvent.Send(SocialSharePayload.CreateInstance("share_type", "social_network")), 20870);
-		TestRunHelper (runOrder.ToString("D2") + " Check social_share event", "Ok", "Construction Error", 20870);
-
+		try {
+			TestRunHelper (runOrder.ToString("D2") + " Check social_share event", "Ok", AnalyticsEvent.SocialShare (ShareType.Achievement, SocialNetwork.Facebook), 20870);
+		} catch (Exception e) {
+			TestRunException (runOrder.ToString("D2") + " Check social_share event", "Ok", e, 20870);
+		}
+			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -703,25 +965,33 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds (timeDelay);
 	}
 		
-
 	private void TestRunHelper(string description, string expectedResult, object realResult, int caseNumber = 0) {
 
 		bool compare = expectedResult == realResult.ToString ();
-		bool compare2 = "TooManyRequests" == realResult.ToString ();
 		string failReason = null;
 
-		if (compare == false && compare2 == false) {
+		if (compare == false) {
 			failReason = realResult.ToString ();
 		}
 	
 		resultTable.Add(new TestCase(
 			description,
-			compare || compare2,
+			compare,
 			failReason,
 			System.DateTime.Now,
 			"http://qatestrail.hq.unity3d.com/index.php?/cases/view/" + caseNumber.ToString()));
 	}
 
+	private void TestRunException(string description, string expectedResult, Exception e, int caseNumber = 0) {
+
+		resultTable.Add(new TestCase(
+			description,
+			false,
+			e.GetBaseException().ToString(),
+			System.DateTime.Now,
+			"http://qatestrail.hq.unity3d.com/index.php?/cases/view/" + caseNumber.ToString()));
+	}
+		
 	private void showProgess(int progress) {
 		// Show progree to the screen
 		float percentage = (float)progress / (float)(maxTest - 1);

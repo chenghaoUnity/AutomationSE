@@ -6,24 +6,19 @@ using UnityEngine;
 namespace UnityEngine.Analytics.Experimental
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "TutorialSkippedPayload.asset", menuName = "Analytics Events/Tutorial Skipped")]
+    [CreateAssetMenu(fileName = "TutorialSkipPayload.asset", menuName = "Analytics Events/First-Time User Experience/Tutorial Skip")]
     public class TutorialSkipPayload : TutorialPayload
     {
-        public static readonly string standardEventName = "tutorial_complete";
+        public static readonly string standardEventName = "tutorial_skip";
 
         public override string eventName
         {
             get { return standardEventName; }
         }
 
-        new public static TutorialSkipPayload CreateInstance(string tutorialId)
+        new public static TutorialSkipPayload CreateInstance(string tutorialId, IDictionary<string, object> eventData)
         {
-            return CreateInstance(tutorialId, new Dictionary<string, object>());
-        }
-
-        new public static TutorialSkipPayload CreateInstance(string tutorialId, IDictionary<string, object> eventParams)
-        {
-            return CreateInstance<TutorialSkipPayload>(tutorialId, eventParams);
+            return CreateInstance<TutorialSkipPayload>(tutorialId, eventData);
         }
     }
 }

@@ -26,15 +26,7 @@ namespace UnityEngine.Analytics.Experimental
         {
             base.ValidatePayload();
 
-            if (!HasParam(k_ParamKey_LevelIndex) && !HasParam(k_ParamKey_LevelName))
-            {
-                OnValidationFailed(
-                    string.Format(
-                        k_ErrorFormat_RequiredParamNotSet,
-                        string.Concat(k_ParamKey_LevelIndex, " or ", k_ParamKey_LevelName)
-                    )
-                );
-            }
+            ValidateAtLeastOneDataKeyExists(k_ParamKey_LevelIndex, k_ParamKey_LevelName);
         }
 
         protected override void ValidateDataField (string key, object value)
@@ -53,20 +45,38 @@ namespace UnityEngine.Analytics.Experimental
 
         public static T CreateInstance<T> (int levelIndex, IDictionary<string, object> eventData) where T : LevelPayload
         {
+            if (Equals(eventData, null))
+            {
+                eventData = new Dictionary<string, object>();
+            }
+
             eventData.Add(k_ParamKey_LevelIndex, levelIndex);
+
             return CreateInstance<T>(eventData);
         }
 
         public static T CreateInstance<T> (string levelName, IDictionary<string, object> eventData) where T : LevelPayload
         {
+            if (Equals(eventData, null))
+            {
+                eventData = new Dictionary<string, object>();
+            }
+
             eventData.Add(k_ParamKey_LevelName, levelName);
+
             return CreateInstance<T>(eventData);
         }
 
         public static T CreateInstance<T> (int levelIndex, string levelName, IDictionary<string, object> eventData) where T : LevelPayload
         {
+            if (Equals(eventData, null))
+            {
+                eventData = new Dictionary<string, object>();
+            }
+
             eventData.Add(k_ParamKey_LevelIndex, levelIndex);
             eventData.Add(k_ParamKey_LevelName, levelName);
+
             return CreateInstance<T>(eventData);
         }
     }

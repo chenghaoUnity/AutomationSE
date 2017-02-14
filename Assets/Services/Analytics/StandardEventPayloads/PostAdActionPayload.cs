@@ -6,7 +6,7 @@ using UnityEngine;
 namespace UnityEngine.Analytics.Experimental
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "PostAdActionPayload.asset", menuName = "Analytics Events/Post Ad Action")]
+    [CreateAssetMenu(fileName = "PostAdActionPayload.asset", menuName = "Analytics Events/Monetization and Game Economy/Post Ad Action")]
     public class PostAdActionPayload : AdPayload
     {
         public static readonly string standardEventName = "post_ad_action";
@@ -16,15 +16,14 @@ namespace UnityEngine.Analytics.Experimental
             get { return standardEventName; }
         }
 
-        new public static PostAdActionPayload CreateInstance (string placementId)
+        public static PostAdActionPayload CreateInstance(bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null)
         {
-            return CreateInstance(placementId, new Dictionary<string, object>());
+            return CreateInstance<PostAdActionPayload>(rewarded, advertisingNetwork, placementId, eventData);
         }
 
-        new public static PostAdActionPayload CreateInstance (string placementId, IDictionary<string, object> eventData)
+        public static PostAdActionPayload CreateInstance(bool rewarded, AdvertisingNetwork advertisingNetwork = AdvertisingNetwork.None, string placementId = null, IDictionary<string, object> eventData = null)
         {
-            return CreateInstance<PostAdActionPayload>(placementId, eventData);
+            return CreateInstance<PostAdActionPayload>(rewarded, advertisingNetwork, placementId, eventData);
         }
-
     }
 }

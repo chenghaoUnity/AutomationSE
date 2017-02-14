@@ -6,7 +6,7 @@ using UnityEngine;
 namespace UnityEngine.Analytics.Experimental
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "CurrencySpentPayload.asset", menuName = "Analytics Events/Currency Spent")]
+    [CreateAssetMenu(fileName = "CurrencySpentPayload.asset", menuName = "Analytics Events/Monetization and Game Economy/Currency Spent")]
     public class CurrencySpentPayload : CurrencyPayload
     {
         public static readonly string standardEventName = "currency_spent";
@@ -16,14 +16,19 @@ namespace UnityEngine.Analytics.Experimental
             get { return standardEventName; }
         }
 
-        public static CurrencySpentPayload CreateInstance (string itemId, int amount, int balance, string source, string type)
+        public static CurrencySpentPayload CreateInstance (int amount, int balance, ItemType type, string itemId, string itemName, IDictionary<string, object> eventData)
         {
-            return CreateInstance(itemId, amount, balance, source, type, new Dictionary<string, object>());
+            return CreateInstance<CurrencySpentPayload>(amount, balance, type, itemId, itemName, eventData);
         }
 
-        public static CurrencySpentPayload CreateInstance (string itemId, int amount, int balance, string source, string type, IDictionary<string, object> eventData)
+        public static CurrencySpentPayload CreateInstance (float amount, float balance, ItemType type, string itemId, string itemName, IDictionary<string, object> eventData)
         {
-            return CreateInstance<CurrencySpentPayload>(itemId, amount, balance, source, type, eventData);
+            return CreateInstance<CurrencySpentPayload>(amount, balance, type, itemId, itemName, eventData);
+        }
+
+        public static CurrencySpentPayload CreateInstance (decimal amount, decimal balance, ItemType type, string itemId, string itemName, IDictionary<string, object> eventData)
+        {
+            return CreateInstance<CurrencySpentPayload>(amount, balance, type, itemId, itemName, eventData);
         }
     }
 }

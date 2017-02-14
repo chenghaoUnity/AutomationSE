@@ -6,56 +6,50 @@ using UnityEngine;
 namespace UnityEngine.Analytics.Experimental
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "StoreOpenedPayload.asset", menuName = "Analytics Events/Store Opened")]
+    [CreateAssetMenu(fileName = "StoreOpenedPayload.asset", menuName = "Analytics Events/Monetization and Game Economy/Store Opened")]
     public class StoreOpenedPayload : AnalyticsEventPayload
     {
         public static readonly string standardEventName = "store_opened";
+
+        static readonly string k_ParamKey_StoreType = "type";
 
         public override string eventName
         {
             get { return standardEventName; }
         }
 
-        static readonly string k_ParamKey_Type = "type";
-
         public string type
         {
-            get { return GetParam<string>(k_ParamKey_Type); }
-            set { SetParam(k_ParamKey_Type, value); }
+            get { return GetParam<string>(k_ParamKey_StoreType); }
+            set { SetParam(k_ParamKey_StoreType, value); }
         }
 
         protected override void ValidatePayload ()
         {
             base.ValidatePayload();
 
-            if (!HasParam(k_ParamKey_Type))
-            {
-                OnValidationFailed(
-                    string.Format(
-                        k_ErrorFormat_RequiredParamNotSet,
-                        k_ParamKey_Type
-                    )
-                );
-            }
+            ValidateDataKeyExists(k_ParamKey_StoreType);
         }
 
         protected override void ValidateDataField (string key, object value)
         {
-            if (key == k_ParamKey_Type)
+            if (key == k_ParamKey_StoreType)
             {
                 ValidateDataValueType<string>(key, value);
+                ValidateStoreType((string)value);
             }
         }
 
-        new public static StoreOpenedPayload CreateInstance (string type)
+        public static StoreOpenedPayload CreateInstance (StoreType storeType, IDictionary<string, object> eventData)
         {
-            return CreateInstance(type, new Dictionary<string, object>());
-        }
+            if (Equals(eventData, null))
+            {
+                eventData = new Dictionary<string, object>();
+            }
 
-        new public static StoreOpenedPayload CreateInstance (string type, IDictionary<string, object> eventParams)
-        {
-            eventParams.Add(k_ParamKey_Type, type);
-            return CreateInstance<StoreOpenedPayload>(eventParams);
+            eventData.Add(k_ParamKey_StoreType, GetStandardParamValue(storeType));
+
+            return CreateInstance<StoreOpenedPayload>(eventData);
         }
     }
 }
