@@ -11,6 +11,7 @@ namespace UnityEngine.Analytics.Experimental
     {
         public static readonly string standardEventName = "store_item_click";
 
+        static readonly string k_ParamKey_StoreType = "type";
         static readonly string k_ParamKey_ItemId = "item_id";
         static readonly string k_ParamKey_ItemName = "item_name";
 
@@ -35,6 +36,7 @@ namespace UnityEngine.Analytics.Experimental
         {
             base.ValidatePayload();
 
+            ValidateDataKeyExists(k_ParamKey_StoreType);
             ValidateAtLeastOneDataKeyExists(k_ParamKey_ItemId, k_ParamKey_ItemName);
         }
 
@@ -42,19 +44,20 @@ namespace UnityEngine.Analytics.Experimental
         {
             base.ValidateDataField(key, value);
 
-            if (key == k_ParamKey_ItemId || key == k_ParamKey_ItemName)
+            if ((key == k_ParamKey_ItemId && value != null) || (key == k_ParamKey_ItemName && value != null))
             {
                 ValidateDataValueType<string>(key, value);
             }
         }
 
-        public static StoreItemClickPayload CreateInstance (string itemId, string itemName, IDictionary<string, object> eventData)
+        public static StoreItemClickPayload CreateInstance (StoreType storeType, string itemId, string itemName, IDictionary<string, object> eventData)
         {
             if (Equals(eventData, null))
             {
                 eventData = new Dictionary<string, object>();
             }
 
+            eventData.Add(k_ParamKey_StoreType, storeType);
             eventData.Add(k_ParamKey_ItemId, itemId);
             eventData.Add(k_ParamKey_ItemName, itemName);
 

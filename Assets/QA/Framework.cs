@@ -229,16 +229,17 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
+	
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (1)", "Ok", AnalyticsEvent.StoreItemClick("item_id"), 20843);
+			TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (1)", "Ok", AnalyticsEvent.StoreItemClick(StoreType.Soft,"item_id"), 20843);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check store_item_clicked event (1)", "Ok", e, 20843);
 		}
 			
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (2)", "Ok", AnalyticsEvent.StoreItemClick("item_id", "iten_name"), 20843);
+			TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (2)", "Ok", AnalyticsEvent.StoreItemClick(StoreType.Soft, "item_id", "iten_name"), 20843);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check store_item_clicked event (2)", "Ok", e, 20843);
 		}
@@ -346,10 +347,11 @@ public class Framework : MonoBehaviour {
 	public IEnumerator test14() {
 		runOrder++;
 		showProgess (runOrder);
+	
 
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", AnalyticsEvent.AdOffer(true, null, null, null), 20849);
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", AnalyticsEvent.AdOffer(true), 20849);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", e, 20849);
 		}
@@ -388,9 +390,11 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
+		AnalyticsEvent.AdStart (true);
+
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", AnalyticsEvent.AdStart(true, null, null, null), 20850);
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", AnalyticsEvent.AdStart(true), 20850);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", e, 20850);
 		}
@@ -431,7 +435,7 @@ public class Framework : MonoBehaviour {
 
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", AnalyticsEvent.AdComplete(true, null, null, null), 20851);
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", AnalyticsEvent.AdComplete(true), 20851);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", e, 20851);
 		}
@@ -472,7 +476,7 @@ public class Framework : MonoBehaviour {
 
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", AnalyticsEvent.AdSkip(true, null, null, null), 20852);
+			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", AnalyticsEvent.AdSkip(true), 20852);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", e, 20852);
 		}

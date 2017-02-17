@@ -37,7 +37,7 @@ namespace UnityEngine.Analytics.Experimental
             {
                 ValidateDataValueType<int>(key, value);
             }
-            else if (key == k_ParamKey_LevelName)
+            else if (key == k_ParamKey_LevelName && value != null)
             {
                 ValidateDataValueType<string>(key, value);
             }

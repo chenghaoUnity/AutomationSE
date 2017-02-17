@@ -130,9 +130,7 @@ namespace UnityEngine.Analytics.Experimental
 
                 for (int i = 0; i < keys.Length; i++)
                 {
-                    message += keys[i];
-
-                    if (keys.Length > 1)
+                    if (i > 0 && keys.Length > 1)
                     {
                         message += (keys.Length > 2) ? ", " : " ";
 
@@ -141,6 +139,8 @@ namespace UnityEngine.Analytics.Experimental
                             message += "or ";
                         }
                     }
+
+                    message += keys[i];
                 }
 
                 OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, message));
@@ -199,6 +199,13 @@ namespace UnityEngine.Analytics.Experimental
             {
                 OnValidationFailed(string.Format(k_ErrorFormat_InvalidType, key, typeof(T)));
             }
+        }
+
+        protected void ValidateDataValueTypeIsNumeric (string key, object value)
+        {
+            if (value is int || value is float || value is decimal) return;
+
+            OnValidationFailed(string.Format(k_ErrorFormat_InvalidType, key, "int, float, or decimal"));
         }
 
         /// <summary>
@@ -476,7 +483,11 @@ namespace UnityEngine.Analytics.Experimental
                 OnValidationFailed(k_Error_KeyValueCountNotEqual);
             }
 
-            // TODO: Implement type validation.
+            if (Equals(value, null) || (value is string && Equals((string)value, string.Empty)))
+            {
+                //if string is empty, don't add it to the dictionary - treat it as null
+                return;
+            }
 
             ValidateDataField(key, value);
 
@@ -504,10 +515,10 @@ namespace UnityEngine.Analytics.Experimental
         public AnalyticsResult Send ()
         {
             var eventData = GetEventData();
-            for (int i = 0; i < eventData.Count; i++)
+            for (int i = eventData.Count - 1; i >= 0; i--)
             {
                 var field = eventData.ElementAt(i);
-                if(Equals(field.Value, null))
+                if(Equals(field.Value, null) || (field.Value is string && (string)field.Value == string.Empty))
                 {
                     eventData.Remove(field.Key);
                 }

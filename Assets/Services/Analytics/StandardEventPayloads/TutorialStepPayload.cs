@@ -18,9 +18,9 @@ namespace UnityEngine.Analytics.Experimental
             get { return standardEventName; }
         }
 
-        public string stepId
+        public int stepId
         {
-            get { return GetParam<string>(k_ParamKey_StepIndex); }
+            get { return GetParam<int>(k_ParamKey_StepIndex); }
             set { SetParam(k_ParamKey_StepIndex, value); }
         }
 
@@ -37,7 +37,7 @@ namespace UnityEngine.Analytics.Experimental
 
             if (key == k_ParamKey_StepIndex)
             {
-                ValidateDataValueType<string>(key, value);
+                ValidateDataValueType<int>(key, value);
             }
         }
 

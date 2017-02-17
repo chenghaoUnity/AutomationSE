@@ -16,7 +16,7 @@ namespace UnityEngine.Analytics.Experimental
 
         protected override void ValidateDataField(string key, object value)
         {
-            if (key == k_ParamKey_TutorialId)
+            if (key == k_ParamKey_TutorialId && value != null)
             {
                 ValidateDataValueType<string>(key, value);
             }

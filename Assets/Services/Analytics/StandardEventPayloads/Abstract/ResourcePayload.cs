@@ -54,7 +54,7 @@ namespace UnityEngine.Analytics.Experimental
             }
             else if (key == k_ParamKey_Amount || key == k_ParamKey_NewBalance)
             {
-                ValidateDataValueType<decimal>(key, value);
+                ValidateDataValueTypeIsNumeric(key, value);
             }
         }
 

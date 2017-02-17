@@ -52,17 +52,6 @@ namespace UnityEngine.Analytics.Experimental
 
         new public static T CreateInstance<T> (IDictionary<string, object> eventData) where T : AdPayload
         {
-            if (eventData.ContainsKey(k_ParamKey_PlacementId))
-            {
-                bool isEmpty = eventData[k_ParamKey_PlacementId] is string &&
-                    Equals((string)eventData[k_ParamKey_PlacementId], string.Empty);
-                
-                if (Equals(eventData[k_ParamKey_PlacementId], null) || isEmpty)
-                {
-                    eventData.Remove(k_ParamKey_PlacementId);
-                }
-            }
-
             return AnalyticsEventPayload.CreateInstance<T>(eventData);
         }
 

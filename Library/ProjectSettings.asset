@@ -524,7 +524,7 @@ PlayerSettings:
     Purchasing: 0
     UNet: 1
     Unity_Ads: 0
-  cloudProjectId: e7776b0e-fbb4-4586-b422-4c40883b3e55
-  projectName: Standard Event SDK
+  cloudProjectId: 91e2b7a5-87e8-49a1-9d80-f4ff7efb0f44
+  projectName: AutomationSE
   organizationId: unity-analytics-qa
   cloudEnabled: 0

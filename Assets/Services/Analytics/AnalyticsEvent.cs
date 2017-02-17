@@ -244,31 +244,31 @@ namespace UnityEngine.Analytics.Experimental
 
         //----[ AdComplete ]------------------------------------------------------------------------------------------//
 
-        public static AnalyticsResult AdComplete (bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult AdComplete (bool rewarded, string advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
         {
-            return AdCompletePayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send(); ;
+            return AdCompletePayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
 
         public static AnalyticsResult AdComplete (bool rewarded, AdvertisingNetwork advertisingNetwork = AdvertisingNetwork.None, string placementId = null, IDictionary<string, object> eventData = null)
         {
-            return AdCompletePayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send(); ;
+            return AdCompletePayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
 
         //----[ AdOffer ]---------------------------------------------------------------------------------------------//
 
-        public static AnalyticsResult AdOffer (bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult AdOffer (bool rewarded, string advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
         {
-            return AdOfferPayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send(); ;
+            return AdOfferPayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
 
         public static AnalyticsResult AdOffer (bool rewarded, AdvertisingNetwork advertisingNetwork = AdvertisingNetwork.None, string placementId = null, IDictionary<string, object> eventData = null)
         {
-            return AdOfferPayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send(); ;
+            return AdOfferPayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
 
         //----[ AdSkip ]----------------------------------------------------------------------------------------------//
 
-        public static AnalyticsResult AdSkip (bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult AdSkip (bool rewarded, string advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
         {
             return AdSkipPayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
@@ -280,7 +280,7 @@ namespace UnityEngine.Analytics.Experimental
 
         //----[ AdStart ]---------------------------------------------------------------------------------------------//
 
-        public static AnalyticsResult AdStart (bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult AdStart (bool rewarded, string advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
         {
             return AdStartPayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
@@ -292,12 +292,7 @@ namespace UnityEngine.Analytics.Experimental
 
         //----[ ChatMessageSent ]-------------------------------------------------------------------------------------//
 
-        public static AnalyticsResult ChatMessageSent ()
-        {
-            return ScriptableObject.CreateInstance<ChatMessageSentPayload>().Send();
-        }
-
-        public static AnalyticsResult ChatMessageSent (IDictionary<string, object> eventData)
+        public static AnalyticsResult ChatMessageSent(IDictionary<string, object> eventData = null)
         {
             return AnalyticsEventPayload.CreateInstance<ChatMessageSentPayload>(eventData).Send();
         }
@@ -372,12 +367,7 @@ namespace UnityEngine.Analytics.Experimental
 
         //----[ GameStart ]-------------------------------------------------------------------------------------------//
 
-        public static AnalyticsResult GameStart ()
-        {
-            return GameStartPayload.CreateInstance<GameStartPayload>().Send();
-        }
-
-        public static AnalyticsResult GameStart (IDictionary<string, object> eventData)
+        public static AnalyticsResult GameStart (IDictionary<string, object> eventData = null)
         {
             return AnalyticsEventPayload.CreateInstance<GameStartPayload>(eventData).Send();
         }
@@ -487,12 +477,7 @@ namespace UnityEngine.Analytics.Experimental
 
         //----[ PushNotificationEnable ]------------------------------------------------------------------------------//
 
-        public static AnalyticsResult PushNotificationEnable ()
-        {
-            return ScriptableObject.CreateInstance<PushNotificationEnablePayload>().Send();
-        }
-
-        public static AnalyticsResult PushNotificationEnable (IDictionary<string, object> eventData)
+        public static AnalyticsResult PushNotificationEnable (IDictionary<string, object> eventData = null)
         {
             return AnalyticsEventPayload.CreateInstance<PushNotificationEnablePayload>(eventData).Send();
         }
@@ -567,9 +552,9 @@ namespace UnityEngine.Analytics.Experimental
 
         //----[ StoreItemClick ]--------------------------------------------------------------------------------------//
 
-        public static AnalyticsResult StoreItemClick (string itemId, string itemName = null, Dictionary<string, object> eventData = null)
+        public static AnalyticsResult StoreItemClick (StoreType storeType, string itemId, string itemName = null, Dictionary<string, object> eventData = null)
         {
-            return StoreItemClickPayload.CreateInstance(itemId, itemName, eventData).Send();
+            return StoreItemClickPayload.CreateInstance(storeType, itemId, itemName, eventData).Send();
         }
 
         //----[ StoreOpened ]-----------------------------------------------------------------------------------------//
