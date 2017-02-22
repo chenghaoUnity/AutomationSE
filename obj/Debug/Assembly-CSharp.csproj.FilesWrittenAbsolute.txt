@@ -29,3 +29,4 @@
 /Users/Shared/Unity/AutomationSE/obj/Debug/Assembly-CSharp.dll.mdb
 /Users/Shared/Unity/AutomationSE/Temp/bin/Debug/UnityEngine.Advertisements.dll
 /Users/Shared/Unity/AutomationSE/Temp/bin/Debug/UnityEngine.Purchasing.dll
+/Users/Shared/Unity/AutomationSE/Temp/bin/Debug/LitJson.dll

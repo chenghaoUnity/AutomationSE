@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 using System.IO;
 using UnityEngine.Analytics.Experimental;
 using System;
+using UnityEngine.Networking;
+using LitJson;
 
 public class Framework : MonoBehaviour {
 
@@ -22,7 +24,7 @@ public class Framework : MonoBehaviour {
 	public float timeDelay = 0.3f;
 
 	private DatabaseReference reference;
-
+	public bool verifyMode;
 
 	void Awake () {
 		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://standard-event.firebaseio.com/");
@@ -30,14 +32,25 @@ public class Framework : MonoBehaviour {
 	}
 
 	public void Start() {
-		testRun ();
+
+		if (verifyMode == true) {
+			StartCoroutine (GetText ("check", (result) => {
+				if (result == "Not ready") {
+					throw new System.Exception("Please make sure running sending first");
+				} else {
+					testRun ();
+				}
+			}));
+		} else {
+			testRun ();
+		}
 	}
 		
 	// Above is not relatived with creating test cases.
 
 	// Please add test cases to the test suite
 	public void testRun() {
-		
+
 		// Add test cases to test suite
 		testSuite.Add (test01 ());
 		testSuite.Add (test02 ());
@@ -101,6 +114,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check post_install_action event (1)", "Ok", AnalyticsEvent.PostInstallAction(), 20661);
+			TestRunJsonVerify("post_install_action/0", runOrder.ToString("D2") + " Check post_install_action event (Server) (1)", 20661, null);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check post_install_action event (1)", "Ok", e, 20661);
 		}
@@ -108,6 +122,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check post_install_action event (2)", "Ok", AnalyticsEvent.PostInstallAction("action_id"), 20661);
+			TestRunJsonVerify("post_install_action/1", runOrder.ToString("D2") + " Check post_install_action event (Server) (2)", 20661, "action_id");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check post_install_action event (2)", "Ok", e, 20661);
 		}
@@ -124,6 +139,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_start event (1)", "Ok", AnalyticsEvent.TutorialStart(), 20662);
+			TestRunJsonVerify("tutorial_start/0", runOrder.ToString("D2") + " Check tutorial_start event (Server) (1)", 20662, null);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString ("D2") + " Check tutorial_start event (1)", "Ok", e, 20662);
 		}
@@ -131,6 +147,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_start event (2)", "Ok", AnalyticsEvent.TutorialStart("tutorial_id"), 20662);
+			TestRunJsonVerify("tutorial_start/1", runOrder.ToString("D2") + " Check tutorial_start event (Server) (2)", 20662, "tutorial_id");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check tutorial_start event (2)", "Ok", e, 20662);
 		}
@@ -147,6 +164,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_step event (1)", "Ok", AnalyticsEvent.TutorialStep(0), 20663);
+			TestRunJsonVerify("tutorial_step/0", runOrder.ToString("D2") + " Check tutorial_step event (Server) (1)", 20663, "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check tutorial_step event (1)", "Ok", e, 20663);
 		}
@@ -154,6 +172,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_step event (2)", "Ok", AnalyticsEvent.TutorialStep(0, "tutorial_id"), 20663);
+			TestRunJsonVerify("tutorial_step/1", runOrder.ToString("D2") + " Check tutorial_step event (Server) (2)", 20663, "0", "tutorial_id");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check tutorial_step event (2)", "Ok", e, 20663);
 		}
@@ -170,6 +189,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_complete event (1)", "Ok", AnalyticsEvent.TutorialComplete(), 20840);
+			TestRunJsonVerify("tutorial_complete/0", runOrder.ToString("D2") + " Check tutorial_complete event (Server) (1)", 20840, null);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check tutorial_complete event (1)", "Ok", e, 20840);
 		}
@@ -177,6 +197,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_complete event (2)", "Ok", AnalyticsEvent.TutorialComplete("tutorial_id"), 20840);
+			TestRunJsonVerify("tutorial_complete/1", runOrder.ToString("D2") + " Check tutorial_complete event (Server) (2)", 20840, "tutorial_id");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check tutorial_complete event (2)", "Ok", e, 20840);
 		}
@@ -193,6 +214,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_skip event (1)", "Ok", AnalyticsEvent.TutorialSkip(), 20841);
+			TestRunJsonVerify("tutorial_skip/0", runOrder.ToString("D2") + " Check tutorial_skip event (Server) (1)", 20841, null);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check tutorial_skip event (1)", "Ok", e, 20841);
 		}
@@ -200,6 +222,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_skip event (2)", "Ok", AnalyticsEvent.TutorialSkip("tutorial_id"), 20841);
+			TestRunJsonVerify("tutorial_skip/1", runOrder.ToString("D2") + " Check tutorial_skip event (Server) (2)", 20841, "tutorial_id");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check tutorial_skip event (2)", "Ok", e, 20841);
 		}
@@ -216,6 +239,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check store_opened event", "Ok", AnalyticsEvent.StoreOpened(StoreType.Soft), 20842);
+			TestRunJsonVerify("store_opened/0", runOrder.ToString("D2") + " Check store_opened event (Server)", 20842, "soft");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check store_opened event", "Ok", e, 20842);
 		}
@@ -232,16 +256,18 @@ public class Framework : MonoBehaviour {
 	
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (1)", "Ok", AnalyticsEvent.StoreItemClick(StoreType.Soft,"item_id"), 20843);
+			TestRunHelper (runOrder.ToString("D2") + " Check store_item_click event (1)", "Ok", AnalyticsEvent.StoreItemClick(StoreType.Soft,"item_id"), 20843);
+			TestRunJsonVerify("store_item_click/0", runOrder.ToString("D2") + " Check store_item_click event (Server) (1)", 20843, "item_id", "soft");
 		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check store_item_clicked event (1)", "Ok", e, 20843);
+			TestRunException (runOrder.ToString("D2") + " Check store_item_click event (1)", "Ok", e, 20843);
 		}
 			
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check store_item_clicked event (2)", "Ok", AnalyticsEvent.StoreItemClick(StoreType.Soft, "item_id", "iten_name"), 20843);
+			TestRunHelper (runOrder.ToString("D2") + " Check store_item_click event (2)", "Ok", AnalyticsEvent.StoreItemClick(StoreType.Soft, "item_id", "item_name"), 20843);
+			TestRunJsonVerify("store_item_click/1", runOrder.ToString("D2") + " Check store_item_click event (Server) (2)", 20843, "item_id", "item_name", "soft");
 		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check store_item_clicked event (2)", "Ok", e, 20843);
+			TestRunException (runOrder.ToString("D2") + " Check store_item_click event (2)", "Ok", e, 20843);
 		}
 			
 		if (runOrder < maxTest) {
@@ -256,6 +282,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", AnalyticsEvent.CurrencyAcquired(1, 2, ItemType.Soft, ItemSource.Earned, "item_id"), 20845);
+			TestRunJsonVerify("currency_acquired/0", runOrder.ToString("D2") + " Check currency_acquired event (Server) (1)", 20845, "1", "item_id", "earned", "2", "soft");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", e, 20845);
 		}
@@ -264,6 +291,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (2)", "Ok", AnalyticsEvent.CurrencyAcquired(1, 2, ItemType.Soft, ItemSource.Earned, "item_id", "item_name"), 20845);
+			TestRunJsonVerify("currency_acquired/1", runOrder.ToString("D2") + " Check currency_acquired event (Server) (2)", 20845, "1", "item_id", "item_name", "earned", "2", "soft");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check currency_acquired event (2)", "Ok", e, 20845);
 		}
@@ -280,6 +308,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check currency_spent event (1)", "Ok", AnalyticsEvent.CurrencySpent(1, 2, ItemType.Soft, "item_id"), 20846);
+			TestRunJsonVerify("currency_spent/0", runOrder.ToString("D2") + " Check currency_spent event (Server) (1)", 20846, "1", "item_id", "2", "soft");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check currency_spent event (1)", "Ok", e, 20846);
 		}
@@ -287,6 +316,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check currency_spent event (2)", "Ok", AnalyticsEvent.CurrencySpent(1, 2, ItemType.Soft, "item_id", "item_name"), 20846);
+			TestRunJsonVerify("currency_spent/1", runOrder.ToString("D2") + " Check currency_spent event (Server) (2)", 20846, "1", "item_id", "item_name", "2", "soft");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check currency_spent event (2)", "Ok", e, 20846);
 		}
@@ -303,6 +333,8 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check resource_acquired event (1)", "Ok", AnalyticsEvent.ResourceAcquired(1, 2, "item_id"), 20847);
+			TestRunJsonVerify("resource_acquired/0", runOrder.ToString("D2") + " Check resource_acquired event (Server) (1)", 20847, "1", "item_id", "2");
+		
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check resource_acquired event (1)", "Ok", e, 20847);
 		}
@@ -311,6 +343,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check resource_acquired event (2)", "Ok", AnalyticsEvent.ResourceAcquired(1, 2, "item_id", "item_name"), 20847);
+			TestRunJsonVerify("resource_acquired/1", runOrder.ToString("D2") + " Check resource_acquired event (Server) (2)", 20847, "1", "item_id", "item_name", "2");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check resource_acquired event (2)", "Ok", e, 20847);
 		}
@@ -327,6 +360,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check resource_spent event (1)", "Ok", AnalyticsEvent.ResourceSpent(1, 2, "item_id"), 20848);
+			TestRunJsonVerify("resource_spent/0", runOrder.ToString("D2") + " Check resource_spent event (Server) (1)", 20848, "1", "item_id", "2");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check resource_spent event (1)", "Ok", e, 20848);
 		}
@@ -335,6 +369,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check resource_spent event (2)", "Ok", AnalyticsEvent.ResourceSpent(1, 2, "item_id", "item_name"), 20848);
+			TestRunJsonVerify("resource_spent/1", runOrder.ToString("D2") + " Check resource_spent event (Server) (2)", 20848, "1", "item_id", "item_name", "2");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check resource_spent event (2)", "Ok", e, 20848);
 		}
@@ -352,6 +387,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", AnalyticsEvent.AdOffer(true), 20849);
+			TestRunJsonVerify("ad_offer/0", runOrder.ToString("D2") + " Check ad_offer event (Server) (1)", 20849, "True");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", e, 20849);
 		}
@@ -360,6 +396,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (2)", "Ok", AnalyticsEvent.AdOffer(true, "network"), 20849);
+			TestRunJsonVerify("ad_offer/1", runOrder.ToString("D2") + " Check ad_offer event (Server) (2)", 20849, "True", "network");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_offer event (2)", "Ok", e, 20849);
 		}
@@ -368,6 +405,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (3)", "Ok", AnalyticsEvent.AdOffer(true, "network", "placementID"), 20849);
+			TestRunJsonVerify("ad_offer/2", runOrder.ToString("D2") + " Check ad_offer event (Server) (3)", 20849, "True", "placementID", "network");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_offer event (3)", "Ok", e, 20849);
 		}
@@ -376,10 +414,11 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (4)", "Ok", AnalyticsEvent.AdOffer(true, null, "placementID"), 20849);
+			TestRunJsonVerify("ad_offer/3", runOrder.ToString("D2") + " Check ad_offer event (Server) (4)", 20849, "True", "placementID");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_offer event (4)", "Ok", e, 20849);
 		}
-
+			
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -390,11 +429,10 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		AnalyticsEvent.AdStart (true);
-
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", AnalyticsEvent.AdStart(true), 20850);
+			TestRunJsonVerify("ad_start/0", runOrder.ToString("D2") + " Check ad_start event (Server) (1)", 20850, "True");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", e, 20850);
 		}
@@ -403,6 +441,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (2)", "Ok", AnalyticsEvent.AdStart(true, "network"), 20850);
+			TestRunJsonVerify("ad_start/1", runOrder.ToString("D2") + " Check ad_start event (Server) (2)", 20850, "True", "network");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_start event (2)", "Ok", e, 20850);
 		}
@@ -411,6 +450,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (3)", "Ok", AnalyticsEvent.AdStart(true, "network", "placementID"), 20850);
+			TestRunJsonVerify("ad_start/2", runOrder.ToString("D2") + " Check ad_start event (Server) (3)", 20850, "True", "placementID", "network");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_start event (3)", "Ok", e, 20850);
 		}
@@ -419,6 +459,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (4)", "Ok", AnalyticsEvent.AdStart(true, null, "placementID"), 20850);
+			TestRunJsonVerify("ad_start/3", runOrder.ToString("D2") + " Check ad_start event (Server) (4)", 20850, "True", "placementID");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_start event (4)", "Ok", e, 20850);
 		}
@@ -436,6 +477,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", AnalyticsEvent.AdComplete(true), 20851);
+			TestRunJsonVerify("ad_complete/0", runOrder.ToString("D2") + " Check ad_complete event (Server) (1)", 20851, "True");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", e, 20851);
 		}
@@ -444,6 +486,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (2)", "Ok", AnalyticsEvent.AdComplete(true, "network"), 20851);
+			TestRunJsonVerify("ad_complete/1", runOrder.ToString("D2") + " Check ad_complete event (Server) (2)", 20851, "True", "network");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_complete event (2)", "Ok", e, 20851);
 		}
@@ -452,6 +495,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (3)", "Ok", AnalyticsEvent.AdComplete(true, "network", "placementID"), 20851);
+			TestRunJsonVerify("ad_complete/2", runOrder.ToString("D2") + " Check ad_complete event (Server) (3)", 20851, "True", "placementID", "network");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_complete event (3)", "Ok", e, 20851);
 		}
@@ -460,6 +504,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (4)", "Ok", AnalyticsEvent.AdComplete(true, null, "placementID"), 20851);
+			TestRunJsonVerify("ad_complete/3", runOrder.ToString("D2") + " Check ad_complete event (Server) (4)", 20851, "True", "placementID");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_complete event (4)", "Ok", e, 20851);
 		}
@@ -477,6 +522,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", AnalyticsEvent.AdSkip(true), 20852);
+			TestRunJsonVerify("ad_skip/0", runOrder.ToString("D2") + " Check ad_skip event (Server) (1)", 20852, "True");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", e, 20852);
 		}
@@ -485,6 +531,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (2)", "Ok", AnalyticsEvent.AdSkip(true, "network"), 20852);
+			TestRunJsonVerify("ad_skip/1", runOrder.ToString("D2") + " Check ad_skip event (Server) (2)", 20852, "True", "network");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_skip event (2)", "Ok", e, 20852);
 		}
@@ -493,6 +540,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (3)", "Ok", AnalyticsEvent.AdSkip(true, "network", "placementID"), 20852);
+			TestRunJsonVerify("ad_skip/2", runOrder.ToString("D2") + " Check ad_skip event (Server) (3)", 20852, "True", "placementID", "network");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_skip event (3)", "Ok", e, 20852);
 		}
@@ -501,6 +549,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (4)", "Ok", AnalyticsEvent.AdSkip(true, null, "placementID"), 20852);
+			TestRunJsonVerify("ad_skip/3", runOrder.ToString("D2") + " Check ad_skip event (Server) (4)", 20852, "True", "placementID");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_skip event (4)", "Ok", e, 20852);
 		}
@@ -518,6 +567,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (1)", "Ok", AnalyticsEvent.PostAdAction(true), 20853);
+			TestRunJsonVerify("post_ad_action/0", runOrder.ToString("D2") + " Check post_ad_action event (Server) (1)", 20853, "True");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check post_ad_action event (1)", "Ok", e, 20853);
 		}
@@ -526,6 +576,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (2)", "Ok", AnalyticsEvent.PostAdAction(true, "network"), 20853);
+			TestRunJsonVerify("post_ad_action/1", runOrder.ToString("D2") + " Check post_ad_action event (Server) (2)", 20853, "True", "network");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check post_ad_action event (2)", "Ok", e, 20853);
 		}
@@ -534,6 +585,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (3)", "Ok", AnalyticsEvent.PostAdAction(true, "network", "placementID"), 20853);
+			TestRunJsonVerify("post_ad_action/2", runOrder.ToString("D2") + " Check post_ad_action event (Server) (3)", 20853, "True", "placementID", "network");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check post_ad_action event (3)", "Ok", e, 20853);
 		}
@@ -542,6 +594,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (4)", "Ok", AnalyticsEvent.PostAdAction(true, null, "placementID"), 20853);
+			TestRunJsonVerify("post_ad_action/3", runOrder.ToString("D2") + " Check post_ad_action event (Server) (4)", 20853, "True", "placementID");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check post_ad_action event (4)", "Ok", e, 20853);
 		}
@@ -559,6 +612,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check screen_visit event", "Ok", AnalyticsEvent.ScreenVisit(ScreenName.Achievements), 20854);
+			TestRunJsonVerify("screen_visit/0", runOrder.ToString("D2") + " Check screen_visit event (Server)", 20854, "achievements");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check screen_visit event", "Ok", e, 20854);
 		}
@@ -576,6 +630,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check cutscene_skip event", "Ok", AnalyticsEvent.CutsceneSkip("scene_name"), 20855);
+			TestRunJsonVerify("cutscene_skip/0", runOrder.ToString("D2") + " Check cutscene_skip event (Server)", 20855, "scene_name");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check cutscene_skip event", "Ok", e, 20855);
 		}
@@ -593,6 +648,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check game_start event", "Ok", AnalyticsEvent.GameStart(), 20856);
+			TestRunJsonVerify("game_start/0", runOrder.ToString("D2") + " Check game_start event (Server)", 20856, null);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check game_start event", "Ok", e, 20856);
 		}
@@ -610,6 +666,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check game_over event (1)", "Ok", AnalyticsEvent.GameOver(), 20857);
+			TestRunJsonVerify("game_over/0", runOrder.ToString("D2") + " Check game_over (Server) (1)", 20857, null);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check game_over event (1)", "Ok", e, 20857);
 		}
@@ -618,6 +675,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check game_over event (2)", "Ok", AnalyticsEvent.GameOver(0), 20857);
+			TestRunJsonVerify("game_over/1", runOrder.ToString("D2") + " Check game_over event (Server) (2)", 20857, "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check game_over event (2)", "Ok", e, 20857);
 		}
@@ -626,6 +684,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check game_over event (3)", "Ok", AnalyticsEvent.GameOver("level_name"), 20857);
+			TestRunJsonVerify("game_over/2", runOrder.ToString("D2") + " Check game_over event (Server) (3)", 20857, "level_name");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check game_over event (3)", "Ok", e, 20857);
 		}
@@ -634,6 +693,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check game_over event (4)", "Ok", AnalyticsEvent.GameOver(0, "level_name"), 20857);
+			TestRunJsonVerify("game_over/3", runOrder.ToString("D2") + " Check game_over event (Server) (4)", 20857, "level_name", "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check game_over event (4)", "Ok", e, 20857);
 		}
@@ -651,6 +711,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_start event (1)", "Ok", AnalyticsEvent.LevelStart(0), 20858);
+			TestRunJsonVerify("level_start/0", runOrder.ToString("D2") + " Check level_start event (Server) (1)", 20858, "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_start event (1)", "Ok", e, 20858);
 		}
@@ -659,6 +720,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_start event (2)", "Ok", AnalyticsEvent.LevelStart ("level_name"), 20858);
+			TestRunJsonVerify("level_start/1", runOrder.ToString("D2") + " Check level_start event (Server) (2)", 20858, "level_name");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_start event (2)", "Ok", e, 20858);
 		}
@@ -667,6 +729,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_start event (3)", "Ok", AnalyticsEvent.LevelStart (0, "level_name"), 20858);
+			TestRunJsonVerify("level_start/2", runOrder.ToString("D2") + " Check level_start event (Server) (3)", 20858, "level_name", "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_start event (3)", "Ok", e, 20858);
 		}
@@ -684,6 +747,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_complete event (1)", "Ok", AnalyticsEvent.LevelComplete(0), 20859);
+			TestRunJsonVerify("level_complete/0", runOrder.ToString("D2") + " Check level_complete event (Server) (1)", 20859, "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_complete event (1)", "Ok", e, 20859);
 		}
@@ -692,6 +756,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_complete event (2)", "Ok", AnalyticsEvent.LevelComplete ("level_name"), 20859);
+			TestRunJsonVerify("level_complete/1", runOrder.ToString("D2") + " Check level_complete event (Server) (2)", 20859, "level_name");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_complete event (2)", "Ok", e, 20859);
 		}
@@ -700,7 +765,8 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_complete event (3)", "Ok", AnalyticsEvent.LevelComplete (0, "level_name"), 20859);
-		} catch (Exception e) {
+			TestRunJsonVerify("level_complete/2", runOrder.ToString("D2") + "Check level_complete event (Server) (3)", 20859, "level_name", "0");
+		} catch (Exception e) { 
 			TestRunException (runOrder.ToString("D2") + " Check level_complete event (3)", "Ok", e, 20859);
 		}
 
@@ -717,6 +783,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_fail event (1)", "Ok", AnalyticsEvent.LevelFail (0), 20860);
+			TestRunJsonVerify("level_fail/0", runOrder.ToString("D2") + " Check level_fail event (Server) (1)", 20860, "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_fail event (1)", "Ok", e, 20860);
 		}
@@ -725,6 +792,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_fail event (2)", "Ok", AnalyticsEvent.LevelFail ("level_name"), 20860);
+			TestRunJsonVerify("level_fail/1", runOrder.ToString("D2") + " Check level_fail event (Server) (2)", 20860, "level_name");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_fail event (2)", "Ok", e, 20860);
 		}
@@ -733,6 +801,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_fail event (3)", "Ok", AnalyticsEvent.LevelFail (0, "level_name"), 20860);
+			TestRunJsonVerify("level_fail/2", runOrder.ToString("D2") + " Check level_fail event (Server) (3)", 20860, "level_name", "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_fail event (3)", "Ok", e, 20860);
 		}
@@ -750,6 +819,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_quit event (1)", "Ok", AnalyticsEvent.LevelQuit (0), 20861);
+			TestRunJsonVerify("level_quit/0", runOrder.ToString("D2") + " Check level_quit event (Server) (1)", 20861, "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_quit event (1)", "Ok", e, 20861);
 		}
@@ -758,6 +828,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_quit event (2)", "Ok", AnalyticsEvent.LevelQuit ("level_name"), 20861);
+			TestRunJsonVerify("level_quit/1", runOrder.ToString("D2") + " Check level_quit event (Server) (2)", 20861, "level_name");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_quit event (2)", "Ok", e, 20861);
 		}
@@ -766,6 +837,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_quit event (3)", "Ok", AnalyticsEvent.LevelQuit (0, "level_name"), 20861);
+			TestRunJsonVerify("level_quit/2", runOrder.ToString("D2") + " Check level_quit event (Server) (3)", 20861, "level_name", "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_quit event (3)", "Ok", e, 20861);
 		}
@@ -783,6 +855,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (1)", "Ok", AnalyticsEvent.LevelSkip (0), 20862);
+			TestRunJsonVerify("level_skip/0", runOrder.ToString("D2") + " Check level_skip event (Server) (1)", 20862, "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_skip event (1)", "Ok", e, 20862);
 		}
@@ -791,6 +864,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (2)", "Ok", AnalyticsEvent.LevelSkip ("level_name"), 20862);
+			TestRunJsonVerify("level_skip/1", runOrder.ToString("D2") + " Check level_skip event (Server) (2)", 20862, "level_name");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_skip event (2)", "Ok", e, 20862);
 		}
@@ -799,6 +873,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (3)", "Ok", AnalyticsEvent.LevelSkip (0, "level_name"), 20862);
+			TestRunJsonVerify("level_skip/2", runOrder.ToString("D2") + " Check level_skip event (Server) (3)", 20862, "level_name", "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_skip event (3)", "Ok", e, 20862);
 		}
@@ -816,6 +891,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_up event (1)", "Ok", AnalyticsEvent.LevelUp (0, 1), 20863);
+			TestRunJsonVerify("level_up/0", runOrder.ToString("D2") + " Check level_up event (Server) (1)", 20863, "0", "1");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_up event (1)", "Ok", e, 20863);
 		}
@@ -824,6 +900,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_up event (2)", "Ok", AnalyticsEvent.LevelUp  ("old_level_name", "new_level_name"), 20863);
+			TestRunJsonVerify("level_up/1", runOrder.ToString("D2") + " Check level_up (Server) (2)", 20863,  "new_level_name", "old_level_name");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_up event (2)", "Ok", e, 20863);
 		}
@@ -832,6 +909,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check level_up event (3)", "Ok", AnalyticsEvent.LevelUp(0, "old_level_name", 1, "new_level_name"), 20863);
+			TestRunJsonVerify("level_up/2", runOrder.ToString("D2") + " Check level_up event (Server) (3)", 20863, "new_level_name", "0", "1", "old_level_name");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_up event (3)", "Ok", e, 20863);
 		}
@@ -849,6 +927,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check push_notification_enable event", "Ok", AnalyticsEvent.PushNotificationEnable(), 20864);
+			TestRunJsonVerify("push_notification_enable/0", runOrder.ToString("D2") + " Check push_notification_enable event (Server)", 20864, null);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check push_notification_enable event", "Ok", e, 20864);
 		}
@@ -866,6 +945,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check push_notification_click event", "Ok", AnalyticsEvent.PushNotificationClick("message_id"), 20865);
+			TestRunJsonVerify("push_notification_click/0", runOrder.ToString("D2") + " Check push_notification_click event (Server)", 20865, "message_id");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check push_notification_click event", "Ok", e, 20865);
 		}
@@ -883,6 +963,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check chat_msg_sent event", "Ok", AnalyticsEvent.ChatMessageSent(), 20866);
+			TestRunJsonVerify("chat_msg_sent/0", runOrder.ToString("D2") + " Check chat_msg_sent event (Server)", 20866, null);
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check chat_msg_sent event", "Ok", e, 20866);
 		}
@@ -899,9 +980,10 @@ public class Framework : MonoBehaviour {
 
 		yield return new WaitForSeconds (timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check achievement_unlock event", "Ok", AnalyticsEvent.AchievementUnlock("achievement_id"), 20867);
+			TestRunHelper (runOrder.ToString("D2") + " Check achievement_unlocked event", "Ok", AnalyticsEvent.AchievementUnlock("achievement_id"), 20867);
+			TestRunJsonVerify("achievement_unlocked/0", runOrder.ToString("D2") + " Check achievement_unlocked event (Server)", 20867, "achievement_id");
 		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check achievement_unlock event", "Ok", e, 20867);
+			TestRunException (runOrder.ToString("D2") + " Check achievement_unlocked event", "Ok", e, 20867);
 		}
 
 
@@ -918,6 +1000,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check achievement_step event", "Ok", AnalyticsEvent.AchievementStep(0, "achievement_id"), 20868);
+			TestRunJsonVerify("achievement_step/0", runOrder.ToString("D2") + " Check achievement_step event (Server)", 20868, "achievement_id", "0");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check achievement_step event", "Ok", e, 20868);
 		}
@@ -935,6 +1018,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay); 
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check user_signup event", "Ok", AnalyticsEvent.UserSignup(AuthorizationNetwork.Facebook), 20869);
+			TestRunJsonVerify("user_signup/0", runOrder.ToString("D2") + " Check user_signup event (Server)", 20869, "facebook");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check user_signup event", "Ok", e, 20869);
 		}
@@ -952,6 +1036,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check social_share event", "Ok", AnalyticsEvent.SocialShare (ShareType.Achievement, SocialNetwork.Facebook), 20870);
+			TestRunJsonVerify("social_share/0", runOrder.ToString("D2") + " Check social_share event (Server)", 20870, "achievement", "facebook");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check social_share event", "Ok", e, 20870);
 		}
@@ -968,8 +1053,13 @@ public class Framework : MonoBehaviour {
 		showReport ();
 		yield return new WaitForSeconds (timeDelay);
 	}
-		
+
+	// For checking status
 	private void TestRunHelper(string description, string expectedResult, object realResult, int caseNumber = 0) {
+
+		if (verifyMode == true) {
+			return;
+		}
 
 		bool compare = expectedResult == realResult.ToString ();
 		string failReason = null;
@@ -986,6 +1076,7 @@ public class Framework : MonoBehaviour {
 			"http://qatestrail.hq.unity3d.com/index.php?/cases/view/" + caseNumber.ToString()));
 	}
 
+	// For finding any exception
 	private void TestRunException(string description, string expectedResult, Exception e, int caseNumber = 0) {
 
 		resultTable.Add(new TestCase(
@@ -996,6 +1087,91 @@ public class Framework : MonoBehaviour {
 			"http://qatestrail.hq.unity3d.com/index.php?/cases/view/" + caseNumber.ToString()));
 	}
 		
+
+	// For verifying json
+	private void TestRunJsonVerify(string methodName, string description, int caseNumber, params string[] parameter) {
+
+		if (verifyMode == false) {
+			return;
+		}
+
+		StartCoroutine(GetText(methodName, (parameterJson) =>
+			{
+				HandleJson(parameterJson, methodName, description, caseNumber, parameter);
+			}));
+	}
+
+	private void HandleJson(string parameterJson, string methodName, string description, int caseNumber, params string[] parameter) {
+
+		if (parameterJson.Length == 0 && parameter == null) {
+			resultTable.Add (new TestCase (
+				description,
+				true,
+				null,
+				System.DateTime.Now,
+				"http://qatestrail.hq.unity3d.com/index.php?/cases/view/" + caseNumber.ToString ()));
+			return;
+		}
+
+		if (parameterJson.Length != 0 && parameter != null) {
+
+			JsonData jsonvale = JsonMapper.ToObject(parameterJson);
+
+			for (int i = 0; i < parameter.Length; i++) {
+
+				if (parameter[i] != jsonvale[i].ToString()) {
+
+					print(methodName + "::" +  parameter[i] + ":" + jsonvale[i].ToString());
+
+					resultTable.Add (new TestCase (
+						description,
+						false,
+						"Server recived " + parameterJson,
+						System.DateTime.Now,
+						"http://qatestrail.hq.unity3d.com/index.php?/cases/view/" + caseNumber.ToString ()));
+
+					return;
+				}
+			}
+				
+			resultTable.Add (new TestCase (
+				description,
+				true,
+				null,
+				System.DateTime.Now,
+				"http://qatestrail.hq.unity3d.com/index.php?/cases/view/" + caseNumber.ToString ()));
+
+			return;
+
+		}
+			
+		resultTable.Add (new TestCase (
+			description,
+			false,
+			"Server recived " + parameterJson,
+			System.DateTime.Now,
+			"http://qatestrail.hq.unity3d.com/index.php?/cases/view/" + caseNumber.ToString ()));
+	}
+
+
+
+
+	IEnumerator GetText(string methodName, Action<string> callback) {
+
+		yield return new WaitForSeconds (timeDelay);
+		
+		UnityWebRequest www = UnityWebRequest.Get("http://localhost:8081/events/" + methodName);
+		yield return www.Send();
+
+		if (www.isError) {
+			Debug.Log (www.error);
+		} else {
+			if (callback != null)
+				callback(www.downloadHandler.text);
+		}
+	}
+		
+
 	private void showProgess(int progress) {
 		// Show progree to the screen
 		float percentage = (float)progress / (float)(maxTest - 1);

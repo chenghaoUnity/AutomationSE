@@ -27,7 +27,8 @@ namespace UnityEngine.Analytics.Experimental
         protected override void ValidateDataField (string key, object value)
         {
             base.ValidateDataField(key, value);
-            if (key == k_ParamKey_ActionId && value != null)
+
+            if (key == k_ParamKey_ActionId)
             {
                 ValidateDataValueType<string>(key, value);
             }

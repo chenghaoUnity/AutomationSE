@@ -7,8 +7,8 @@ public class SimpleLine : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		AnalyticsEvent.PostInstallAction ();
-		// AnalyticsEvent.PostInstallAction ("ad");
+		AnalyticsEvent.AdOffer (true);
+
 	}
 	
 	// Update is called once per frame

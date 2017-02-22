@@ -49,7 +49,6 @@ namespace UnityEngine.Analytics.Experimental
 
             ValidateAtLeastOneDataKeyExists(k_ParamKey_ItemId, k_ParamKey_ItemName);
             ValidateAllDataKeysExist(k_ParamKey_Amount, k_ParamKey_NewBalance, k_ParamKey_Type);
-            ValidateItemType(GetParam<string>(k_ParamKey_Type));
         }
 
         protected override void ValidateDataField (string key, object value)
@@ -59,6 +58,11 @@ namespace UnityEngine.Analytics.Experimental
             if (key == k_ParamKey_ItemId || key == k_ParamKey_ItemName || key == k_ParamKey_Type)
             {
                 ValidateDataValueType<string>(key, value);
+
+                if (key == k_ParamKey_Type)
+                {
+                    ValidateDataValueExistsInEnum<ItemType>(key, (string)value);
+                }
             }
             else if (key == k_ParamKey_Amount || key == k_ParamKey_NewBalance)
             {

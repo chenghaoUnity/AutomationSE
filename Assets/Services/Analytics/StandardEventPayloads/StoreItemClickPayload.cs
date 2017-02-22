@@ -44,9 +44,14 @@ namespace UnityEngine.Analytics.Experimental
         {
             base.ValidateDataField(key, value);
 
-            if ((key == k_ParamKey_ItemId && value != null) || (key == k_ParamKey_ItemName && value != null))
+            if (key == k_ParamKey_StoreType || key == k_ParamKey_ItemId || key == k_ParamKey_ItemName)
             {
                 ValidateDataValueType<string>(key, value);
+
+                if (key == k_ParamKey_StoreType)
+                {
+                    ValidateDataValueExistsInEnum<StoreType>(key, (string)value);
+                }
             }
         }
 
@@ -57,7 +62,7 @@ namespace UnityEngine.Analytics.Experimental
                 eventData = new Dictionary<string, object>();
             }
 
-            eventData.Add(k_ParamKey_StoreType, storeType);
+            eventData.Add(k_ParamKey_StoreType, GetStandardParamValue(storeType));
             eventData.Add(k_ParamKey_ItemId, itemId);
             eventData.Add(k_ParamKey_ItemName, itemName);
 

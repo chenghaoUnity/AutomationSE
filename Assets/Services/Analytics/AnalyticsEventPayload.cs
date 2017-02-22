@@ -10,7 +10,9 @@ namespace UnityEngine.Analytics.Experimental
     [CreateAssetMenu(fileName = "CustomEventPayload.asset", menuName = "Analytics Events/Custom", order = 0)]
     public class AnalyticsEventPayload : ScriptableObject, IEnumerable<KeyValuePair<string, object>>
     {
-        protected static readonly string k_ErrorFormat_InvalidType = "Invalid value type for param '{0}'. Expected '{1}' type.";
+        protected static readonly string k_WarningFormat_NullValue = "Unable to validate '{0}' param value is of type '{1}'. Value is 'null'.";
+        protected static readonly string k_ErrorFormat_InvalidType = "Invalid value type for '{0}' param. Expected type: '{1}'.";
+        protected static readonly string k_ErrorFormat_InvalidValue = "Invalid value for '{0}' param. Expected value: '{1}'.";
         protected static readonly string k_ErrorFormat_RequiredParamNotSet = "Required param not set ({0}).";
 
         static readonly string k_StandardEventPrefix = "unity.";
@@ -37,11 +39,6 @@ namespace UnityEngine.Analytics.Experimental
         { 
             get 
             { 
-                if (string.IsNullOrEmpty(m_EventName))
-                {
-                    OnValidationFailed(k_Error_NameNullOrEmpty);
-                }
-
                 return m_EventName;
             } 
             set 
@@ -102,7 +99,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <summary>
         /// Validates that the key exists in payload data.
         /// </summary>
-        /// <param name="key">Key.</param>
+        /// <param name="key">The key to validate.</param>
         protected void ValidateDataKeyExists (string key)
         {
             if (!HasParam(key))
@@ -112,9 +109,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates that at least one key exists payload data.
+        /// Validates that at least one of the provided keys exist payload data.
         /// </summary>
-        /// <param name="keys">Keys.</param>
+        /// <param name="keys">The keys to validate.</param>
         protected void ValidateAtLeastOneDataKeyExists (params string[] keys)
         {
             bool keyExists = false;
@@ -126,64 +123,26 @@ namespace UnityEngine.Analytics.Experimental
 
             if (!keyExists)
             {
-                string message = "";
-
-                for (int i = 0; i < keys.Length; i++)
-                {
-                    if (i > 0 && keys.Length > 1)
-                    {
-                        message += (keys.Length > 2) ? ", " : " ";
-
-                        if (i == keys.Length - 1)
-                        {
-                            message += "or ";
-                        }
-                    }
-
-                    message += keys[i];
-                }
-
-                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, message));
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, JoinWords("or", keys)));
             }
         }
 
         /// <summary>
-        /// Validates all data keys exist in payload data.
+        /// Validates that all of the provided keys exist in payload data.
         /// </summary>
-        /// <param name="keys">Keys.</param>
+        /// <param name="keys">The keys to validate.</param>
         protected void ValidateAllDataKeysExist (params string[] keys)
         {
-            int missingKeyCount = 0;
+            var missingKeys = new List<string>();
 
             for (int i = 0; i < keys.Length; i++)
             {
-                if (!HasParam(keys[i])) missingKeyCount++;
+                if (!HasParam(keys[i])) missingKeys.Add(keys[i]);
             }
 
-            if (missingKeyCount > 0)
+            if (missingKeys.Count > 0)
             {
-                string message = "";
-                int msgKeyCount = 0;
-
-                for (int i = 0; i < keys.Length; i++)
-                {
-                    if (HasParam(keys[i])) continue;
-
-                    message += keys[i];
-                    msgKeyCount++;
-
-                    if (missingKeyCount > 1)
-                    {
-                        message += (missingKeyCount > 2) ? ", " : " ";
-
-                        if (msgKeyCount == missingKeyCount - 1)
-                        {
-                            message += "and ";
-                        }
-                    }
-                }
-
-                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, message));
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, JoinWords("and", missingKeys.ToArray())));
             }
         }
 
@@ -192,15 +151,27 @@ namespace UnityEngine.Analytics.Experimental
         /// </summary>
         /// <param name="key">Key.</param>
         /// <param name="value">Value.</param>
-        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        /// <typeparam name="T">The expected value type.</typeparam>
         protected void ValidateDataValueType<T> (string key, object value)
         {
-            if (!(value is T))
+            if (Equals(value, null))
+            {
+                if (AnalyticsEvent.debugMode)
+                {
+                    Debug.LogWarningFormat(k_WarningFormat_NullValue, key, typeof(T));
+                }
+            }
+            else if (!(value is T))
             {
                 OnValidationFailed(string.Format(k_ErrorFormat_InvalidType, key, typeof(T)));
             }
         }
 
+        /// <summary>
+        /// Validates the data value type is numeric.
+        /// </summary>
+        /// <param name="key">Key.</param>
+        /// <param name="value">Value.</param>
         protected void ValidateDataValueTypeIsNumeric (string key, object value)
         {
             if (value is int || value is float || value is decimal) return;
@@ -209,26 +180,18 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the value of the store type.
+        /// Validates the value against an enum type.
         /// </summary>
-        /// <param name="storeType">Store type value.</param>
-        protected void ValidateStoreType (string storeType)
+        /// <param name="key">Key.</param>
+        /// <param name="value">Value.</param>
+        /// <typeparam name="T">The enum type.</typeparam>
+        protected void ValidateDataValueExistsInEnum<T> (string key, string value)
         {
-            if (storeType != "premium" && storeType != "soft")
-            {
-                OnValidationFailed("Store type must be either 'premium' or 'soft'.");
-            }
-        }
+            string[] acceptableValues = (Enum.GetValues(typeof(T)) as T[]).Select(x => x.ToString().ToLower()).ToArray();
 
-        /// <summary>
-        /// Validates the value of the item type.
-        /// </summary>
-        /// <param name="itemType">Item type value.</param>
-        protected void ValidateItemType (string itemType)
-        {
-            if (itemType != "premium" && itemType != "soft")
+            if (!acceptableValues.Contains(value))
             {
-                OnValidationFailed("Item type must be either 'premium' or 'soft'.");
+                OnValidationFailed(string.Format(k_ErrorFormat_InvalidValue, key, JoinWords("or", acceptableValues)));
             }
         }
 
@@ -409,18 +372,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <returns>The event data.</returns>
         public Dictionary<string, object> GetEventData ()
         {
-            if (m_EventDataKeys.Count != m_EventDataValues.Count)
-            {
-                OnValidationFailed(k_Error_KeyValueCountNotEqual);
-            }
-
-            m_EventData.Clear();
-
-            for (int i = 0; i < m_EventDataKeys.Count; i++)
-            {
-                ValidateDataField(m_EventDataKeys[i], m_EventDataValues[i]);
-                m_EventData.Add(m_EventDataKeys[i], m_EventDataValues[i]);
-            }
+            UpdateEventData();
 
             return m_EventData;
         }
@@ -483,9 +435,9 @@ namespace UnityEngine.Analytics.Experimental
                 OnValidationFailed(k_Error_KeyValueCountNotEqual);
             }
 
-            if (Equals(value, null) || (value is string && Equals((string)value, string.Empty)))
+            // Only add a param if value is not null or an empty string.
+            if (Equals(value, null) || (value is string && string.IsNullOrEmpty((string)value)))
             {
-                //if string is empty, don't add it to the dictionary - treat it as null
                 return;
             }
 
@@ -514,30 +466,33 @@ namespace UnityEngine.Analytics.Experimental
         /// </summary>
         public AnalyticsResult Send ()
         {
-            var eventData = GetEventData();
-            for (int i = eventData.Count - 1; i >= 0; i--)
-            {
-                var field = eventData.ElementAt(i);
-                if(Equals(field.Value, null) || (field.Value is string && (string)field.Value == string.Empty))
-                {
-                    eventData.Remove(field.Key);
-                }
-            }
-
+            UpdateEventData();
             ValidatePayload();
 
-            var result = Analytics.CustomEvent(string.Concat(k_StandardEventPrefix, eventName), eventData);
+            var result = Analytics.CustomEvent(string.Concat(k_StandardEventPrefix, eventName), m_EventData);
+            string verboseLog = string.Empty;
+
+            // Enable verbose logging by adding the following symbol to Scripting Define Symbols in Player Settings.
+#if DEBUG_ANALYTICS_STANDARD_EVENTS
+            verboseLog = string.Concat("\n  Event Name: ", eventName);
+            verboseLog += "\n  Event Data ({0} fields):";
+
+            foreach (KeyValuePair<string, object> field in m_EventData)
+            {
+                verboseLog += string.Format("\n    Key: '{0}'\t\t Value: '{1}'", field.Key, field.Value);
+            }
+#endif
 
             if (result == AnalyticsResult.Ok)
             {
                 if(AnalyticsEvent.debugMode)
                 {
-                    Debug.LogFormat("Successfully sent '{0}' (Result: {1}).", GetType(), result);
+                    Debug.LogFormat("Successfully sent '{0}' (Result: '{1}').{2}", GetType(), result, verboseLog);
                 }
             }
             else
             {
-                Debug.LogErrorFormat("Failed to send '{0}' (Result: {1}).", GetType(), result);
+                Debug.LogErrorFormat("Failed to send '{0}' (Result: '{1}').{2}", GetType(), result, verboseLog);
             }
 
             return result;
@@ -546,6 +501,45 @@ namespace UnityEngine.Analytics.Experimental
         IEnumerator IEnumerable.GetEnumerator ()
         {
             return GetEnumerator();
+        }
+
+        string JoinWords (string conjunction, string[] words)
+        {
+            string result = string.Join("', '", words);
+
+            if (words.Length > 1)
+            {
+                int startIndex = result.LastIndexOf(",", StringComparison.Ordinal);
+
+                if (words.Length == 2)
+                {
+                    result = result.Remove(startIndex, 1);
+                }
+                else
+                {
+                    startIndex++;
+                }
+
+                result = result.Insert(startIndex, string.Concat(" ", conjunction));
+            }
+
+            return result;
+        }
+
+        void UpdateEventData ()
+        {
+            if (m_EventDataKeys.Count != m_EventDataValues.Count)
+            {
+                OnValidationFailed(k_Error_KeyValueCountNotEqual);
+            }
+
+            m_EventData.Clear();
+
+            for (int i = 0; i < m_EventDataKeys.Count; i++)
+            {
+                ValidateDataField(m_EventDataKeys[i], m_EventDataValues[i]);
+                m_EventData.Add(m_EventDataKeys[i], m_EventDataValues[i]);
+            }
         }
     }
 }

@@ -291,7 +291,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 207067158}
   m_HandleRect: {fileID: 0}
@@ -405,7 +405,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f461399b45af44fd1be42bbc742901ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeDelay: 0.3
+  timeDelay: 0.1
+  verifyMode: 1
 --- !u!114 &934415258
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -36,7 +36,7 @@ namespace UnityEngine.Analytics.Experimental
             if (key == k_ParamKey_StoreType)
             {
                 ValidateDataValueType<string>(key, value);
-                ValidateStoreType((string)value);
+                ValidateDataValueExistsInEnum<StoreType>(key, (string)value);
             }
         }
 

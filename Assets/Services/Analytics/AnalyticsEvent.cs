@@ -9,7 +9,7 @@ namespace UnityEngine.Analytics.Experimental
     {
         static readonly string k_SdkVersion = "0.0.0";
 
-        static readonly Dictionary<string, Type> k_StandardEvents = new Dictionary<string, Type>()
+        static readonly Dictionary<string, Type> k_StandardEvents = new Dictionary<string, Type>
         {
             { AchievementUnlockedPayload.standardEventName,         typeof(AchievementUnlockedPayload) },
             { AchievementStepPayload.standardEventName,             typeof(AchievementStepPayload) },
@@ -292,7 +292,7 @@ namespace UnityEngine.Analytics.Experimental
 
         //----[ ChatMessageSent ]-------------------------------------------------------------------------------------//
 
-        public static AnalyticsResult ChatMessageSent(IDictionary<string, object> eventData = null)
+        public static AnalyticsResult ChatMessageSent (IDictionary<string, object> eventData = null)
         {
             return AnalyticsEventPayload.CreateInstance<ChatMessageSentPayload>(eventData).Send();
         }
