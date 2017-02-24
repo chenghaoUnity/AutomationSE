@@ -94,7 +94,7 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		TestRunHelper (runOrder.ToString("D2") + " Check if version number is correct", "0.0.0", AnalyticsEvent.sdkVersion, 20660);
+		TestRunHelper (runOrder.ToString("D2") + " Check if version number is correct", "0.1.0", AnalyticsEvent.sdkVersion, 20660);
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -275,8 +275,8 @@ public class Framework : MonoBehaviour {
 
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", AnalyticsEvent.CurrencyAcquired(1, 2, ItemType.Soft, ItemSource.Earned, "item_id"), 20845);
-			TestRunJsonVerify("currency_acquired/0", runOrder.ToString("D2") + " Check currency_acquired event (Server) (1)", 20845, "1", "2", "soft", "earned", "item_id");
+			TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", AnalyticsEvent.CurrencyAcquired("currency_name", AcquisitionType.Soft, AcquisitionSource.Earned, 1, 2), 20845);
+			TestRunJsonVerify("currency_acquired/0", runOrder.ToString("D2") + " Check currency_acquired event (Server) (1)", 20845, "1", "2", "soft", "earned", "currency_name");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", e, 20845);
 		}
@@ -284,8 +284,8 @@ public class Framework : MonoBehaviour {
 
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (2)", "Ok", AnalyticsEvent.CurrencyAcquired(1, 2, ItemType.Soft, ItemSource.Earned, "item_id", "item_name"), 20845);
-			TestRunJsonVerify("currency_acquired/1", runOrder.ToString("D2") + " Check currency_acquired event (Server) (2)", 20845, "1", "2", "soft", "earned", "item_id", "item_name");
+			TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (2)", "Ok", AnalyticsEvent.CurrencyAcquired("currency_name", AcquisitionType.Soft, AcquisitionSource.Earned, 1, 2, "purchaseID", "purchaseName", 1), 20845);
+			TestRunJsonVerify("currency_acquired/1", runOrder.ToString("D2") + " Check currency_acquired event (Server) (2)", 20845, "1", "2", "soft", "earned", "item_id", "item_name", "purchaseID", "purchaseName", "1");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check currency_acquired event (2)", "Ok", e, 20845);
 		}
@@ -301,18 +301,10 @@ public class Framework : MonoBehaviour {
 
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check currency_spent event (1)", "Ok", AnalyticsEvent.CurrencySpent(1, 2, ItemType.Soft, "item_id"), 20846);
-			TestRunJsonVerify("currency_spent/0", runOrder.ToString("D2") + " Check currency_spent event (Server) (1)", 20846, "1", "2", "soft", "item_id");
+			TestRunHelper (runOrder.ToString("D2") + " Check consumable_acquired event (1)", "Ok", AnalyticsEvent.ConsumableAcquired("cpnsumable_name", AcquisitionType.Soft, AcquisitionSource.Earned, 1, 2), 20846);
+			TestRunJsonVerify("currency_spent/0", runOrder.ToString("D2") + " Check consumable_acquired event (Server) (1)", 20846, "1", "2", "soft", "earned", "cpnsumable_name");
 		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check currency_spent event (1)", "Ok", e, 20846);
-		}
-			
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check currency_spent event (2)", "Ok", AnalyticsEvent.CurrencySpent(1, 2, ItemType.Soft, "item_id", "item_name"), 20846);
-			TestRunJsonVerify("currency_spent/1", runOrder.ToString("D2") + " Check currency_spent event (Server) (2)", 20846, "1", "2", "soft", "item_id", "item_name");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check currency_spent event (2)", "Ok", e, 20846);
+			TestRunException (runOrder.ToString("D2") + " Check consumable_acquired event (1)", "Ok", e, 20846);
 		}
 			
 		if (runOrder < maxTest) {
@@ -326,20 +318,20 @@ public class Framework : MonoBehaviour {
 
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check resource_acquired event (1)", "Ok", AnalyticsEvent.ResourceAcquired(1, 2, "item_id"), 20847);
-			TestRunJsonVerify("resource_acquired/0", runOrder.ToString("D2") + " Check resource_acquired event (Server) (1)", 20847, "1", "2", "item_id");
+			TestRunHelper (runOrder.ToString("D2") + " Check consumable_spent event (1)", "Ok", AnalyticsEvent.ConsumableSpent("consumable_name", 1, 2), 20847);
+			TestRunJsonVerify("resource_acquired/0", runOrder.ToString("D2") + " Check consumable_spent event (Server) (1)", 20847, "1", "2", "consumable_name");
 		
 		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check resource_acquired event (1)", "Ok", e, 20847);
+			TestRunException (runOrder.ToString("D2") + " Check consumable_spent event (1)", "Ok", e, 20847);
 		}
 
 
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check resource_acquired event (2)", "Ok", AnalyticsEvent.ResourceAcquired(1, 2, "item_id", "item_name"), 20847);
-			TestRunJsonVerify("resource_acquired/1", runOrder.ToString("D2") + " Check resource_acquired event (Server) (2)", 20847, "1", "2", "item_id", "item_name");
+			TestRunHelper (runOrder.ToString("D2") + " Check consumable_spent event (2)", "Ok", AnalyticsEvent.ConsumableSpent("consumable_name", 1, 2, "itemPurchased"), 20847);
+			TestRunJsonVerify("resource_acquired/1", runOrder.ToString("D2") + " Check consumable_spent event (Server) (2)", 20847, "1", "2", "consumable_name", "itemPurchased");
 		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check resource_acquired event (2)", "Ok", e, 20847);
+			TestRunException (runOrder.ToString("D2") + " Check consumable_spent event (2)", "Ok", e, 20847);
 		}
 			
 		if (runOrder < maxTest) {
@@ -353,19 +345,19 @@ public class Framework : MonoBehaviour {
 
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check resource_spent event (1)", "Ok", AnalyticsEvent.ResourceSpent(1, 2, "item_id"), 20848);
-			TestRunJsonVerify("resource_spent/0", runOrder.ToString("D2") + " Check resource_spent event (Server) (1)", 20848, "1", "2", "item_id");
+			//TestRunHelper (runOrder.ToString("D2") + " Check item_acquired event (1)", "Ok", AnalyticsEvent.ItemAcquired("item_name", AcquisitionType.Soft, AcquisitionSource.Earned), 20848);
+			//TestRunJsonVerify("resource_spent/0", runOrder.ToString("D2") + " Check item_acquired event (Server) (1)", 20848, "soft", "earned", "item_name");
 		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check resource_spent event (1)", "Ok", e, 20848);
+			TestRunException (runOrder.ToString("D2") + " Check item_acquired event (1)", "Ok", e, 20848);
 		}
 
 
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check resource_spent event (2)", "Ok", AnalyticsEvent.ResourceSpent(1, 2, "item_id", "item_name"), 20848);
-			TestRunJsonVerify("resource_spent/1", runOrder.ToString("D2") + " Check resource_spent event (Server) (2)", 20848, "1", "2", "item_id", "item_name");
+			TestRunHelper (runOrder.ToString("D2") + " Check item_acquired event (2)", "Ok", AnalyticsEvent.ItemAcquired("item_name", AcquisitionType.Soft, AcquisitionSource.Earned, "resourceType", 0, 0), 20848);
+			TestRunJsonVerify("resource_spent/1", runOrder.ToString("D2") + " Check item_acquired event (Server) (2)", 20848, "1", "2", "soft", "earned", "item_name", "resourceType", "0", "0");
 		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check resource_spent event (2)", "Ok", e, 20848);
+			TestRunException (runOrder.ToString("D2") + " Check item_acquired event (2)", "Ok", e, 20848);
 		}
 			
 		if (runOrder < maxTest) {

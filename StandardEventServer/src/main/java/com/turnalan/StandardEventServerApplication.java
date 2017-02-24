@@ -30,9 +30,9 @@ public class StandardEventServerApplication {
 		put("store_opened", 1);
 		put("store_item_click", 2);
 		put("currency_acquired", 2);
-		put("currency_spent", 2);
-		put("resource_acquired", 2);
-		put("resource_spent", 2);
+		put("consumable_acquired", 1);
+		put("consumable_spent", 2);
+		put("item_acquired", 2);
 		put("ad_offer", 4);
 		put("ad_start", 4);
 		put("ad_complete", 4);

@@ -1,21 +1,34 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace UnityEngine.Analytics.Experimental
 {
-    [Serializable]
-    [CreateAssetMenu(fileName = "TutorialCompletePayload.asset", menuName = "Analytics Events/First-Time User Experience/Tutorial Complete")]
+    /// <summary>
+    /// Tutorial complete payload.
+    /// </summary>
+    [Serializable, CreateAssetMenu(fileName = "TutorialCompletePayload.asset", menuName = "Analytics Events/First-Time User Experience/Tutorial Complete")]
     public class TutorialCompletePayload : TutorialPayload
     {
+        /// <summary>
+        /// The name of the standard event.
+        /// </summary>
         public static readonly string standardEventName = "tutorial_complete";
 
+        /// <summary>
+        /// Gets the name of the event.
+        /// </summary>
+        /// <value>The name of the event.</value>
         public override string eventName
         {
             get { return standardEventName; }
         }
 
+        /// <summary>
+        /// Creates the instance.
+        /// </summary>
+        /// <returns>The instance.</returns>
+        /// <param name="tutorialId">Tutorial identifier.</param>
+        /// <param name="eventData">Event data.</param>
         new public static TutorialCompletePayload CreateInstance(string tutorialId, IDictionary<string, object> eventData)
         {
             return CreateInstance<TutorialCompletePayload>(tutorialId, eventData);

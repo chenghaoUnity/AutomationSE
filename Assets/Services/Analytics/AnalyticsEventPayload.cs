@@ -1,21 +1,22 @@
-﻿using System;
+using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Text.RegularExpressions;
 
 namespace UnityEngine.Analytics.Experimental
 {
-    [Serializable]
-    [CreateAssetMenu(fileName = "CustomEventPayload.asset", menuName = "Analytics Events/Custom", order = 0)]
-    public class AnalyticsEventPayload : ScriptableObject, IEnumerable<KeyValuePair<string, object>>
+    /// <summary>
+    /// Analytics event payload.
+    /// </summary>
+    [Serializable, CreateAssetMenu(fileName = "CustomEventPayload.asset", menuName = "Analytics Events/Custom", order = 0)]
+    public class AnalyticsEventPayload : ScriptableObject
     {
-        protected static readonly string k_WarningFormat_NullValue = "Unable to validate '{0}' param value is of type '{1}'. Value is 'null'.";
-        protected static readonly string k_ErrorFormat_InvalidType = "Invalid value type for '{0}' param. Expected type: '{1}'.";
-        protected static readonly string k_ErrorFormat_InvalidValue = "Invalid value for '{0}' param. Expected value: '{1}'.";
-        protected static readonly string k_ErrorFormat_RequiredParamNotSet = "Required param not set ({0}).";
+        static readonly string k_WarningFormat_NullValue = "Unable to validate '{0}' param value is of type '{1}'. Value is 'null'.";
+        static readonly string k_ErrorFormat_InvalidType = "Invalid value type for '{0}' param. Expected type: '{1}'.";
+        static readonly string k_ErrorFormat_InvalidValue = "Invalid value for '{0}' param. Expected value: '{1}'.";
+        static readonly string k_ErrorFormat_RequiredParamNotSet = "Required param not set ({0}).";
 
-        static readonly string k_StandardEventPrefix = "unity.";
+        static readonly string k_StandardEventPrefix = string.Empty; // "unity.";
         static readonly string k_Error_TooManyParams = "Too many event parameters.";
         static readonly string k_Error_NameNullOrEmpty = "Event name cannot be null or empty.";
         static readonly string k_Error_KeyValueCountNotEqual = "Number of keys must equal the number of values.";
@@ -154,7 +155,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <typeparam name="T">The expected value type.</typeparam>
         protected void ValidateDataValueType<T> (string key, object value)
         {
-            if (Equals(value, null))
+            if (value == null)
             {
                 if (AnalyticsEvent.debugMode)
                 {
@@ -196,116 +197,14 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets the standard parameter string value.
+        /// Gets the standard parameter value from an enum value.
         /// </summary>
-        /// <returns>The standard parameter string value.</returns>
-        /// <param name="type">Type.</param>
-        protected static string GetStandardParamValue (StoreType type)
+        /// <returns>The standard parameter value.</returns>
+        /// <param name="value">The enum value.</param>
+        /// <typeparam name="T">The enum type.</typeparam>
+        protected static string GetStandardParamValue<T> (T value) where T : struct
         {
-            return type.ToString().ToLower();
-        }
-
-        /// <summary>
-        /// Gets the standard parameter string value.
-        /// </summary>
-        /// <returns>The standard parameter string value.</returns>
-        /// <param name="type">Type.</param>
-        protected static string GetStandardParamValue (ItemType type)
-        {
-            return type.ToString().ToLower();
-        }
-
-        /// <summary>
-        /// Gets the standard parameter string value.
-        /// </summary>
-        /// <returns>The standard parameter string value.</returns>
-        /// <param name="itemSource">Item source.</param>
-        protected static string GetStandardParamValue (ItemSource itemSource)
-        {
-            switch (itemSource)
-            {
-                case ItemSource.None:               return null;
-                case ItemSource.RewardedAd:         return "rewarded_ad";
-                case ItemSource.TimedReward:        return "timed_reward";
-                case ItemSource.SocialReward:       return "social_reward";
-                default: return itemSource.ToString().ToLower();
-            }
-        }
-
-        /// <summary>
-        /// Gets the standard parameter string value.
-        /// </summary>
-        /// <returns>The standard parameter string value.</returns>
-        /// <param name="authorizationNetwork">Authorization network.</param>
-        protected static string GetStandardParamValue (AuthorizationNetwork authorizationNetwork)
-        {
-            switch (authorizationNetwork)
-            {
-                case AuthorizationNetwork.None:     return null;
-                default: return authorizationNetwork.ToString().ToLower();
-            }
-        }
-
-        /// <summary>
-        /// Gets the standard parameter string value.
-        /// </summary>
-        /// <returns>The standard parameter string value.</returns>
-        /// <param name="socialNetwork">Social network.</param>
-        protected static string GetStandardParamValue (SocialNetwork socialNetwork)
-        {
-            switch (socialNetwork)
-            {
-                case SocialNetwork.None:            return null;
-                case SocialNetwork.GooglePlus:      return "google_plus";
-                default: return socialNetwork.ToString().ToLower();
-            }
-        }
-
-        /// <summary>
-        /// Gets the standard parameter string value.
-        /// </summary>
-        /// <returns>The standard parameter string value.</returns>
-        /// <param name="shareType">Share type.</param>
-        protected static string GetStandardParamValue (ShareType shareType)
-        {
-            switch (shareType)
-            {
-                case ShareType.None:                return null;
-                case ShareType.Text:                return "text_only";
-                default: return shareType.ToString().ToLower();
-            }
-        }
-
-        /// <summary>
-        /// Gets the standard parameter string value.
-        /// </summary>
-        /// <returns>The standard parameter string value.</returns>
-        /// <param name="screenType">Screen type.</param>
-        protected static string GetStandardParamValue (ScreenName screenType)
-        {
-            switch (screenType)
-            {
-                case ScreenName.None:               return null;
-                case ScreenName.MainMenu:           return "main_menu";
-                case ScreenName.IAPPromo:           return "iap_promo";
-                case ScreenName.CrossPromo:         return "cross_promo";
-                case ScreenName.FeaturePromo:       return "feature_promo";
-                default: return screenType.ToString().ToLower();
-            }
-        }
-
-        /// <summary>
-        /// Gets the standard parameter string value.
-        /// </summary>
-        /// <returns>The standard parameter string value.</returns>
-        /// <param name="advertisingNetwork">Advertising Network type.</param>
-        protected static string GetStandardParamValue(AdvertisingNetwork advertisingNetwork)
-        {
-            switch (advertisingNetwork)
-            {
-                case AdvertisingNetwork.None: return null;
-                default: return advertisingNetwork.ToString().ToLower();
-            }
+            return ConvertEnumToString(value);
         }
 
         /// <summary>
@@ -314,7 +213,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <returns>The instance.</returns>
         /// <param name="eventData">Event data.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public static T CreateInstance<T> (IDictionary<string, object> eventData) where T : AnalyticsEventPayload
+        public static T CreateInstance<T> (IDictionary<string, object> eventData = null) where T : AnalyticsEventPayload
         {
             return (T)CreateInstance(typeof(T), eventData);
         }
@@ -325,9 +224,9 @@ namespace UnityEngine.Analytics.Experimental
         /// <returns>The instance.</returns>
         /// <param name="eventType">Event type.</param>
         /// <param name="eventData">Event data.</param>
-        public static AnalyticsEventPayload CreateInstance (Type eventType, IDictionary<string, object> eventData)
+        public static AnalyticsEventPayload CreateInstance (Type eventType, IDictionary<string, object> eventData = null)
         {
-            var instance = CreateInstance(eventType) as AnalyticsEventPayload;
+            var instance = ScriptableObject.CreateInstance(eventType) as AnalyticsEventPayload;
 
             instance.SetEventData(eventData);
 
@@ -340,11 +239,11 @@ namespace UnityEngine.Analytics.Experimental
         /// <returns>The instance.</returns>
         /// <param name="eventName">Event name.</param>
         /// <param name="eventData">Event data.</param>
-        public static AnalyticsEventPayload CreateInstance (string eventName, IDictionary<string, object> eventData)
+        public static AnalyticsEventPayload CreateInstance (string eventName, IDictionary<string, object> eventData = null)
         {
             Type eventType = AnalyticsEvent.GetStandardEventType(eventName);
 
-            if (!Equals(eventType, null))
+            if (eventType != null)
             {
                 return CreateInstance(eventType, eventData);
             }
@@ -355,15 +254,6 @@ namespace UnityEngine.Analytics.Experimental
             instance.SetEventData(eventData);
 
             return instance;
-        }
-
-        /// <summary>
-        /// Gets the enumerator.
-        /// </summary>
-        /// <returns>The enumerator.</returns>
-        public IEnumerator<KeyValuePair<string, object>> GetEnumerator ()
-        {
-            return GetEventData().GetEnumerator();
         }
 
         /// <summary>
@@ -383,7 +273,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">Event data.</param>
         public void SetEventData (IDictionary<string, object> eventData)
         {
-            if (Equals(eventData, null))
+            if (eventData == null)
             {
                 m_EventData.Clear();
                 return;
@@ -417,7 +307,14 @@ namespace UnityEngine.Analytics.Experimental
 
             if (index >= 0)
             {
-                return (T)m_EventDataValues[index];
+                var param = m_EventDataValues[index];
+
+                if (typeof(T).IsEnum)
+                {
+                    return ConvertStringToEnum<T>((string)param);
+                }
+
+                return (T)param;
             }
 
             return default(T);
@@ -436,7 +333,7 @@ namespace UnityEngine.Analytics.Experimental
             }
 
             // Only add a param if value is not null or an empty string.
-            if (Equals(value, null) || (value is string && string.IsNullOrEmpty((string)value)))
+            if (value == null || (value is string && string.IsNullOrEmpty((string)value)))
             {
                 return;
             }
@@ -498,12 +395,7 @@ namespace UnityEngine.Analytics.Experimental
             return result;
         }
 
-        IEnumerator IEnumerable.GetEnumerator ()
-        {
-            return GetEnumerator();
-        }
-
-        string JoinWords (string conjunction, string[] words)
+        static string JoinWords (string conjunction, string[] words)
         {
             string result = string.Join("', '", words);
 
@@ -524,6 +416,50 @@ namespace UnityEngine.Analytics.Experimental
             }
 
             return result;
+        }
+
+        static string SplitCamelCase (string input)
+        {
+            input = Regex.Replace(input, "([a-z](?=[A-Z]))", "$0_");
+            return Regex.Replace(input, "(?<!_|^)[A-Z][a-z]", "_$0");
+        }
+
+        static string ConvertEnumToString<T> (T value)
+        {
+            if (!typeof(T).IsEnum)
+            {
+                throw new ArgumentException("T must be an enum type.");
+            }
+
+            var stringValue = value.ToString();
+
+            if (!typeof(T).Equals(typeof(AdvertisingNetwork)) &&
+                !typeof(T).Equals(typeof(AuthorizationNetwork)) &&
+                !typeof(T).Equals(typeof(SocialNetwork)))
+            {
+                stringValue = SplitCamelCase(stringValue);
+            }
+
+            return stringValue.ToLower();
+        }
+
+        static T ConvertStringToEnum<T> (string value)
+        {
+            if (!typeof(T).IsEnum)
+            {
+                throw new ArgumentException("T must be an enum type.");
+            }
+
+            var enumValues = Enum.GetValues(typeof(T)) as T[];
+            var stringValues = enumValues.Select(x => ConvertEnumToString(x)).ToArray();
+            int index = Array.IndexOf(stringValues, value);
+
+            if (index >= 0)
+            {
+                return enumValues[index];
+            }
+
+            return default(T);
         }
 
         void UpdateEventData ()

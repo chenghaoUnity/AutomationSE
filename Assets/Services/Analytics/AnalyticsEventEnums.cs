@@ -1,18 +1,27 @@
 ﻿namespace UnityEngine.Analytics.Experimental
 {
+    /// <summary>
+    /// Store type.
+    /// </summary>
     public enum StoreType
     {
-        Premium = 0,
-        Soft,
+        Soft = 0,
+        Premium,
     }
 
-    public enum ItemType
+    /// <summary>
+    /// Acquisition type.
+    /// </summary>
+    public enum AcquisitionType
     {
-        Premium = 0,
-        Soft,
+        Soft = 0,
+        Premium,
     }
 
-    public enum ItemSource
+    /// <summary>
+    /// Acquisition source.
+    /// </summary>
+    public enum AcquisitionSource
     {
         None = 0,
         Store,
@@ -24,6 +33,9 @@
         SocialReward,
     }
 
+    /// <summary>
+    /// Advertising network.
+    /// </summary>
     public enum AdvertisingNetwork
     {
         None = 0,
@@ -110,6 +122,9 @@
         YuMe,
     }
 
+    /// <summary>
+    /// Authorization network.
+    /// </summary>
     public enum AuthorizationNetwork
     {
         None = 0,
@@ -120,6 +135,9 @@
         GameCenter,
     }
 
+    /// <summary>
+    /// Social network.
+    /// </summary>
     public enum SocialNetwork
     {
         None = 0,
@@ -136,16 +154,22 @@
         OK_ru,
     }
 
+    /// <summary>
+    /// Share type.
+    /// </summary>
     public enum ShareType
     {
         None = 0,
-        Text,
+        TextOnly,
         Image,
         Video,
         Invite,
         Achievement,
     }
 
+    /// <summary>
+    /// Screen name.
+    /// </summary>
     public enum ScreenName
     {
         None = 0,

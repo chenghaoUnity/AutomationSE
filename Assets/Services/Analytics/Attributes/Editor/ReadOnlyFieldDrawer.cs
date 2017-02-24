@@ -1,33 +1,44 @@
 ﻿using UnityEditor;
-using UnityEngine;
 
 namespace UnityEngine.Analytics.Experimental
 {
+    /// <summary>
+    /// Read-only field property drawer.
+    /// </summary>
     [CustomPropertyDrawer(typeof(ReadOnlyFieldAttribute))]
     public class ReadOnlyFieldDrawer : PropertyDrawer
     {
-        public override void OnGUI (Rect position, SerializedProperty prop, GUIContent label)
+        /// <summary>
+        /// Makes the GUI for the property.
+        /// <remarks>
+        /// Use this to display a serialized field, but not allow the field to be edited.
+        /// </remarks>
+        /// </summary>
+        /// <param name="position">Rectangle on the screen to use for the property GUI.</param>
+        /// <param name="property">The <c>SerializedProperty</c> to make the custom GUI for.</param>
+        /// <param name="label">The label of this property.</param>
+        public override void OnGUI (Rect position, SerializedProperty property, GUIContent label)
         {
             string valueStr;
 
-            switch (prop.propertyType)
+            switch (property.propertyType)
             {
                 case SerializedPropertyType.Integer:
-                    valueStr = prop.intValue.ToString();
+                    valueStr = property.intValue.ToString();
                     break;
                 case SerializedPropertyType.Boolean:
-                    valueStr = prop.boolValue.ToString();
+                    valueStr = property.boolValue.ToString();
                     break;
                 case SerializedPropertyType.Float:
-                    valueStr = prop.floatValue.ToString("0.00000");
+                    valueStr = property.floatValue.ToString("0.00000");
                     break;
                 case SerializedPropertyType.String:
-                    valueStr = prop.stringValue;
+                    valueStr = property.stringValue;
                     break;
                 default:
                     valueStr = "(not supported)";
-            break;
-        }
+                break;
+            }
 
             EditorGUI.LabelField(position,label.text, valueStr);
         }
