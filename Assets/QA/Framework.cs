@@ -1197,7 +1197,7 @@ public class Framework : MonoBehaviour {
 		string key = reference.Child("QAReport").Push().Key;
 		Dictionary<string, object> childUpdates = new Dictionary<string, object>();
 		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/" + testCase.getDescitpion() + "/" + testCase.getDate ().ToString ("HH:mm:ss tt zz") + "/Result/"] = testCase.getResult () == true ? "Pass" : "Fail";
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () + "/" + testCase.getDate ().ToString ("HH:mm:ss tt zz") + "/UnityVersion/"] = UnityEditorInternal.InternalEditorUtility.GetFullUnityVersion ();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () + "/" + testCase.getDate ().ToString ("HH:mm:ss tt zz") + "/UnityVersion/"] = Application.unityVersion;
 		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () + "/" + testCase.getDate ().ToString ("HH:mm:ss tt zz") + "/FailReason/"] = testCase.getFailReason ();
 		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () + "/" + testCase.getDate ().ToString ("HH:mm:ss tt zz") + "/TestrailLink/"] = testCase.getCaseLink ();
 		reference.UpdateChildrenAsync(childUpdates);
