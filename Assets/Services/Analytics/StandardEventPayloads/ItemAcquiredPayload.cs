@@ -135,9 +135,9 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="resourceAmount">Resource amount.</param>
         /// <param name="resourceBalance">Resource balance.</param>
         /// <param name="eventData">Event data.</param>
-        public static ItemAcquiredPayload CreateInstance (string name, AcquisitionType type, AcquisitionSource source, string resourceType = null, int resourceAmount = 0, int resourceBalance = 0, IDictionary<string, object> eventData = null)
+        public static ItemAcquiredPayload CreateInstance (string name, AcquisitionType type, AcquisitionSource source, string resourceType = null, IDictionary<string, object> eventData = null)
         {
-            return CreateInstance(name, type, GetStandardParamValue(source), resourceType, (object)resourceAmount, resourceBalance, eventData);
+            return CreateInstance(name, type, GetStandardParamValue(source), resourceType, eventData);
         }
 
         /// <summary>
@@ -151,76 +151,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="resourceAmount">Resource amount.</param>
         /// <param name="resourceBalance">Resource balance.</param>
         /// <param name="eventData">Event data.</param>
-        public static ItemAcquiredPayload CreateInstance (string name, AcquisitionType type, string source, string resourceType = null, int resourceAmount = 0, int resourceBalance = 0, IDictionary<string, object> eventData = null)
-        {
-            return CreateInstance(name, type, source, resourceType, (object)resourceAmount, resourceBalance, eventData);
-        }
-
-        /// <summary>
-        /// Creates the instance.
-        /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="resourceType">Resource type.</param>
-        /// <param name="resourceAmount">Resource amount.</param>
-        /// <param name="resourceBalance">Resource balance.</param>
-        /// <param name="eventData">Event data.</param>
-        public static ItemAcquiredPayload CreateInstance (string name, AcquisitionType type, AcquisitionSource source, string resourceType = null, float resourceAmount = 0, float resourceBalance = 0, IDictionary<string, object> eventData = null)
-        {
-            return CreateInstance(name, type, GetStandardParamValue(source), resourceType, (object)resourceAmount, resourceBalance, eventData);
-        }
-
-        /// <summary>
-        /// Creates the instance.
-        /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="resourceType">Resource type.</param>
-        /// <param name="resourceAmount">Resource amount.</param>
-        /// <param name="resourceBalance">Resource balance.</param>
-        /// <param name="eventData">Event data.</param>
-        public static ItemAcquiredPayload CreateInstance (string name, AcquisitionType type, string source, string resourceType = null, float resourceAmount = 0, float resourceBalance = 0, IDictionary<string, object> eventData = null)
-        {
-            return CreateInstance(name, type, source, resourceType, (object)resourceAmount, resourceBalance, eventData);
-        }
-
-        /// <summary>
-        /// Creates the instance.
-        /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="resourceType">Resource type.</param>
-        /// <param name="resourceAmount">Resource amount.</param>
-        /// <param name="resourceBalance">Resource balance.</param>
-        /// <param name="eventData">Event data.</param>
-        public static ItemAcquiredPayload CreateInstance (string name, AcquisitionType type, AcquisitionSource source, string resourceType = null, decimal resourceAmount = 0, decimal resourceBalance = 0, IDictionary<string, object> eventData = null)
-        {
-            return CreateInstance(name, type, GetStandardParamValue(source), resourceType, (object)resourceAmount, resourceBalance, eventData);
-        }
-
-        /// <summary>
-        /// Creates the instance.
-        /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="resourceType">Resource type.</param>
-        /// <param name="resourceAmount">Resource amount.</param>
-        /// <param name="resourceBalance">Resource balance.</param>
-        /// <param name="eventData">Event data.</param>
-        public static ItemAcquiredPayload CreateInstance (string name, AcquisitionType type, string source, string resourceType = null, decimal resourceAmount = 0, decimal resourceBalance = 0, IDictionary<string, object> eventData = null)
-        {
-            return CreateInstance(name, type, source, resourceType, (object)resourceAmount, resourceBalance, eventData);
-        }
-
-        static ItemAcquiredPayload CreateInstance (string name, AcquisitionType type, string source, string resourceType, object resourceAmount, object resourceBalance, IDictionary<string, object> eventData)
+        public static ItemAcquiredPayload CreateInstance (string name, AcquisitionType type, string source, string resourceType = null, IDictionary<string, object> eventData = null)
         {
             if (eventData == null)
             {
@@ -231,12 +162,6 @@ namespace UnityEngine.Analytics.Experimental
             eventData.Add(k_ParamKey_Source, source);
             eventData.Add(k_ParamKey_Name, name);
             eventData.Add(k_ParamKey_ResourceType, resourceType);
-
-            if ((decimal)resourceAmount != 0)
-            {
-                eventData.Add(k_ParamKey_ResourceAmount, resourceAmount);
-                eventData.Add(k_ParamKey_ResourceBalance, resourceBalance);
-            }
 
             return CreateInstance<ItemAcquiredPayload>(eventData);
         }

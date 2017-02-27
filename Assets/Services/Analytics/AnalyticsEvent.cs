@@ -664,9 +664,9 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="resourceAmount">Resource amount.</param>
         /// <param name="resourceBalance">Resource balance.</param>
         /// <param name="eventData">Event data.</param>
-        public static AnalyticsResult ItemAcquired (string name, AcquisitionType type, AcquisitionSource source, string resourceType = null, int resourceAmount = 0, int resourceBalance = 0, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult ItemAcquired (string name, AcquisitionType type, AcquisitionSource source, string resourceType = null, IDictionary<string, object> eventData = null)
         {
-            return ItemAcquiredPayload.CreateInstance(name, type, source, resourceType, resourceAmount, resourceBalance, eventData).Send();
+            return ItemAcquiredPayload.CreateInstance(name, type, source, resourceType, eventData).Send();
         }
 
         /// <summary>
@@ -680,73 +680,9 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="resourceAmount">Resource amount.</param>
         /// <param name="resourceBalance">Resource balance.</param>
         /// <param name="eventData">Event data.</param>
-        public static AnalyticsResult ItemAcquired (string name, AcquisitionType type, string source, string resourceType = null, int resourceAmount = 0, int resourceBalance = 0, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult ItemAcquired (string name, AcquisitionType type, string source, string resourceType = null, IDictionary<string, object> eventData = null)
         {
-            return ItemAcquiredPayload.CreateInstance(name, type, source, resourceType, resourceAmount, resourceBalance, eventData).Send();
-        }
-
-        /// <summary>
-        /// Items the acquired.
-        /// </summary>
-        /// <returns>The acquired.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="resourceType">Resource type.</param>
-        /// <param name="resourceAmount">Resource amount.</param>
-        /// <param name="resourceBalance">Resource balance.</param>
-        /// <param name="eventData">Event data.</param>
-        public static AnalyticsResult ItemAcquired (string name, AcquisitionType type, AcquisitionSource source, string resourceType = null, float resourceAmount = 0, float resourceBalance = 0, IDictionary<string, object> eventData = null)
-        {
-            return ItemAcquiredPayload.CreateInstance(name, type, source, resourceType, resourceAmount, resourceBalance, eventData).Send();
-        }
-
-        /// <summary>
-        /// Items the acquired.
-        /// </summary>
-        /// <returns>The acquired.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="resourceType">Resource type.</param>
-        /// <param name="resourceAmount">Resource amount.</param>
-        /// <param name="resourceBalance">Resource balance.</param>
-        /// <param name="eventData">Event data.</param>
-        public static AnalyticsResult ItemAcquired (string name, AcquisitionType type, string source, string resourceType = null, float resourceAmount = 0, float resourceBalance = 0, IDictionary<string, object> eventData = null)
-        {
-            return ItemAcquiredPayload.CreateInstance(name, type, source, resourceType, resourceAmount, resourceBalance, eventData).Send();
-        }
-
-        /// <summary>
-        /// Items the acquired.
-        /// </summary>
-        /// <returns>The acquired.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="resourceType">Resource type.</param>
-        /// <param name="resourceAmount">Resource amount.</param>
-        /// <param name="resourceBalance">Resource balance.</param>
-        /// <param name="eventData">Event data.</param>
-        public static AnalyticsResult ItemAcquired (string name, AcquisitionType type, AcquisitionSource source, string resourceType = null, decimal resourceAmount = 0, decimal resourceBalance = 0, IDictionary<string, object> eventData = null)
-        {
-            return ItemAcquiredPayload.CreateInstance(name, type, source, resourceType, resourceAmount, resourceBalance, eventData).Send();
-        }
-
-        /// <summary>
-        /// Items the acquired.
-        /// </summary>
-        /// <returns>The acquired.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="resourceType">Resource type.</param>
-        /// <param name="resourceAmount">Resource amount.</param>
-        /// <param name="resourceBalance">Resource balance.</param>
-        /// <param name="eventData">Event data.</param>
-        public static AnalyticsResult ItemAcquired (string name, AcquisitionType type, string source, string resourceType = null, decimal resourceAmount = 0, decimal resourceBalance = 0, IDictionary<string, object> eventData = null)
-        {
-            return ItemAcquiredPayload.CreateInstance(name, type, source, resourceType, resourceAmount, resourceBalance, eventData).Send();
+            return ItemAcquiredPayload.CreateInstance(name, type, source, resourceType, eventData).Send();
         }
 
         /// <summary>
