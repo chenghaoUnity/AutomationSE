@@ -105,18 +105,9 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="placementId">Placement ID for the ad.</param>
         /// <param name="eventData">Dictionary with any custom parameters.</param>
         /// <typeparam name="T">The payload type that inherits from AdPayload.</typeparam>
-        protected static T CreateInstance<T>(bool rewarded, AdvertisingNetwork advertisingNetwork = AdvertisingNetwork.None, string placementId = null, IDictionary<string, object> eventData = null) where T : AdPayload
+        protected static T CreateInstance<T>(bool rewarded, AdvertisingNetwork advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null) where T : AdPayload
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
-
-            eventData.Add(k_ParamKey_PlacementId, placementId);
-            eventData.Add(k_ParamKey_Network, GetStandardParamValue(advertisingNetwork));
-            eventData.Add(k_ParamKey_Rewarded, rewarded);
-
-            return CreateInstance<T>(eventData);
+            return CreateInstance<T>(rewarded, GetStandardParamValue(advertisingNetwork), placementId, eventData);
         }
     }
 }

@@ -381,7 +381,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", AnalyticsEvent.AdOffer(true), 20849);
-			TestRunJsonVerify("ad_offer/0", runOrder.ToString("D2") + " Check ad_offer event (Server) (1)", 20849, "True", "none");
+			TestRunJsonVerify("ad_offer/0", runOrder.ToString("D2") + " Check ad_offer event (Server) (1)", 20849, "True");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", e, 20849);
 		}
@@ -426,7 +426,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", AnalyticsEvent.AdStart(true), 20850);
-			TestRunJsonVerify("ad_start/0", runOrder.ToString("D2") + " Check ad_start event (Server) (1)", 20850, "True", "none");
+			TestRunJsonVerify("ad_start/0", runOrder.ToString("D2") + " Check ad_start event (Server) (1)", 20850, "True");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", e, 20850);
 		}
@@ -471,7 +471,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", AnalyticsEvent.AdComplete(true), 20851);
-			TestRunJsonVerify("ad_complete/0", runOrder.ToString("D2") + " Check ad_complete event (Server) (1)", 20851, "True", "none");
+			TestRunJsonVerify("ad_complete/0", runOrder.ToString("D2") + " Check ad_complete event (Server) (1)", 20851, "True");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", e, 20851);
 		}
@@ -516,7 +516,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", AnalyticsEvent.AdSkip(true), 20852);
-			TestRunJsonVerify("ad_skip/0", runOrder.ToString("D2") + " Check ad_skip event (Server) (1)", 20852, "True", "none");
+			TestRunJsonVerify("ad_skip/0", runOrder.ToString("D2") + " Check ad_skip event (Server) (1)", 20852, "True");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", e, 20852);
 		}
@@ -1205,10 +1205,10 @@ public class Framework : MonoBehaviour {
 	private void pushResultToServer(TestCase testCase) {
 		string key = reference.Child("QAReport").Push().Key;
 		Dictionary<string, object> childUpdates = new Dictionary<string, object>();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/" + testCase.getDescitpion() + "/" + testCase.getDate ().ToString ("HH:mm:ss tt zz") + "/Result/"] = testCase.getResult () == true ? "Pass" : "Fail";
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () + "/" + testCase.getDate ().ToString ("HH:mm:ss tt zz") + "/UnityVersion/"] = Application.unityVersion;
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () + "/" + testCase.getDate ().ToString ("HH:mm:ss tt zz") + "/FailReason/"] = testCase.getFailReason ();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () + "/" + testCase.getDate ().ToString ("HH:mm:ss tt zz") + "/TestrailLink/"] = testCase.getCaseLink ();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/" + testCase.getDescitpion() +  "/Result/"] = testCase.getResult () == true ? "Pass" : "Fail";
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () +  "/UnityVersion/"] = Application.unityVersion;
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () +  "/FailReason/"] = testCase.getFailReason ();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () +  "/TestrailLink/"] = testCase.getCaseLink ();
 		reference.UpdateChildrenAsync(childUpdates);
 	}
 

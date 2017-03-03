@@ -440,7 +440,9 @@ namespace UnityEngine.Analytics.Experimental
                 stringValue = SplitCamelCase(stringValue);
             }
 
-            return stringValue.ToLower();
+            stringValue = stringValue.ToLower();
+
+            return (stringValue == "none") ? null : stringValue;
         }
 
         static T ConvertStringToEnum<T> (string value)

@@ -263,7 +263,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="placementId">Ad placement ID.</param>
         /// <param name="eventData">Custom event data.</param>
         /// <returns>Analytics API result.</returns>
-        public static AnalyticsResult AdComplete (bool rewarded, string advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult AdComplete (bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null)
         {
             return AdCompletePayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
@@ -276,7 +276,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="placementId">Ad placement ID.</param>
         /// <param name="eventData">Custom event data.</param>
         /// <returns>Analytics API result.</returns>
-        public static AnalyticsResult AdComplete (bool rewarded, AdvertisingNetwork advertisingNetwork = AdvertisingNetwork.None, string placementId = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult AdComplete (bool rewarded, AdvertisingNetwork advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
         {
             return AdCompletePayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
@@ -289,7 +289,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="placementId">Ad placement ID.</param>
         /// <param name="eventData">Custom event data.</param>
         /// <returns>Analytics API result.</returns>
-        public static AnalyticsResult AdOffer (bool rewarded, string advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult AdOffer (bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null)
         {
             return AdOfferPayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
@@ -302,7 +302,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="placementId">Ad placement ID.</param>
         /// <param name="eventData">Custom event data.</param>
         /// <returns>Analytics API result.</returns>
-        public static AnalyticsResult AdOffer (bool rewarded, AdvertisingNetwork advertisingNetwork = AdvertisingNetwork.None, string placementId = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult AdOffer (bool rewarded, AdvertisingNetwork advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
         {
             return AdOfferPayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
@@ -315,7 +315,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="placementId">Ad placement ID.</param>
         /// <param name="eventData">Custom event data.</param>
         /// <returns>Analytics API result.</returns>
-        public static AnalyticsResult AdSkip (bool rewarded, string advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult AdSkip (bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null)
         {
             return AdSkipPayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
@@ -328,7 +328,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="placementId">Ad placement ID.</param>
         /// <param name="eventData">Custom event data.</param>
         /// <returns>Analytics API result.</returns>
-        public static AnalyticsResult AdSkip (bool rewarded, AdvertisingNetwork advertisingNetwork = AdvertisingNetwork.None, string placementId = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult AdSkip (bool rewarded, AdvertisingNetwork advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
         {
             return AdSkipPayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
@@ -341,7 +341,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="placementId">Ad placement ID.</param>
         /// <param name="eventData">Custom event data.</param>
         /// <returns>Analytics API result.</returns>
-        public static AnalyticsResult AdStart (bool rewarded, string advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult AdStart (bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null)
         {
             return AdStartPayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }
@@ -354,7 +354,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="placementId">Ad placement ID.</param>
         /// <param name="eventData">Custom event data.</param>
         /// <returns>Analytics API result.</returns>
-        public static AnalyticsResult AdStart (bool rewarded, AdvertisingNetwork advertisingNetwork = AdvertisingNetwork.None, string placementId = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult AdStart (bool rewarded, AdvertisingNetwork advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
         {
             return AdStartPayload.CreateInstance(rewarded, advertisingNetwork, placementId, eventData).Send();
         }

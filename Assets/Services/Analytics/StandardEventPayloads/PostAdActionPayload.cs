@@ -44,7 +44,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="advertisingNetwork">Advertising network.</param>
         /// <param name="placementId">Placement identifier.</param>
         /// <param name="eventData">Event data.</param>
-        public static PostAdActionPayload CreateInstance(bool rewarded, AdvertisingNetwork advertisingNetwork = AdvertisingNetwork.None, string placementId = null, IDictionary<string, object> eventData = null)
+        public static PostAdActionPayload CreateInstance(bool rewarded, AdvertisingNetwork advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null)
         {
             return CreateInstance<PostAdActionPayload>(rewarded, advertisingNetwork, placementId, eventData);
         }
