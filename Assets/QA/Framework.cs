@@ -1196,7 +1196,11 @@ public class Framework : MonoBehaviour {
 			if (result.getResult () == true) {
 				passed++;
 			}
-			pushResultToServer (result);
+			try {
+				pushResultToServer (result);
+			} catch (NullReferenceException e) {
+				print (e);
+			}
 		}
 			
 		GameObject.Find("Text").GetComponent<Text> ().text = "Finished! " + (passed) + " / " + (resultTable.Count)  + " Passed!";
