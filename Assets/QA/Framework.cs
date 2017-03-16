@@ -15,9 +15,6 @@ using LitJson;
 
 public class Framework : MonoBehaviour {
 
-	public int sum_result;
-	public int sum_test;
-
 	public List<TestCase> resultTable = new List<TestCase>();
 	public List<IEnumerator> testSuite = new List<IEnumerator>();
 
@@ -36,13 +33,35 @@ public class Framework : MonoBehaviour {
 
 	public void Start() {
 
+		#if !UNITY_EDITOR
+		verifyMode = false;
+		testRun ();
+		#endif
 	}
 
-	public void Update() {
-		sum_result = resultTable.Count;
-		sum_test = testSuite.Count;
-	}
+	public IEnumerator automationTestRun() {
 		
+		verifyMode = false;
+		testRun ();
+
+		string status = "Not Ready";
+
+		while (status != "Ready") {
+			yield return new WaitForSeconds (5);
+			StartCoroutine (GetText ("check", (result) => {
+				Debug.Log(result);
+				status = result;
+			}));
+		}
+
+		while (GameObject.Find ("Text").GetComponent<Text> ().text.Contains ("Please wait")) {
+			yield return new WaitForSeconds (1);
+		}
+
+		verifyMode = true;
+		testRun ();
+	}
+
 	// Above is not relatived with creating test cases.
 
 	// Please add test cases to the test suite
@@ -94,10 +113,14 @@ public class Framework : MonoBehaviour {
 		maxTest = testSuite.Count;
 
 		// Start test run
+
+		// When sending mode enable
+		// Reset all previous content from the server
 		if (verifyMode == false) {
 			StartCoroutine (GetText ("reset", null));
 		}
 			
+		// When verify mode enable
 		StartCoroutine(testSuite[runOrder]);
 	}
 
@@ -105,6 +128,7 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
+		yield return new WaitForSeconds(timeDelay);
 		TestRunHelper (runOrder.ToString("D2") + " Check if version number is correct", "0.1.0", AnalyticsEvent.sdkVersion, 20660);
 
 		if (runOrder < maxTest) {

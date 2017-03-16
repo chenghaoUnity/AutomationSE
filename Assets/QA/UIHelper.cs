@@ -27,8 +27,6 @@ public class UIHelper : MonoBehaviour {
 	}
 
 	public void VerifyEvent() {
-
-
 		StartCoroutine (GetText ("check", (result) => {
 			if (result == "Ready") {
 				framework.verifyMode = true;
