@@ -27,6 +27,8 @@ public class UIHelper : MonoBehaviour {
 	}
 
 	public void VerifyEvent() {
+
+
 		StartCoroutine (GetText ("check", (result) => {
 			if (result == "Ready") {
 				framework.verifyMode = true;
@@ -39,7 +41,7 @@ public class UIHelper : MonoBehaviour {
 		
 	IEnumerator GetText(string methodName, Action<string> callback) {
 
-		UnityWebRequest www = UnityWebRequest.Get("http://localhost:8081/events/" + methodName);
+		UnityWebRequest www = UnityWebRequest.Get("https://obscure-shelf-46410.herokuapp.com/events/" + methodName);
 		yield return www.Send();
 
 		if (www.isError) {

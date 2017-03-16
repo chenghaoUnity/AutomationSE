@@ -94,8 +94,11 @@ public class Framework : MonoBehaviour {
 		maxTest = testSuite.Count;
 
 		// Start test run
+		if (verifyMode == false) {
+			StartCoroutine (GetText ("reset", null));
+		}
+			
 		StartCoroutine(testSuite[runOrder]);
-
 	}
 
 	public IEnumerator test01() {
@@ -123,8 +126,8 @@ public class Framework : MonoBehaviour {
 
 		yield return new WaitForSeconds(timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check post_install_action event (2)", "Ok", AnalyticsEvent.PostInstallAction("action_id"), 20661);
-			TestRunJsonVerify("post_install_action/1", runOrder.ToString("D2") + " Check post_install_action event (Server) (2)", 20661, "action_id");
+			TestRunHelper (runOrder.ToString("D2") + " Check post_install_action event (2)", "Ok", AnalyticsEvent.PostInstallAction("action_id2"), 20661);
+			TestRunJsonVerify("post_install_action/1", runOrder.ToString("D2") + " Check post_install_action event (Server) (2)", 20661, "action_id2");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check post_install_action event (2)", "Ok", e, 20661);
 		}
@@ -1167,7 +1170,7 @@ public class Framework : MonoBehaviour {
 
 	IEnumerator GetText(string methodName, Action<string> callback) {
 		
-		UnityWebRequest www = UnityWebRequest.Get("http://localhost:8081/events/" + methodName);
+		UnityWebRequest www = UnityWebRequest.Get("https://obscure-shelf-46410.herokuapp.com/events/" + methodName);
 		yield return www.Send();
 
 		if (www.isError) {
