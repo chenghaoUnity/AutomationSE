@@ -4,8 +4,14 @@ using System.Collections.Generic;
 namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// Store opened payload.
+    /// Store Opened standard event payload (<c>store_opened</c>).
+    /// <remarks>
+    /// Send this event when the player opens a store in game.
+    /// </remarks>
     /// </summary>
+    /// <remarks>
+    /// This standard event can provide insight into potential player engagment with store inventory.
+    /// </remarks>
     [Serializable, CreateAssetMenu(fileName = "StoreOpenedPayload.asset", menuName = "Analytics Events/Monetization and Game Economy/Store Opened")]
     public class StoreOpenedPayload : AnalyticsEventPayload
     {
@@ -17,26 +23,29 @@ namespace UnityEngine.Analytics.Experimental
         static readonly string k_ParamKey_StoreType = "type";
 
         /// <summary>
-        /// Gets the name of the event.
+        /// Gets the standard event name.
         /// </summary>
-        /// <value>The name of the event.</value>
+        /// <value>The standard event name.</value>
         public override string eventName
         {
             get { return standardEventName; }
         }
 
         /// <summary>
-        /// Gets or sets the type.
+        /// Gets or sets the type of the store.
         /// </summary>
-        /// <value>The type.</value>
-        public string type
+        /// <value>StoreType.Premium if purchases use real-world money; otherwise, StoreType.Soft</value>
+        public StoreType type
         {
-            get { return GetParam<string>(k_ParamKey_StoreType); }
+            get { return GetParam<StoreType>(k_ParamKey_StoreType); }
             set { SetParam(k_ParamKey_StoreType, value); }
         }
 
         /// <summary>
-        /// Validates the payload.
+        /// Verifies that any required event data parameters are set.
+        /// <remarks>
+        /// The <c>type</c> parameter must be set for the payload to be valid.
+        /// </remarks>
         /// </summary>
         protected override void ValidatePayload ()
         {
@@ -46,13 +55,16 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the data field.
+        /// Verifies the value and value type set for specific event payload data fields.
+        /// <remarks>
+        /// The <c>type</c> parameter value must be of type <c>string</c> to be valid.
+        /// </remarks>
         /// </summary>
-        /// <param name="key">Key.</param>
-        /// <param name="value">Value.</param>
+        /// <param name="key">The event data key.</param>
+        /// <param name="value">The event data value.</param>
         protected override void ValidateDataField (string key, object value)
         {
-            if (key == k_ParamKey_StoreType)
+            if (key == k_ParamKey_StoreType && !(value is StoreType))
             {
                 ValidateDataValueType<string>(key, value);
                 ValidateDataValueExistsInEnum<StoreType>(key, (string)value);
@@ -60,12 +72,12 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates a new instance of StoreOpenedPayload and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="storeType">Store type.</param>
-        /// <param name="eventData">Event data.</param>
-        public static StoreOpenedPayload CreateInstance (StoreType storeType, IDictionary<string, object> eventData)
+        /// <returns>A new instance of <see cref="StoreOpenedPayload"/>.</returns>
+        /// <param name="storeType">Set to StoreType.Premium if purchases use real-world money; otherwise, StoreType.Soft</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        public static StoreOpenedPayload CreateInstance (StoreType storeType, IDictionary<string, object> eventData = null)
         {
             if (eventData == null)
             {

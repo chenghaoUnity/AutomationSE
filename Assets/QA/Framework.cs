@@ -929,7 +929,7 @@ public class Framework : MonoBehaviour {
 
 		yield return new WaitForSeconds(timeDelay); 
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_up event (3)", "Ok", AnalyticsEvent.LevelUp(0, "old_level_name", 1, "new_level_name"), 20863);
+			TestRunHelper (runOrder.ToString("D2") + " Check level_up event (3)", "Ok", AnalyticsEvent.LevelUp(0, 1, "old_level_name" ,"new_level_name"), 20863);
 			TestRunJsonVerify("level_up/2", runOrder.ToString("D2") + " Check level_up event (Server) (3)", 20863, "0", "old_level_name", "1", "new_level_name");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check level_up event (3)", "Ok", e, 20863);

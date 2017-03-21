@@ -3,7 +3,15 @@ using System.Collections.Generic;
 
 namespace UnityEngine.Analytics.Experimental
 {
-
+    /// <summary>
+    /// Currency Acquired (<c>currency_acquired</c>) standard event payload.
+    /// <remarks>
+    /// Send this event when the player purchases or earns in-game currency.
+    /// </remarks>
+    /// </summary>
+    /// <remarks>
+    /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+    /// </remarks>
     [Serializable, CreateAssetMenu(fileName = "CurrencyAcquiredPayload.asset", menuName = "Analytics Events/Monetization and Game Economy/Currency Acquired")]
     public class CurrencyAcquiredPayload : AnalyticsEventPayload
     {
@@ -22,18 +30,18 @@ namespace UnityEngine.Analytics.Experimental
         static readonly string k_ParamKey_PurchaseQty = "puchase_qty"; // Optional parameter
 
         /// <summary>
-        /// Gets the name of the event.
+        /// Gets the standard event name.
         /// </summary>
-        /// <value>The name of the event.</value>
+        /// <value>The standard event name.</value>
         public override string eventName
         {
             get { return standardEventName; }
         }
 
         /// <summary>
-        /// Gets or sets the type.
+        /// Gets or sets the acquisition type, which indicates whether the item was purchased with real-world money.
         /// </summary>
-        /// <value>The type.</value>
+        /// <value>AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</value>
         public AcquisitionType type
         {
             get { return GetParam<AcquisitionType>(k_ParamKey_Type); }
@@ -41,9 +49,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets the source.
+        /// Gets or sets the source by which the currency was acquired.
         /// </summary>
-        /// <value>The source.</value>
+        /// <value>The acquisition source.</value>
         public string source
         {
             get { return GetParam<string>(k_ParamKey_Source); }
@@ -51,9 +59,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets or sets the name of the in-game currency.
         /// </summary>
-        /// <value>The name.</value>
+        /// <value>The name of the in-game currency.</value>
         new public string name
         {
             get { return GetParam<string>(k_ParamKey_Name); }
@@ -61,9 +69,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets the amount.
+        /// Gets or sets the amount of in-game currency acquired..
         /// </summary>
-        /// <value>The amount.</value>
+        /// <value>The amount of in-game currency acquired.</value>
         public object amount
         {
             get { return GetParam<object>(k_ParamKey_Amount); }
@@ -71,9 +79,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets the balance.
+        /// Gets or sets new total balance, including the currency acquired.
         /// </summary>
-        /// <value>The balance.</value>
+        /// <value>The new total balance.</value>
         public object balance
         {
             get { return GetParam<object>(k_ParamKey_Balance); }
@@ -81,9 +89,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets the purchase identifier.
+        /// Gets or sets the ID of the store item purchased.
         /// </summary>
-        /// <value>The purchase identifier.</value>
+        /// <value>The ID of the store item purchased.</value>
         public string purchaseId
         {
             get { return GetParam<string>(k_ParamKey_PurchaseId); }
@@ -91,9 +99,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets the name of the purchase.
+        /// Gets or sets the name of the store item purchased.
         /// </summary>
-        /// <value>The name of the purchase.</value>
+        /// <value>The name of the store item purchased.</value>
         public string purchaseName
         {
             get { return GetParam<string>(k_ParamKey_PurchaseName); }
@@ -101,9 +109,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets the purchase qty.
+        /// Gets or sets the quantity of store items purchased.
         /// </summary>
-        /// <value>The purchase qty.</value>
+        /// <value>The quantity of store items purchased.</value>
         public int purchaseQty
         {
             get { return GetParam<int>(k_ParamKey_PurchaseQty); }
@@ -111,7 +119,11 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the payload.
+        /// Verifies that any required event data parameters are set.
+        /// <remarks>
+        /// The <c>type</c>, <c>source</c>, <c>currency_name</c>, <c>currency_amount</c>, 
+        /// and <c>currency_balance</c> parameters must be set for the payload to be valid.
+        /// </remarks>
         /// </summary>
         protected override void ValidatePayload ()
         {
@@ -121,21 +133,32 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the data field.
+        /// Verifies the value and value type set for specific event payload data fields.
+        /// <remarks>
+        /// The <c>type</c>, <c>source</c>, <c>currency_name</c>, <c>purchase_name</c>, <c>purchase_id</c> parameter values must be of type <c>string</c>, 
+        /// while the <c>currency_amount</c> and <c>currency_balance</c> parameter values must be of types <c>int</c>, <c>float</c>, or <c>decimal</c>.
+        /// The <c>purchase_qty</c> parameter value must be of type <c>int</c>.
+        /// </remarks>
         /// </summary>
-        /// <param name="key">Key.</param>
-        /// <param name="value">Value.</param>
+        /// <param name="key">The event data key.</param>
+        /// <param name="value">The event data value.</param>
         protected override void ValidateDataField (string key, object value)
         {
             base.ValidateDataField(key, value);
 
-            if (key == k_ParamKey_Type || key == k_ParamKey_Source || key == k_ParamKey_Name || key == k_ParamKey_PurchaseId || key == k_ParamKey_PurchaseName)
+            if (key == k_ParamKey_Name || key == k_ParamKey_PurchaseId || key == k_ParamKey_PurchaseName || (key == k_ParamKey_Source && !(value is AcquisitionSource)))
             {
                 ValidateDataValueType<string>(key, value);
-
-                if (key == k_ParamKey_Type)
+            }
+            else if (key == k_ParamKey_Type)
+            {
+                if (value is string)
                 {
                     ValidateDataValueExistsInEnum<AcquisitionType>(key, (string)value);
+                }
+                else
+                {
+                    ValidateDataValueType<AcquisitionType>(key, value);
                 }
             }
             else if (key == k_ParamKey_Amount || key == k_ParamKey_Balance || key == k_ParamKey_PurchaseQty)
@@ -145,117 +168,122 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sets the source.
+        /// Sets the source by which the currency was acquired.
         /// </summary>
-        /// <param name="source">Source.</param>
+        /// <param name="source">The acquisition source.</param>
         public void SetSource (AcquisitionSource source)
         {
             SetParam(k_ParamKey_Source, GetStandardParamValue(source));
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates a new instance of CurrencyAcquiredPayload and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="amount">Amount.</param>
-        /// <param name="balance">Balance.</param>
-        /// <param name="purchaseId">Purchase identifier.</param>
-        /// <param name="purchaseName">Purchase name.</param>
-        /// <param name="purchaseQty">Purchase qty.</param>
-        /// <param name="eventData">Event data.</param>
+        /// <returns>A new instance of <see cref="CurrencyAcquiredPayload"/>.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased (optional).</param>
+        /// <param name="purchaseName">The name of the store item purchased (optional).</param>
+        /// <param name="purchaseQty">The quantity of store items purchased (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
         public static CurrencyAcquiredPayload CreateInstance (string name, AcquisitionType type, AcquisitionSource source, int amount, int balance, string purchaseId = null, string purchaseName = null, int purchaseQty = 1, IDictionary<string, object> eventData = null)
         {
             return CreateInstance(name, type, GetStandardParamValue(source), amount, balance, purchaseId, purchaseName, purchaseQty, eventData);
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates an instance of the CurrencyAcquiredPayload class, adding currency name, acquistion type, source, amount, balance, purchase ID, purchase name,
+        /// and purchase quantity to eventData. If eventData is null, creates the dictionary.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="amount">Amount.</param>
-        /// <param name="balance">Balance.</param>
-        /// <param name="purchaseId">Purchase identifier.</param>
-        /// <param name="purchaseName">Purchase name.</param>
-        /// <param name="purchaseQty">Purchase qty.</param>
-        /// <param name="eventData">Event data.</param>
+        /// <returns>The instance of CurrencyAcquiredPayload.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased (optional).</param>
+        /// <param name="purchaseName">The name of the store item purchased (optional).</param>
+        /// <param name="purchaseQty">The quantity of store items purchased (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
         public static CurrencyAcquiredPayload CreateInstance (string name, AcquisitionType type, string source, int amount, int balance, string purchaseId = null, string purchaseName = null, int purchaseQty = 1, IDictionary<string, object> eventData = null)
         {
             return CreateInstance(name, type, source, (object)amount, balance, purchaseId, purchaseName, purchaseQty, eventData);
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates an instance of the CurrencyAcquiredPayload class, adding currency name, acquistion type, source, amount, balance, purchase ID, purchase name,
+        /// and purchase quantity to eventData. If eventData is null, creates the dictionary.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="amount">Amount.</param>
-        /// <param name="balance">Balance.</param>
-        /// <param name="purchaseId">Purchase identifier.</param>
-        /// <param name="purchaseName">Purchase name.</param>
-        /// <param name="purchaseQty">Purchase qty.</param>
-        /// <param name="eventData">Event data.</param>
+        /// <returns>The instance of CurrencyAcquiredPayload.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased (optional).</param>
+        /// <param name="purchaseName">The name of the store item purchased (optional).</param>
+        /// <param name="purchaseQty">The quantity of store items purchased (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
         public static CurrencyAcquiredPayload CreateInstance (string name, AcquisitionType type, AcquisitionSource source, float amount, float balance, string purchaseId = null, string purchaseName = null, int purchaseQty = 1, IDictionary<string, object> eventData = null)
         {
             return CreateInstance(name, type, GetStandardParamValue(source), amount, balance, purchaseId, purchaseName, purchaseQty, eventData);
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates an instance of the CurrencyAcquiredPayload class, adding currency name, acquistion type, source, amount, balance, purchase ID, purchase name,
+        /// and purchase quantity to eventData. If eventData is null, creates the dictionary.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="amount">Amount.</param>
-        /// <param name="balance">Balance.</param>
-        /// <param name="purchaseId">Purchase identifier.</param>
-        /// <param name="purchaseName">Purchase name.</param>
-        /// <param name="purchaseQty">Purchase qty.</param>
-        /// <param name="eventData">Event data.</param>
+        /// <returns>The instance of CurrencyAcquiredPayload.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased (optional).</param>
+        /// <param name="purchaseName">The name of the store item purchased (optional).</param>
+        /// <param name="purchaseQty">The quantity of store items purchased (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
         public static CurrencyAcquiredPayload CreateInstance (string name, AcquisitionType type, string source, float amount, float balance, string purchaseId = null, string purchaseName = null, int purchaseQty = 1, IDictionary<string, object> eventData = null)
         {
             return CreateInstance(name, type, source, (object)amount, balance, purchaseId, purchaseName, purchaseQty, eventData);
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates an instance of the CurrencyAcquiredPayload class, adding currency name, acquistion type, source, amount, balance, purchase ID, purchase name,
+        /// and purchase quantity to eventData. If eventData is null, creates the dictionary.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="amount">Amount.</param>
-        /// <param name="balance">Balance.</param>
-        /// <param name="purchaseId">Purchase identifier.</param>
-        /// <param name="purchaseName">Purchase name.</param>
-        /// <param name="purchaseQty">Purchase qty.</param>
-        /// <param name="eventData">Event data.</param>
+        /// <returns>The instance of CurrencyAcquiredPayload.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased (optional).</param>
+        /// <param name="purchaseName">The name of the store item purchased (optional).</param>
+        /// <param name="purchaseQty">The quantity of store items purchased (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
         public static CurrencyAcquiredPayload CreateInstance (string name, AcquisitionType type, AcquisitionSource source, decimal amount, decimal balance, string purchaseId = null, string purchaseName = null, int purchaseQty = 1, IDictionary<string, object> eventData = null)
         {
             return CreateInstance(name, type, GetStandardParamValue(source), amount, balance, purchaseId, purchaseName, purchaseQty, eventData);
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates an instance of the CurrencyAcquiredPayload class, adding currency name, acquistion type, source, amount, balance, purchase ID, purchase name,
+        /// and purchase quantity to eventData. If eventData is null, creates the dictionary.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="amount">Amount.</param>
-        /// <param name="balance">Balance.</param>
-        /// <param name="purchaseId">Purchase identifier.</param>
-        /// <param name="purchaseName">Purchase name.</param>
-        /// <param name="purchaseQty">Purchase qty.</param>
-        /// <param name="eventData">Event data.</param>
+        /// <returns>The instance of CurrencyAcquiredPayload.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased (optional).</param>
+        /// <param name="purchaseName">The name of the store item purchased (optional).</param>
+        /// <param name="purchaseQty">The quantity of store items purchased (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
         public static CurrencyAcquiredPayload CreateInstance (string name, AcquisitionType type, string source, decimal amount, decimal balance, string purchaseId = null, string purchaseName = null, int purchaseQty = 1, IDictionary<string, object> eventData = null)
         {
             return CreateInstance(name, type, source, (object)amount, balance, purchaseId, purchaseName, purchaseQty, eventData);

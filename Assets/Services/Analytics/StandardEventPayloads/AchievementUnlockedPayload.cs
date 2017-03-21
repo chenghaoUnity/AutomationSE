@@ -4,8 +4,14 @@ using System.Collections.Generic;
 namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// Achievement unlocked payload.
+    /// Achievement Unlocked standard event payload (<c>achievement_unlocked</c>).
+    /// <remarks>
+    /// Send this event when all requirements to unlock an achievement have been met.
+    /// </remarks>
     /// </summary>
+    /// <remarks>
+    /// This standard event can help provide insight to achievement completion rates among players. 
+    /// </remarks>
     [Serializable, CreateAssetMenu(fileName = "AchievementUnlockedPayload.asset", menuName = "Analytics Events/User Engagement and Social/Achievement Unlocked")]
     public class AchievementUnlockedPayload : AchievementPayload
     {
@@ -15,21 +21,21 @@ namespace UnityEngine.Analytics.Experimental
         public static readonly string standardEventName = "achievement_unlocked";
 
         /// <summary>
-        /// Gets the name of the event.
+        /// Gets the name of the standard event.
         /// </summary>
-        /// <value>The name of the event.</value>
+        /// <value>The standard event name.</value>
         public override string eventName
         {
             get { return standardEventName; }
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates a new instance of AchievementUnlockedPayload and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="achievementId">Achievement identifier.</param>
-        /// <param name="eventData">Event data.</param>
-        new public static AchievementUnlockedPayload CreateInstance (string achievementId, IDictionary<string, object> eventData)
+        /// <returns>A new instance of <see cref="AchievementUnlockedPayload"/>.</returns>
+        /// <param name="achievementId">The achievement ID.</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        new public static AchievementUnlockedPayload CreateInstance (string achievementId, IDictionary<string, object> eventData = null)
         {
             return CreateInstance<AchievementUnlockedPayload>(achievementId, eventData);
         }

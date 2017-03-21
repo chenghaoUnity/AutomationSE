@@ -1,11 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// Level fail payload.
+    /// Level Fail standard event payload (<c>level_fail</c>).
+    /// <remarks>
+    /// Send this event when the player fails to successfully complete a level.
+    /// </remarks>
     /// </summary>
+    /// <remarks>
+    /// This standard event can help provide insight into level progression rates among players, and potentially help predict when players may churn.
+    /// The <c>level_fail</c> event should be preceded by a <see cref="LevelStartPayload"><c>level_start</c></see> event, 
+    /// sent using AnalyticsEvent.LevelStart or LevelStartPayload.Send.
+    /// </remarks>
     [Serializable, CreateAssetMenu(fileName = "LevelFailPayload.asset", menuName = "Analytics Events/Game Progression/Level Fail")]
     public class LevelFailPayload : LevelPayload
     {
@@ -15,44 +23,33 @@ namespace UnityEngine.Analytics.Experimental
         public static readonly string standardEventName = "level_fail";
 
         /// <summary>
-        /// Gets the name of the event.
+        /// Gets the name of the standard event.
         /// </summary>
-        /// <value>The name of the event.</value>
+        /// <value>The standard event name.</value>
         public override string eventName
         {
             get { return standardEventName; }
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates a new instance of LevelFailPayload and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="levelIndex">Level index.</param>
-        /// <param name="eventData">Event data.</param>
-        public static LevelFailPayload CreateInstance (int levelIndex, IDictionary<string, object> eventData)
-        {
-            return CreateInstance<LevelFailPayload>(levelIndex, eventData);
-        }
-
-        /// <summary>
-        /// Creates the instance.
-        /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="levelName">Level name.</param>
-        /// <param name="eventData">Event data.</param>
-        new public static LevelFailPayload CreateInstance (string levelName, IDictionary<string, object> eventData)
+        /// <returns>A new instance of <see cref="LevelFailPayload"/>.</returns>
+        /// <param name="levelName">The level name.</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        new public static LevelFailPayload CreateInstance (string levelName, IDictionary<string, object> eventData = null)
         {
             return CreateInstance<LevelFailPayload>(levelName, eventData);
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates a new instance of LevelFailPayload and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="levelIndex">Level index.</param>
-        /// <param name="levelName">Level name.</param>
-        /// <param name="eventData">Event data.</param>
-        public static LevelFailPayload CreateInstance (int levelIndex, string levelName, IDictionary<string, object> eventData)
+        /// <returns>A new instance of <see cref="LevelFailPayload"/>.</returns>
+        /// <param name="levelIndex">The level index or number.</param>
+        /// <param name="levelName">The level name (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        public static LevelFailPayload CreateInstance (int levelIndex, string levelName = null, IDictionary<string, object> eventData = null)
         {
             return CreateInstance<LevelFailPayload>(levelIndex, levelName, eventData);
         }

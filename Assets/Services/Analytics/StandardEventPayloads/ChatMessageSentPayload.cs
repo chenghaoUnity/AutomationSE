@@ -3,12 +3,14 @@
 namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// Chat Message Sent (<c>chat_msg_sent</c>) standard event payload.
+    /// Chat Message Sent standard event payload (<c>chat_msg_sent</c>).
     /// <remarks>
-    /// Send this event when the user sends a chat message in game. This event can provide insight into
-    /// how often users are sending chat messages in your game.
+    /// Send this event when the player sends a chat message in game. 
     /// </remarks>
     /// </summary>
+    /// <remarks>
+    /// This standard event can provide insight into how often users are sending chat messages in your game.
+    /// </remarks>
     [Serializable, CreateAssetMenu(fileName = "ChatMessageSentPayload.asset", menuName = "Analytics Events/User Engagement and Social/Chat Message Sent")]
     public class ChatMessageSentPayload : AnalyticsEventPayload
     {

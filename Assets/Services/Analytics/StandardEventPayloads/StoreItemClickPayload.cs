@@ -4,8 +4,14 @@ using System.Collections.Generic;
 namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// Store item click payload.
+    /// Store Item Click standard event payload (<c>store_item_click</c>).
+    /// <remarks>
+    /// Send this event when the player clicks on an item in the store.
+    /// </remarks>
     /// </summary>
+    /// <remarks>
+    /// This standard event can provide insight into player engagment with store inventory.
+    /// </remarks>
     [Serializable, CreateAssetMenu(fileName = "StoreItemClickPayload.asset", menuName = "Analytics Events/Monetization and Game Economy/Store Item Click")]
     public class StoreItemClickPayload : AnalyticsEventPayload
     {
@@ -19,18 +25,18 @@ namespace UnityEngine.Analytics.Experimental
         static readonly string k_ParamKey_ItemName = "item_name";
 
         /// <summary>
-        /// Gets the name of the event.
+        /// Gets the standard event name.
         /// </summary>
-        /// <value>The name of the event.</value>
+        /// <value>The standard event name.</value>
         public override string eventName
         {
             get { return standardEventName; }
         }
 
         /// <summary>
-        /// Gets or sets the item identifier.
+        /// Gets or sets the item ID.
         /// </summary>
-        /// <value>The item identifier.</value>
+        /// <value>The item ID.</value>
         public string itemId
         {
             get { return GetParam<string>(k_ParamKey_ItemId); }
@@ -48,7 +54,11 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the payload.
+        /// Verifies that any required event data parameters are set.
+        /// <remarks>
+        /// The <c>type</c> parameter, and either <c>item_id</c> or <c>item_name</c> parameters, 
+        /// must be set for the payload to be valid.
+        /// </remarks>
         /// </summary>
         protected override void ValidatePayload ()
         {
@@ -59,15 +69,18 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the data field.
+        /// Verifies the value and value type set for specific event payload data fields.
+        /// <remarks>
+        /// The <c>type</c>, <c>item_id</c>, and <c>item_name</c> parameter values must be of type <c>string</c> to be valid.
+        /// </remarks>
         /// </summary>
-        /// <param name="key">Key.</param>
-        /// <param name="value">Value.</param>
+        /// <param name="key">The event data key.</param>
+        /// <param name="value">The event data value.</param>
         protected override void ValidateDataField (string key, object value)
         {
             base.ValidateDataField(key, value);
 
-            if (key == k_ParamKey_StoreType || key == k_ParamKey_ItemId || key == k_ParamKey_ItemName)
+            if (key == k_ParamKey_ItemId || key == k_ParamKey_ItemName || (key == k_ParamKey_StoreType && !(value is StoreType)))
             {
                 ValidateDataValueType<string>(key, value);
 
@@ -79,14 +92,14 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates a new instance of StoreItemClickPayload and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="storeType">Store type.</param>
-        /// <param name="itemId">Item identifier.</param>
-        /// <param name="itemName">Item name.</param>
-        /// <param name="eventData">Event data.</param>
-        public static StoreItemClickPayload CreateInstance (StoreType storeType, string itemId, string itemName, IDictionary<string, object> eventData)
+        /// <returns>A new instance of <see cref="StoreItemClickPayload"/>.</returns>
+        /// <param name="storeType">Set to StoreType.Premium if purchases use real-world money; otherwise, StoreType.Soft</param>
+        /// <param name="itemId">The item ID.</param>
+        /// <param name="itemName">The item name (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        public static StoreItemClickPayload CreateInstance (StoreType storeType, string itemId, string itemName = null, IDictionary<string, object> eventData = null)
         {
             if (eventData == null)
             {

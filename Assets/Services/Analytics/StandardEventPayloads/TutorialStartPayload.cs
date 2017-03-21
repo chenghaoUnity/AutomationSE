@@ -4,8 +4,14 @@ using System.Collections.Generic;
 namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// Tutorial start payload.
+    /// Tutorial Start standard event payload (<c>tutorial_start</c>).
+    /// <remarks>
+    /// Send this event when the player starts a tutorial.
+    /// </remarks>
     /// </summary>
+    /// <remarks>
+    /// This standard event can provide insight into tutorial progression rates among players.
+    /// </remarks>
     [Serializable, CreateAssetMenu(fileName = "TutorialStartPayload.asset", menuName = "Analytics Events/First-Time User Experience/Tutorial Start")]
     public class TutorialStartPayload : TutorialPayload
     {
@@ -15,21 +21,21 @@ namespace UnityEngine.Analytics.Experimental
         public static readonly string standardEventName = "tutorial_start";
 
         /// <summary>
-        /// Gets the name of the event.
+        /// Gets the standard event name.
         /// </summary>
-        /// <value>The name of the event.</value>
+        /// <value>The standard event name.</value>
         public override string eventName
         {
             get { return standardEventName; }
 		}
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates a new instance of TutorialStartPayload and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="tutorialId">Tutorial identifier.</param>
-        /// <param name="eventData">Event data.</param>
-        new public static TutorialStartPayload CreateInstance(string tutorialId, IDictionary<string, object> eventData)
+        /// <returns>A new instance of <see cref="TutorialStartPayload"/>.</returns>
+        /// <param name="tutorialId">The tutorial name or ID (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        new public static TutorialStartPayload CreateInstance(string tutorialId = null, IDictionary<string, object> eventData = null)
         {
             return CreateInstance<TutorialStartPayload>(tutorialId, eventData);
         }

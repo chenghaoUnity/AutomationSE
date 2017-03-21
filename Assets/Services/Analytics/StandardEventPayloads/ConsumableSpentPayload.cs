@@ -4,8 +4,14 @@ using System.Collections.Generic;
 namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// Consumable spent payload.
+    /// Consumable Spent standard event payload (<c>consumable_spent</c>).
+    /// <remarks>
+    /// Send this event when the player spends a consumable resource.
+    /// </remarks>
     /// </summary>
+    /// <remarks>
+    /// This standard event can provide insight into consumable resource spend rates.
+    /// </remarks>
     [Serializable, CreateAssetMenu(fileName = "ConsumableSpentPayload.asset", menuName = "Analytics Events/Monetization and Game Economy/Consumable Spent")]
     public class ConsumableSpentPayload : AnalyticsEventPayload
     {
@@ -17,21 +23,21 @@ namespace UnityEngine.Analytics.Experimental
         static readonly string k_ParamKey_Name = "consumable_name";
         static readonly string k_ParamKey_Amount = "consumable_amount";
         static readonly string k_ParamKey_Balance = "consumable_balance";
-        static readonly string k_ParamKey_Purchase = "item_purchased"; // Optional parameter
+        static readonly string k_ParamKey_Purchase = "item_purchased";
 
         /// <summary>
-        /// Gets the name of the event.
+        /// Gets the standard event name.
         /// </summary>
-        /// <value>The name of the event.</value>
+        /// <value>The standard event name.</value>
         public override string eventName
         {
             get { return standardEventName; }
         }
 
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets or sets the name of the in-game consumable resource.
         /// </summary>
-        /// <value>The name.</value>
+        /// <value>The name of the in-game consumable resource.</value>
         new public string name
         {
             get { return GetParam<string>(k_ParamKey_Name); }
@@ -39,9 +45,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets the amount.
+        /// Gets or sets the amount of consumable resources spent.
         /// </summary>
-        /// <value>The amount.</value>
+        /// <value>The amount of consumable resources spent.</value>
         public object amount
         {
             get { return GetParam<object>(k_ParamKey_Amount); }
@@ -49,9 +55,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets the balance.
+        /// Gets or sets new total balance, minus the consumable resources spent.
         /// </summary>
-        /// <value>The balance.</value>
+        /// <value>The new total balance.</value>
         public object balance
         {
             get { return GetParam<object>(k_ParamKey_Balance); }
@@ -59,7 +65,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets the item purchased.
+        /// Gets or sets the item purchased with the consumable resource.
         /// </summary>
         /// <value>The item purchased.</value>
         public string itemPurchased
@@ -69,7 +75,10 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the payload.
+        /// Verifies that any required event data parameters are set.
+        /// <remarks>
+        /// The <c>consumable_name</c>, <c>consumable_amount</c>, and <c>consumable_balance</c> parameters must be set for the payload to be valid.
+        /// </remarks>
         /// </summary>
         protected override void ValidatePayload ()
         {
@@ -79,10 +88,14 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the data field.
+        /// Verifies the value and value type set for specific event payload data fields.
+        /// <remarks>
+        /// The <c>consumable_name</c> and <c>item_purcahsed</c> parameter values must be of type <c>string</c>, 
+        /// while the <c>consumable_amount</c> and <c>consumable_balance</c> parameter values must be of types <c>int</c>, <c>float</c>, or <c>decimal</c>.
+        /// </remarks>
         /// </summary>
-        /// <param name="key">Key.</param>
-        /// <param name="value">Value.</param>
+        /// <param name="key">The event data key.</param>
+        /// <param name="value">The event data value.</param>
         protected override void ValidateDataField (string key, object value)
         {
             base.ValidateDataField(key, value);
@@ -98,42 +111,42 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates a new instance of ConsumableSpentPayload and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="amount">Amount.</param>
-        /// <param name="balance">Balance.</param>
-        /// <param name="name">Name.</param>
-        /// <param name="itemPurchased">Item purchased.</param>
-        /// <param name="eventData">Event data.</param>
+        /// <returns>A new instance of <see cref="ConsumableSpentPayload"/>.</returns>
+        /// <param name="name">The name of the consumable resource spent.</param>
+        /// <param name="amount">The number of consumable resources spent.</param>
+        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
+        /// <param name="itemPurchased">The item purchased with the consumable resource (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
         public static ConsumableSpentPayload CreateInstance (string name, int amount, int balance, string itemPurchased = null, IDictionary<string, object> eventData = null)
         {
             return CreateInstance(name, (object)amount, balance, itemPurchased, eventData);
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates a new instance of ConsumableSpentPayload and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="amount">Amount.</param>
-        /// <param name="balance">Balance.</param>
-        /// <param name="name">Name.</param>
-        /// <param name="itemPurchased">Item purchased.</param>
-        /// <param name="eventData">Event data.</param>
+        /// <returns>A new instance of <see cref="ConsumableSpentPayload"/>.</returns>
+        /// <param name="name">The name of the consumable resource spent.</param>
+        /// <param name="amount">The number of consumable resources spent.</param>
+        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
+        /// <param name="itemPurchased">The item purchased with the consumable resource (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
         public static ConsumableSpentPayload CreateInstance (string name, float amount, float balance, string itemPurchased = null, IDictionary<string, object> eventData = null)
         {
             return CreateInstance(name, (object)amount, balance, itemPurchased, eventData);
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates a new instance of ConsumableSpentPayload and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="amount">Amount.</param>
-        /// <param name="balance">Balance.</param>
-        /// <param name="name">Name.</param>
-        /// <param name="itemPurchased">Item purchased.</param>
-        /// <param name="eventData">Event data.</param>
+        /// <returns>A new instance of <see cref="ConsumableSpentPayload"/>.</returns>
+        /// <param name="name">The name of the consumable resource spent.</param>
+        /// <param name="amount">The number of consumable resources spent.</param>
+        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
+        /// <param name="itemPurchased">The item purchased with the consumable resource (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
         public static ConsumableSpentPayload CreateInstance (string name, decimal amount, decimal balance, string itemPurchased = null, IDictionary<string, object> eventData = null)
         {
             return CreateInstance(name, (object)amount, balance, itemPurchased, eventData);

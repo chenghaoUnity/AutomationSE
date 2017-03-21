@@ -4,8 +4,14 @@ using System.Collections.Generic;
 namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// Level up payload.
+    /// Level Up standard event payload (<c>level_up</c>).
+    /// <remarks>
+    /// Send this event when the player rank increases, or when the accumulated experience reaches the next level tier.
+    /// </remarks>
     /// </summary>
+    /// <remarks>
+    /// This standard event can help provide insight into gameplay progression rates among players.
+    /// </remarks>
     [Serializable, CreateAssetMenu(fileName = "LevelUpPayload.asset", menuName = "Analytics Events/Game Progression/Level Up")]
     public class LevelUpPayload : AnalyticsEventPayload
     {
@@ -20,38 +26,38 @@ namespace UnityEngine.Analytics.Experimental
         static string k_ParamKey_NewLevelName = "new_level_name";
 
         /// <summary>
-        /// Gets the name of the event.
+        /// Gets the name of the standard event.
         /// </summary>
-        /// <value>The name of the event.</value>
+        /// <value>The standard event name.</value>
         public override string eventName
         {
             get { return standardEventName; }
         }
 
         /// <summary>
-        /// Gets or sets the old index of the level.
+        /// Gets or sets the old rank or experience level.
         /// </summary>
-        /// <value>The old index of the level.</value>
-        public string oldLevelIndex
+        /// <value>The old rank or experience level.</value>
+        public int oldLevelIndex
         {
-            get { return GetParam<string>(k_ParamKey_OldLevelIndex); }
+            get { return GetParam<int>(k_ParamKey_OldLevelIndex); }
             set { SetParam(k_ParamKey_OldLevelIndex, value); }
         }
 
         /// <summary>
-        /// Gets or sets the new index of the level.
+        /// Gets or sets the new rank or experience level.
         /// </summary>
-        /// <value>The new index of the level.</value>
-        public string newLevelIndex
+        /// <value>The new rank or experience level.</value>
+        public int newLevelIndex
         {
-            get { return GetParam<string>(k_ParamKey_NewLevelIndex); }
+            get { return GetParam<int>(k_ParamKey_NewLevelIndex); }
             set { SetParam(k_ParamKey_NewLevelIndex, value); }
         }
 
         /// <summary>
-        /// Gets or sets the old name of the level.
+        /// Gets or sets the name of the old rank or experience level.
         /// </summary>
-        /// <value>The old name of the level.</value>
+        /// <value>The old rank or experience level.</value>
         public string oldLevelName
         {
             get { return GetParam<string>(k_ParamKey_OldLevelName); }
@@ -59,9 +65,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets the new name of the level.
+        /// Gets or sets the name of the new rank or experience level.
         /// </summary>
-        /// <value>The new name of the level.</value>
+        /// <value>The old rank or experience level.</value>
         public string newLevelName
         {
             get { return GetParam<string>(k_ParamKey_NewLevelName); }
@@ -69,7 +75,13 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the payload.
+        /// Verifies that any required event data parameters are set.
+        /// <remarks>
+        /// Either <c>old_level_index</c> and <c>new_level_index</c>, or <c>old_level_name</c> and <c>new_level_name</c>, 
+        /// must be set for the payload to be valid.
+        /// If the <c>old_level_index</c> or <c>new_level_index</c> parameter is set, then both must be set for the payload to be valid.
+        /// The same applies for <c>old_level_name</c> and <c>new_level_name</c>.
+        /// </remarks>
         /// </summary>
         protected override void ValidatePayload ()
         {
@@ -84,13 +96,19 @@ namespace UnityEngine.Analytics.Experimental
             {
                 ValidateAllDataKeysExist(k_ParamKey_OldLevelName, k_ParamKey_NewLevelName);
             }
+
+            ValidateAtLeastOneDataKeyExists(k_ParamKey_OldLevelIndex, k_ParamKey_OldLevelName);
         }
 
         /// <summary>
-        /// Validates the data field.
+        /// Verifies the value and value type set for specific event payload data fields.
+        /// <remarks>
+        /// The <c>old_level_index</c> and <c>new_level_index</c> parameter values must be of type <c>int</c> to be valid, 
+        /// while <c>old_level_name</c> and <c>new_level_name</c> must be of type <c>string</c>.
+        /// </remarks>
         /// </summary>
-        /// <param name="key">Key.</param>
-        /// <param name="value">Value.</param>
+        /// <param name="key">The event data key.</param>
+        /// <param name="value">The event data value.</param>
         protected override void ValidateDataField (string key, object value)
         {
             base.ValidateDataField(key, value);
@@ -106,33 +124,13 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates a new instance of LevelUpPayload and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="oldLevelIndex">Old level index.</param>
-        /// <param name="newLevelIndex">New level index.</param>
-        /// <param name="eventData">Event data.</param>
-        public static LevelUpPayload CreateInstance (int oldLevelIndex, int newLevelIndex, IDictionary<string, object> eventData)
-        {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
-
-            eventData.Add(k_ParamKey_OldLevelIndex, oldLevelIndex);
-            eventData.Add(k_ParamKey_NewLevelIndex, newLevelIndex);
-
-            return CreateInstance<LevelUpPayload>(eventData);
-        }
-
-        /// <summary>
-        /// Creates the instance.
-        /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="oldLevelName">Old level name.</param>
-        /// <param name="newLevelName">New level name.</param>
-        /// <param name="eventData">Event data.</param>
-        public static LevelUpPayload CreateInstance (string oldLevelName, string newLevelName, IDictionary<string, object> eventData)
+        /// <returns>A new instance of <see cref="LevelUpPayload"/>.</returns>
+        /// <param name="oldLevelName">The old rank or level name.</param>
+        /// <param name="newLevelName">The new rank or level name.</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        public static LevelUpPayload CreateInstance (string oldLevelName, string newLevelName, IDictionary<string, object> eventData = null)
         {
             if (eventData == null)
             {
@@ -146,15 +144,27 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Creates the instance.
+        /// Creates a new instance of LevelUpPayload and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="oldLevelIndex">Old level index.</param>
-        /// <param name="oldLevelName">Old level name.</param>
-        /// <param name="newLevelIndex">New level index.</param>
-        /// <param name="newLevelName">New level name.</param>
-        /// <param name="eventData">Event data.</param>
-        public static LevelUpPayload CreateInstance (int oldLevelIndex, string oldLevelName, int newLevelIndex, string newLevelName, IDictionary<string, object> eventData)
+        /// <returns>A new instance of <see cref="LevelUpPayload"/>.</returns>
+        /// <param name="oldLevelIndex">The level index or number.</param>
+        /// <param name="newLevelIndex">The level index or number.</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        public static LevelUpPayload CreateInstance (int oldLevelIndex, int newLevelIndex, IDictionary<string, object> eventData = null)
+        {
+            return CreateInstance(oldLevelIndex, newLevelIndex, null, null, eventData);
+        }
+
+        /// <summary>
+        /// Creates a new instance of LevelUpPayload and adds parameters to event data.
+        /// </summary>
+        /// <returns>A new instance of <see cref="LevelUpPayload"/>.</returns>
+        /// <param name="oldLevelIndex">The level index or number.</param>
+        /// <param name="newLevelIndex">The level index or number.</param>
+        /// <param name="oldLevelName">The old rank or level name.</param>
+        /// <param name="newLevelName">The new rank or level name.</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        public static LevelUpPayload CreateInstance (int oldLevelIndex, int newLevelIndex, string oldLevelName, string newLevelName, IDictionary<string, object> eventData = null)
         {
             if (eventData == null)
             {

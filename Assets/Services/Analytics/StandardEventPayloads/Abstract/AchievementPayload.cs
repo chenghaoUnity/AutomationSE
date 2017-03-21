@@ -3,14 +3,14 @@ using System.Collections.Generic;
 namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// Base class for all achievement payloads.
+    /// Base standard event class from which achievement payload classes derive.
     /// </summary>
     public abstract class AchievementPayload : AnalyticsEventPayload
     {
-        private static string k_ParamKey_AchievementId = "achievement_id";
+        static readonly string k_ParamKey_AchievementId = "achievement_id";
 
         /// <summary>
-        /// Gets or sets the ID for the achievement.
+        /// Gets or sets the ID of the achievement.
         /// </summary>
         /// <value>The achievement ID.</value>
         public string achievementId
@@ -20,7 +20,10 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the payload, ensuring the achievement ID has been set.
+        /// Verifies that any required event data parameters are set.
+        /// <remarks>
+        /// The <c>achievement_id</c> parameter must be set for the payload to be valid.
+        /// </remarks>
         /// </summary>
         protected override void ValidatePayload ()
         {
@@ -30,10 +33,13 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates that the achievement ID is set with a <c>string</c> value.
+        /// Verifies the value and value type set for specific event payload data fields.
+        /// <remarks>
+        /// The <c>achievement_id</c> parameter value must be of type <c>string</c> to be valid.
+        /// </remarks>
         /// </summary>
-        /// <param name="key">The key for the parameter being tested</param>
-        /// <param name="value">The value of the parameter being tested</param>
+        /// <param name="key">The event data key.</param>
+        /// <param name="value">The event data value.</param>
         protected override void ValidateDataField (string key, object value)
         {
             base.ValidateDataField(key, value);
@@ -45,13 +51,13 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Creates an instance of the base AchievementPayload class, adding achievementId to eventData. If eventData is null, creates the dictionary.
+        /// Creates a new instance of payload type <c>T</c>, where <c>T</c> inherits from AchievementPayload.
         /// </summary>
-        /// <returns>The instance of AchievementPayload.</returns>
-        /// <param name="achievementId">ID for the achievement.</param>
-        /// <param name="eventData">Dictionary with any custom parameters.</param>
-        /// <typeparam name="T">The payload type that inherits from AchievementPayload.</typeparam>
-        protected static T CreateInstance<T> (string achievementId, IDictionary<string, object> eventData) where T : AchievementPayload
+        /// <returns>A new instance of payload type <c>T</c>, where <c>T</c> inherits from <see cref="AchievementPayload"/>.</returns>
+        /// <param name="achievementId">The achievement ID.</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        /// <typeparam name="T">Payload type that inherits from <see cref="AchievementPayload"/>.</typeparam>
+        protected static T CreateInstance<T> (string achievementId, IDictionary<string, object> eventData = null) where T : AchievementPayload
         {
             if (eventData == null)
             {

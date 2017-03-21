@@ -3,18 +3,18 @@ using System.Collections.Generic;
 namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// Base class for all ad payloads.
+    /// Base standard event class from which advertising payload classes derive.
     /// </summary>
     public abstract class AdPayload : AnalyticsEventPayload
     {
-        private static string k_ParamKey_PlacementId = "placement_id";
-        private static string k_ParamKey_Network = "network";
-        private static string k_ParamKey_Rewarded = "rewarded";
+        static readonly string k_ParamKey_PlacementId = "placement_id";
+        static readonly string k_ParamKey_Network = "network";
+        static readonly string k_ParamKey_Rewarded = "rewarded";
 
         /// <summary>
-        /// Gets or sets the placement ID for the ad.
+        /// Gets or sets the ID of the ad placement.
         /// </summary>
-        /// <value>The achievement ID.</value>
+        /// <value>The ad placement ID.</value>
         public string placementId
         {
             get { return GetParam<string>(k_ParamKey_PlacementId); }
@@ -22,9 +22,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets the ad network being used.
+        /// Gets or sets the ad or mediation network provider.
         /// </summary>
-        /// <value>The ad network.</value>
+        /// <value>The ad or mediation network.</value>
         public string network
         {
             get { return GetParam<string>(k_ParamKey_Network); }
@@ -32,9 +32,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets or sets whether this is a rewarded ad or not.
+        /// Gets or sets whether the ad placement is rewarded.
         /// </summary>
-        /// <value>Boolean value representing whether or not the ad is rewarded.</value>
+        /// <value><c>true</c> if a reward was offered for viewing the ad; otherwise, <c>false</c>.</value>
         public string rewarded
         {
             get { return GetParam<string>(k_ParamKey_Rewarded); }
@@ -42,7 +42,10 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the payload, ensuring rewarded has been set.
+        /// Verifies that any required event data parameters are set.
+        /// <remarks>
+        /// The <c>rewarded</c> parameter must be set for the payload to be valid.
+        /// </remarks>
         /// </summary>
         protected override void ValidatePayload()
         {
@@ -52,15 +55,19 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates that placement ID and network are set with <c>string</c> values, and rewarded is set with a <c>bool</c> value.
+        /// Verifies the value and value type set for specific event payload data fields.
+        /// <remarks>
+        /// The <c>placement_id</c> and <c>network</c> parameter values must be of type <c>string</c>, 
+        /// and the <c>rewarded</c> parameter value must be of type <c>bool</c> to be valid.
+        /// </remarks>
         /// </summary>
-        /// <param name="key">The key for the parameter being tested</param>
-        /// <param name="value">The value of the parameter being tested</param>
+        /// <param name="key">The event data key.</param>
+        /// <param name="value">The event data value.</param>
         protected override void ValidateDataField (string key, object value)
         {
             base.ValidateDataField(key, value);
 
-            if (key == k_ParamKey_PlacementId || key == k_ParamKey_Network)
+            if (key == k_ParamKey_PlacementId || (key == k_ParamKey_Network && !(value is AdvertisingNetwork)))
             {
                 ValidateDataValueType<string>(key, value);
             }
@@ -71,14 +78,28 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Creates an instance of the base AdPayload class, adding rewarded, ad network, and placementId to eventData. If eventData is null, creates the dictionary.
+        /// Creates a new instance of payload type <c>T</c> and adds parameters to event data.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="rewarded">Boolean value representing whether or not the ad is rewarded.</param>
-        /// <param name="advertisingNetwork">Ad network being used.</param>
-        /// <param name="placementId">Placement ID for the ad.</param>
-        /// <param name="eventData">Dictionary with any custom parameters.</param>
-        /// <typeparam name="T">The payload type that inherits from AdPayload.</typeparam>
+        /// <returns>A new instance of payload type <c>T</c>, where <c>T</c> inherits from <see cref="AdPayload"/>.</returns>
+        /// <param name="rewarded">Set to <c>true</c> if a reward was offered for viewing the ad; otherwise, <c>false</c>.</param>
+        /// <param name="advertisingNetwork">The ad or mediation network provider.</param>
+        /// <param name="placementId">The ad placement or configuration ID (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        /// <typeparam name="T">Payload type that inherits from <see cref="AdPayload"/>.</typeparam>
+        protected static T CreateInstance<T> (bool rewarded, AdvertisingNetwork advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null) where T : AdPayload
+        {
+            return CreateInstance<T>(rewarded, GetStandardParamValue(advertisingNetwork), placementId, eventData);
+        }
+
+        /// <summary>
+        /// Creates a new instance of payload type <c>T</c> and adds parameters to event data.
+        /// </summary>
+        /// <returns>A new instance of payload type <c>T</c>, where <c>T</c> inherits from <see cref="AdPayload"/>.</returns>
+        /// <param name="rewarded">Set to <c>true</c> if a reward was offered for viewing the ad; otherwise, <c>false</c>.</param>
+        /// <param name="advertisingNetwork">The ad or mediation network provider (optional).</param>
+        /// <param name="placementId">The ad placement or configuration ID (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        /// <typeparam name="T">Payload type that inherits from <see cref="AdPayload"/>.</typeparam>
         protected static T CreateInstance<T> (bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null) where T : AdPayload
         {
             if (eventData == null)
@@ -91,23 +112,6 @@ namespace UnityEngine.Analytics.Experimental
             eventData.Add(k_ParamKey_Rewarded, rewarded);
 
             return CreateInstance<T>(eventData);
-        }
-
-        /// <summary>
-        /// Creates an instance of the base AdPayload class, adding rewarded, ad network, and placementId to eventData. If eventData is null, creates the dictionary.
-        /// <para>
-        /// This version of the method uses the AdvertisingNetwork enum, and converts the enum value to a string before adding it to eventData.
-        /// </para>
-        /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="rewarded">Boolean value representing whether or not the ad is rewarded.</param>
-        /// <param name="advertisingNetwork">Ad network being used.</param>
-        /// <param name="placementId">Placement ID for the ad.</param>
-        /// <param name="eventData">Dictionary with any custom parameters.</param>
-        /// <typeparam name="T">The payload type that inherits from AdPayload.</typeparam>
-        protected static T CreateInstance<T>(bool rewarded, AdvertisingNetwork advertisingNetwork, string placementId = null, IDictionary<string, object> eventData = null) where T : AdPayload
-        {
-            return CreateInstance<T>(rewarded, GetStandardParamValue(advertisingNetwork), placementId, eventData);
         }
     }
 }

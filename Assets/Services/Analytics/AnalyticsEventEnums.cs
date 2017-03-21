@@ -1,40 +1,52 @@
 ﻿namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// Store type.
+    /// The type of in-game store. 
     /// </summary>
     public enum StoreType
     {
+        /// <summary>Contains items purchasable with in-game currency only.</summary>
         Soft = 0,
+        /// <summary>Contains items purchasable with real-world money.</summary>
         Premium,
     }
 
     /// <summary>
-    /// Acquisition type.
+    /// The way in which an item, consumable, or currency was acquired.
     /// </summary>
     public enum AcquisitionType
     {
+        /// <summary>Not directly purchased with real-world money.</summary>
         Soft = 0,
+        /// <summary>Purchased with real-world money.</summary>
         Premium,
     }
 
     /// <summary>
-    /// Acquisition source.
+    /// The source through which an item, consumable, or currency was acquired.
     /// </summary>
     public enum AcquisitionSource
     {
+        /// <summary>No available source, or source unknown.</summary>
         None = 0,
+        /// <summary>Purchased using currency or consumable resources.</summary>
         Store,
+        /// <summary>Awarded through an achievement or other in-game interaction.</summary>
         Earned,
+        /// <summary>Granted as a promotion of some in-game feature or through cross promotion.</summary>
         Promotion,
+        /// <summary>Granted without motive other than good feelings.</summary>
         Gift,
+        /// <summary>Granted as a reward for watching an advertisement.</summary>
         RewardedAd,
+        /// <summary>Granted periodically.</summary>
         TimedReward,
+        /// <summary>Granted through social engagement.</summary>
         SocialReward,
     }
 
     /// <summary>
-    /// Advertising network.
+    /// The advertising or mediation network service provider.
     /// </summary>
     public enum AdvertisingNetwork
     {
@@ -123,7 +135,7 @@
     }
 
     /// <summary>
-    /// Authorization network.
+    /// The authorization network used with in-game login sessions.
     /// </summary>
     public enum AuthorizationNetwork
     {
@@ -136,7 +148,7 @@
     }
 
     /// <summary>
-    /// Social network.
+    /// The social network used with social engagements.
     /// </summary>
     public enum SocialNetwork
     {
@@ -155,7 +167,7 @@
     }
 
     /// <summary>
-    /// Share type.
+    /// The media type or mode used for social engagements.
     /// </summary>
     public enum ShareType
     {
@@ -168,7 +180,7 @@
     }
 
     /// <summary>
-    /// Screen name.
+    /// The name of the in-game screen or interface type.
     /// </summary>
     public enum ScreenName
     {

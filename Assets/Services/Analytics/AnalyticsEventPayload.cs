@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// Analytics event payload.
+    /// The base class from which all standard event payload classes derive.
     /// </summary>
     [Serializable, CreateAssetMenu(fileName = "CustomEventPayload.asset", menuName = "Analytics Events/Custom", order = 0)]
     public class AnalyticsEventPayload : ScriptableObject
@@ -30,10 +30,17 @@ namespace UnityEngine.Analytics.Experimental
         [SerializeField, HideInInspector]
         readonly List<object> m_EventDataValues = new List<object>();
 
+        /// <summary>
+        /// DO NOT reference m_EventData. Use GetEventData instead.
+        /// </summary>
         readonly Dictionary<string, object> m_EventData = new Dictionary<string, object>();
 
         /// <summary>
         /// Gets or sets the name of the event.
+        /// <remarks>
+        /// The standard event payload classes override this property to make it read-only, 
+        /// and get the value of <c>standardEventName</c>.
+        /// </remarks>
         /// </summary>
         /// <value>The name of the event.</value>
         public virtual string eventName 
@@ -49,21 +56,29 @@ namespace UnityEngine.Analytics.Experimental
                     OnValidationFailed(k_Error_NameNullOrEmpty);
                 }
 
-                Debug.Log(GetType());
-
                 m_EventName = value;
             }
         }
 
         /// <summary>
-        /// Gets or sets the max number of event parameters.
+        /// Gets the payload event data.
         /// </summary>
-        /// <value>The max parameters.</value>
+        /// <value>The payload event data.</value>
+        public Dictionary<string, object> eventData { get { return GetEventData(); } }
+
+        /// <summary>
+        /// Gets or sets the max number of allowable event parameters in the event payload data.
+        /// <remarks>
+        /// Update this value if the remote config file for your Unity project has been modified to support 
+        /// more than the defaut maximum number of allowable parameters for custom events.
+        /// </remarks>
+        /// </summary>
+        /// <value>The max number of parameters (default is 10).</value>
         public int maxParams 
         { 
             get 
             {
-                bool hasKey = PlayerPrefs.HasKey(k_PrefsKey_MaxParams);
+                var hasKey = PlayerPrefs.HasKey(k_PrefsKey_MaxParams);
                 return hasKey ? PlayerPrefs.GetInt(k_PrefsKey_MaxParams) : k_DefaultMaxParams; 
             } 
             set 
@@ -73,34 +88,41 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the payload. Called just prior to sending the event payload.
+        /// Override this method to verify that any required fields are set in the payload data.
+        /// <remarks>
+        /// This method is invoked by the Send method just prior to sending the event payload.
+        /// </remarks>
         /// </summary>
         protected virtual void ValidatePayload ()
         {
         }
 
         /// <summary>
-        /// Validates the data field.
+        /// Override this method to verfy the value and value type set for specific event payload data fields.
+        /// <remarks>
+        /// This method is invoked by the SetParam and GetEventData methods.
+        /// </remarks> 
         /// </summary>
-        /// <param name="key">Key.</param>
-        /// <param name="value">Value.</param>
+        /// <param name="key">The event data key.</param>
+        /// <param name="value">The event data value.</param>
         protected virtual void ValidateDataField (string key, object value)
         {
         }
 
         /// <summary>
-        /// On validation failed. Throws an AnalyticsEventPayloadEception.
+        /// Override this method to customize how invalid event data is handled.
         /// </summary>
-        /// <param name="message">Message.</param>
+        /// <param name="message">An error message indicating why validation failed, and how to fix it.</param>
+        /// <exception cref="AnalyticsEventPayloadException">Thrown by default.</exception>
         protected virtual void OnValidationFailed (string message)
         {
             throw new AnalyticsEventPayloadException(message);
         }
 
         /// <summary>
-        /// Validates that the key exists in payload data.
+        /// Validates that the specified key exists in event data.
         /// </summary>
-        /// <param name="key">The key to validate.</param>
+        /// <param name="key">The expected event data key.</param>
         protected void ValidateDataKeyExists (string key)
         {
             if (!HasParam(key))
@@ -110,9 +132,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates that at least one of the provided keys exist payload data.
+        /// Validates that at least one of the provided keys exist in event data.
         /// </summary>
-        /// <param name="keys">The keys to validate.</param>
+        /// <param name="keys">The expected event data keys.</param>
         protected void ValidateAtLeastOneDataKeyExists (params string[] keys)
         {
             bool keyExists = false;
@@ -129,9 +151,9 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates that all of the provided keys exist in payload data.
+        /// Validates that all of the provided keys exist in event payload data.
         /// </summary>
-        /// <param name="keys">The keys to validate.</param>
+        /// <param name="keys">The expected event data keys.</param>
         protected void ValidateAllDataKeysExist (params string[] keys)
         {
             var missingKeys = new List<string>();
@@ -148,10 +170,10 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the type of the value being set in payload data.
+        /// Validates the value type assigned to a specific event payload data field.
         /// </summary>
-        /// <param name="key">Key.</param>
-        /// <param name="value">Value.</param>
+        /// <param name="key">The event data key.</param>
+        /// <param name="value">The event data value.</param>
         /// <typeparam name="T">The expected value type.</typeparam>
         protected void ValidateDataValueType<T> (string key, object value)
         {
@@ -169,10 +191,10 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the data value type is numeric.
+        /// Validates the value type of a specific event payload data field is numeric.
         /// </summary>
-        /// <param name="key">Key.</param>
-        /// <param name="value">Value.</param>
+        /// <param name="key">The event data key.</param>
+        /// <param name="value">The event data value.</param>
         protected void ValidateDataValueTypeIsNumeric (string key, object value)
         {
             if (value is int || value is float || value is decimal) return;
@@ -181,14 +203,14 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Validates the value against an enum type.
+        /// Validates the value of the specified event data field exists within the specified enum type.
         /// </summary>
-        /// <param name="key">Key.</param>
-        /// <param name="value">Value.</param>
-        /// <typeparam name="T">The enum type.</typeparam>
+        /// <param name="key">The event data key.</param>
+        /// <param name="value">The event data value.</param>
+        /// <typeparam name="T">The <c>enum</c> type.</typeparam>
         protected void ValidateDataValueExistsInEnum<T> (string key, string value)
         {
-            string[] acceptableValues = (Enum.GetValues(typeof(T)) as T[]).Select(x => x.ToString().ToLower()).ToArray();
+            var acceptableValues = (Enum.GetValues(typeof(T)) as T[]).Select(x => x.ToString().ToLower()).ToArray();
 
             if (!acceptableValues.Contains(value))
             {
@@ -197,36 +219,36 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets the standard parameter value from an enum value.
+        /// Gets the standardized event data value from an enum value.
         /// </summary>
         /// <returns>The standard parameter value.</returns>
-        /// <param name="value">The enum value.</param>
-        /// <typeparam name="T">The enum type.</typeparam>
+        /// <param name="value">The <c>enum</c> value.</param>
+        /// <typeparam name="T">The <c>enum</c> type.</typeparam>
         protected static string GetStandardParamValue<T> (T value) where T : struct
         {
             return ConvertEnumToString(value);
         }
 
         /// <summary>
-        /// Creates a payload instance of type <c>T</c>.
+        /// Creates a new instance of payload type <c>T</c>, where <c>T</c> inherits from AnalyticsEventPayload.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="eventData">Event data.</param>
-        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        /// <returns>A new instance of payload type <c>T</c>, where <c>T</c> inherits from <see cref="AnalyticsEventPayload"/></returns>
+        /// <param name="eventData">The event data (optional).</param>
+        /// <typeparam name="T">Payload type that inherits from <see cref="AchievementPayload"/>.</typeparam>
         public static T CreateInstance<T> (IDictionary<string, object> eventData = null) where T : AnalyticsEventPayload
         {
             return (T)CreateInstance(typeof(T), eventData);
         }
 
         /// <summary>
-        /// Creates a payload instance of event type with event data.
+        /// Creates a new instance of the specified <c>payloadType</c> as AnalyticsEventPayload.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="eventType">Event type.</param>
-        /// <param name="eventData">Event data.</param>
-        public static AnalyticsEventPayload CreateInstance (Type eventType, IDictionary<string, object> eventData = null)
+        /// <returns>A new instance of <c>payloadType</c> as <see cref="AnalyticsEventPayload"/>.</returns>
+        /// <param name="payloadType">The analytics event payload type.</param>
+        /// <param name="eventData">The event data (optional).</param>
+        public static AnalyticsEventPayload CreateInstance (Type payloadType, IDictionary<string, object> eventData = null)
         {
-            var instance = ScriptableObject.CreateInstance(eventType) as AnalyticsEventPayload;
+            var instance = ScriptableObject.CreateInstance(payloadType) as AnalyticsEventPayload;
 
             instance.SetEventData(eventData);
 
@@ -234,14 +256,14 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Creates a payload instance with event name and event data.
+        /// Creates a new instance of AnalyticsEventPayload with the specified <c>eventName</c>.
         /// </summary>
-        /// <returns>The instance.</returns>
-        /// <param name="eventName">Event name.</param>
-        /// <param name="eventData">Event data.</param>
+        /// <returns>A new instance of <see cref="AnalyticsEventPayload"/>.</returns>
+        /// <param name="eventName">The name of the event.</param>
+        /// <param name="eventData">The event data (optional).</param>
         public static AnalyticsEventPayload CreateInstance (string eventName, IDictionary<string, object> eventData = null)
         {
-            Type eventType = AnalyticsEvent.GetStandardEventType(eventName);
+            var eventType = AnalyticsEvent.GetStandardEventType(eventName);
 
             if (eventType != null)
             {
@@ -257,27 +279,41 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Gets the event data.
+        /// Gets the payload event data.
         /// </summary>
-        /// <returns>The event data.</returns>
+        /// <returns>The payload event data.</returns>
         public Dictionary<string, object> GetEventData ()
         {
-            UpdateEventData();
+            if (m_EventDataKeys.Count != m_EventDataValues.Count)
+            {
+                OnValidationFailed(k_Error_KeyValueCountNotEqual);
+            }
+
+            m_EventData.Clear();
+
+            for (int i = 0; i < m_EventDataKeys.Count; i++)
+            {
+                ValidateDataField(m_EventDataKeys[i], m_EventDataValues[i]);
+                m_EventData.Add(m_EventDataKeys[i], m_EventDataValues[i]);
+            }
 
             return m_EventData;
         }
 
         /// <summary>
-        /// Sets the event data.
+        /// Sets the payload event data.
+        /// <remarks>
+        /// Any field in <c>eventData</c> with a <c>null</c> value or an empty string will be dropped from the data set.
+        /// Passing in a <c>null</c> value to <c>eventData</c> resets the event data.
+        /// </remarks>
         /// </summary>
-        /// <param name="eventData">Event data.</param>
+        /// <param name="eventData">The payload event data.</param>
         public void SetEventData (IDictionary<string, object> eventData)
         {
-            if (eventData == null)
-            {
-                m_EventData.Clear();
-                return;
-            }
+            m_EventDataKeys.Clear();
+            m_EventDataValues.Clear();
+
+            if (eventData == null) return;
 
             foreach (KeyValuePair<string, object> field in eventData)
             {
@@ -286,24 +322,24 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Has the event parameter.
+        /// Determines if the specified <c>key</c> exists in the payload event data.
         /// </summary>
-        /// <returns><c>true</c>, if parameter was hased, <c>false</c> otherwise.</returns>
-        /// <param name="key">Key.</param>
+        /// <returns><c>true</c>, if a field with the specified <c>key</c> exists in event data, <c>false</c> otherwise.</returns>
+        /// <param name="key">The event data key.</param>
         public bool HasParam (string key)
         {
             return (m_EventDataKeys.IndexOf(key) >= 0);
         }
 
         /// <summary>
-        /// Gets the event parameter.
+        /// Gets the value of the event data field specified.
         /// </summary>
-        /// <returns>The parameter.</returns>
-        /// <param name="key">Key.</param>
-        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        /// <returns>The event data value as type <c>T</c>, or the default value of <c>T</c> if the specified key does not exist in event data.</returns>
+        /// <param name="key">The event data key.</param>
+        /// <typeparam name="T">The expected value type.</typeparam>
         public T GetParam<T> (string key)
         {
-            int index = m_EventDataKeys.IndexOf(key);
+            var index = m_EventDataKeys.IndexOf(key);
 
             if (index >= 0)
             {
@@ -321,10 +357,13 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sets the event parameter.
+        /// Sets the specified event data field.
+        /// <remarks>
+        /// If the <c>value</c> is either <c>null</c> or an empty string, the field will not be added to event data.
+        /// </remarks>
         /// </summary>
-        /// <param name="key">Key.</param>
-        /// <param name="value">Value.</param>
+        /// <param name="key">The event data key.</param>
+        /// <param name="value">The event data value.</param>
         public void SetParam (string key, object value)
         {
             if (m_EventDataKeys.Count != m_EventDataValues.Count)
@@ -332,7 +371,6 @@ namespace UnityEngine.Analytics.Experimental
                 OnValidationFailed(k_Error_KeyValueCountNotEqual);
             }
 
-            // Only add a param if value is not null or an empty string.
             if (value == null || (value is string && string.IsNullOrEmpty((string)value)))
             {
                 return;
@@ -340,7 +378,22 @@ namespace UnityEngine.Analytics.Experimental
 
             ValidateDataField(key, value);
 
-            int index = m_EventDataKeys.IndexOf(key);
+            if (value.GetType().IsEnum)
+            {
+                if (value is StoreType ||
+                    value is AcquisitionType ||
+                    value is AcquisitionSource ||
+                    value is AdvertisingNetwork ||
+                    value is AuthorizationNetwork ||
+                    value is SocialNetwork ||
+                    value is ShareType ||
+                    value is ScreenName)
+                {
+                    value = ConvertEnumToString(value);
+                }
+            }
+
+            var index = m_EventDataKeys.IndexOf(key);
 
             if (index >= 0)
             {
@@ -359,37 +412,54 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends the event payload.
+        /// Sends the event payload using Analytics.CustomEvent.
+        /// <remarks>
+        /// To log debug messages when the event is sent, set AnalyticsEvent.debugMode to <c>true</c>.
+        /// </remarks>
         /// </summary>
+        /// <remarks>
+        /// To view the event name and a listing of event data parameters within the debug log messages for each event, 
+        /// add DEBUG_ANALYTICS_STANDARD_EVENTS to Scripting Define Symbols for the target platforms in Player Settings.
+        /// </remarks>
+        /// <returns>The result of sending the event.</returns>
         public AnalyticsResult Send ()
         {
-            UpdateEventData();
+            if (string.IsNullOrEmpty(eventName))
+            {
+                OnValidationFailed(k_Error_NameNullOrEmpty);
+            }
+
             ValidatePayload();
 
-            var result = Analytics.CustomEvent(string.Concat(k_StandardEventPrefix, eventName), m_EventData);
+            var result = Analytics.CustomEvent(string.Concat(k_StandardEventPrefix, eventName), GetEventData());
             string verboseLog = string.Empty;
 
             // Enable verbose logging by adding the following symbol to Scripting Define Symbols in Player Settings.
 #if DEBUG_ANALYTICS_STANDARD_EVENTS
             verboseLog = string.Concat("\n  Event Name: ", eventName);
-            verboseLog += "\n  Event Data ({0} fields):";
+            verboseLog += string.Format("\n  Event Data ({0} params):", m_EventDataKeys.Count);
 
-            foreach (KeyValuePair<string, object> field in m_EventData)
+            for (int i = 0; i < m_EventDataKeys.Count; i++)
             {
-                verboseLog += string.Format("\n    Key: '{0}'\t\t Value: '{1}'", field.Key, field.Value);
+                verboseLog += string.Format("\n    Key: '{0}';  Value: '{1}'", m_EventDataKeys[i], m_EventDataValues[i]);
             }
 #endif
 
-            if (result == AnalyticsResult.Ok)
+            switch (result)
             {
-                if(AnalyticsEvent.debugMode)
-                {
-                    Debug.LogFormat("Successfully sent '{0}' (Result: '{1}').{2}", GetType(), result, verboseLog);
-                }
-            }
-            else
-            {
-                Debug.LogErrorFormat("Failed to send '{0}' (Result: '{1}').{2}", GetType(), result, verboseLog);
+                case AnalyticsResult.Ok:
+                    if (AnalyticsEvent.debugMode)
+                    {
+                        Debug.LogFormat("Successfully sent '{0}' (Result: '{1}').{2}", GetType(), result, verboseLog);
+                    }
+                    break;
+                case AnalyticsResult.InvalidData:
+                case AnalyticsResult.TooManyItems:
+                    Debug.LogErrorFormat("Failed to send '{0}' (Result: '{1}').{2}", GetType(), result, verboseLog);
+                    break;
+                default:
+                    Debug.LogWarningFormat("Unable to send '{0}' (Result: '{1}').{2}", GetType(), result, verboseLog);
+                    break;
             }
 
             return result;
@@ -397,11 +467,11 @@ namespace UnityEngine.Analytics.Experimental
 
         static string JoinWords (string conjunction, string[] words)
         {
-            string result = string.Join("', '", words);
+            var result = string.Join("', '", words);
 
             if (words.Length > 1)
             {
-                int startIndex = result.LastIndexOf(",", StringComparison.Ordinal);
+                var startIndex = result.LastIndexOf(",", StringComparison.Ordinal);
 
                 if (words.Length == 2)
                 {
@@ -424,18 +494,20 @@ namespace UnityEngine.Analytics.Experimental
             return Regex.Replace(input, "(?<!_|^)[A-Z][a-z]", "_$0");
         }
 
-        static string ConvertEnumToString<T> (T value)
+        static string ConvertEnumToString (object value)
         {
-            if (!typeof(T).IsEnum)
+            var enumType = value.GetType();
+
+            if (!enumType.IsEnum)
             {
-                throw new ArgumentException("T must be an enum type.");
+                throw new ArgumentException("Value must be an enum type.");
             }
 
             var stringValue = value.ToString();
 
-            if (!typeof(T).Equals(typeof(AdvertisingNetwork)) &&
-                !typeof(T).Equals(typeof(AuthorizationNetwork)) &&
-                !typeof(T).Equals(typeof(SocialNetwork)))
+            if (!enumType.Equals(typeof(AdvertisingNetwork)) &&
+                !enumType.Equals(typeof(AuthorizationNetwork)) &&
+                !enumType.Equals(typeof(SocialNetwork)))
             {
                 stringValue = SplitCamelCase(stringValue);
             }
@@ -454,7 +526,7 @@ namespace UnityEngine.Analytics.Experimental
 
             var enumValues = Enum.GetValues(typeof(T)) as T[];
             var stringValues = enumValues.Select(x => ConvertEnumToString(x)).ToArray();
-            int index = Array.IndexOf(stringValues, value);
+            var index = Array.IndexOf(stringValues, value);
 
             if (index >= 0)
             {
@@ -462,22 +534,6 @@ namespace UnityEngine.Analytics.Experimental
             }
 
             return default(T);
-        }
-
-        void UpdateEventData ()
-        {
-            if (m_EventDataKeys.Count != m_EventDataValues.Count)
-            {
-                OnValidationFailed(k_Error_KeyValueCountNotEqual);
-            }
-
-            m_EventData.Clear();
-
-            for (int i = 0; i < m_EventDataKeys.Count; i++)
-            {
-                ValidateDataField(m_EventDataKeys[i], m_EventDataValues[i]);
-                m_EventData.Add(m_EventDataKeys[i], m_EventDataValues[i]);
-            }
         }
     }
 }

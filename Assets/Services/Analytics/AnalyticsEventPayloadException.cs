@@ -6,10 +6,9 @@
     public class AnalyticsEventPayloadException : UnityException
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// <see cref="T:UnityEngine.Analytics.Experimental.AnalyticsEventPayloadException"/> class.
+        /// Initializes a new instance of the AnalyticsEventPayloadException class.
         /// </summary>
-        /// <param name="message">Message.</param>
+        /// <param name="message">The exception message.</param>
         public AnalyticsEventPayloadException (string message) : base(message) { }
     }
 }
