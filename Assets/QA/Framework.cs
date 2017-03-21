@@ -18,6 +18,8 @@ public class Framework : MonoBehaviour {
 	public List<TestCase> resultTable = new List<TestCase>();
 	public List<IEnumerator> testSuite = new List<IEnumerator>();
 
+	public string branchInfo;
+
 	private int maxTest;
 	private int runOrder;
 
@@ -27,7 +29,8 @@ public class Framework : MonoBehaviour {
 	public bool verifyMode;
 
 	void Awake () {
-		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://standard-event.firebaseio.com/");
+		branchInfo = Resources.Load ("branchInfo").ToString ();
+		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://standard-event.firebaseio.com/");
 		reference = FirebaseDatabase.DefaultInstance.RootReference;
 	}
 
@@ -1238,10 +1241,10 @@ public class Framework : MonoBehaviour {
 	private void pushResultToServer(TestCase testCase) {
 		string key = reference.Child("QAReport").Push().Key;
 		Dictionary<string, object> childUpdates = new Dictionary<string, object>();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/" + testCase.getDescitpion() +  "/Result/"] = testCase.getResult () == true ? "Pass" : "Fail";
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () +  "/UnityVersion/"] = Application.unityVersion;
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () +  "/FailReason/"] = testCase.getFailReason ();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + testCase.getDescitpion () +  "/TestrailLink/"] = testCase.getCaseLink ();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion() +  "/Result/"] = testCase.getResult () == true ? "Pass" : "Fail";
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/UnityVersion/"] = Application.unityVersion;
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () +  "/FailReason/"] = testCase.getFailReason ();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () +  "/TestrailLink/"] = testCase.getCaseLink ();
 		reference.UpdateChildrenAsync(childUpdates);
 	}
 
