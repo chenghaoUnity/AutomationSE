@@ -1003,7 +1003,7 @@ public class Framework : MonoBehaviour {
 
 		yield return new WaitForSeconds (timeDelay);
 		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check achievement_unlocked event", "Ok", AnalyticsEvent.AchievementUnlock("achievement_id"), 20867);
+			TestRunHelper (runOrder.ToString("D2") + " Check achievement_unlocked event", "Ok", AnalyticsEvent.AchievementUnlocked("achievement_id"), 20867);
 			TestRunJsonVerify("achievement_unlocked/0", runOrder.ToString("D2") + " Check achievement_unlocked event (Server)", 20867, "achievement_id");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check achievement_unlocked event", "Ok", e, 20867);
