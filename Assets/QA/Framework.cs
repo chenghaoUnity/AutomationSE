@@ -29,7 +29,19 @@ public class Framework : MonoBehaviour {
 	public bool verifyMode;
 
 	void Awake () {
-		branchInfo = Resources.Load ("branchInfo").ToString ();
+
+		if (Resources.Load ("branchInfo").ToString ().Contains ("v01")) {
+			branchInfo = "v01";
+		}
+
+		if (Resources.Load ("branchInfo").ToString ().Contains ("v02")) {
+			branchInfo = "v02";
+		}
+
+		if (Resources.Load ("branchInfo").ToString ().Contains ("master")) {
+			branchInfo = "master";
+		}
+			
 		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://standard-event.firebaseio.com/");
 		reference = FirebaseDatabase.DefaultInstance.RootReference;
 	}
