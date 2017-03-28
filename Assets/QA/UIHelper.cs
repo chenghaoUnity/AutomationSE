@@ -39,14 +39,13 @@ public class UIHelper : MonoBehaviour {
 		
 	IEnumerator GetText(string methodName, Action<string> callback) {
 
-		UnityWebRequest www = UnityWebRequest.Get("https://obscure-shelf-46410.herokuapp.com/events/" + methodName);
-		yield return www.Send();
+		WWW www = new WWW("https://obscure-shelf-46410.herokuapp.com/events/" + methodName);
+		yield return www;
 
-		if (www.isError) {
-			callback (www.error);
+		if (www.error == null) {
+			callback(www.text);
 		} else {
-			if (callback != null)
-				callback(www.downloadHandler.text);
+			callback(www.error);
 		}
 	}
 
