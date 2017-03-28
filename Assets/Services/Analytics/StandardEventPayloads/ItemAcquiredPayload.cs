@@ -143,17 +143,14 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">Custom event data (optional).</param>
         public static ItemAcquiredPayload CreateInstance (string name, AcquisitionType type, string source, string resourceType = null, IDictionary<string, object> eventData = null)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<ItemAcquiredPayload>(eventData);
 
-            eventData.Add(k_ParamKey_Type, GetStandardParamValue(type));
-            eventData.Add(k_ParamKey_Source, source);
-            eventData.Add(k_ParamKey_Name, name);
-            eventData.Add(k_ParamKey_ResourceType, resourceType);
+            instance.SetParam(k_ParamKey_Type, GetStandardParamValue(type));
+            instance.SetParam(k_ParamKey_Source, source);
+            instance.SetParam(k_ParamKey_Name, name);
+            instance.SetParam(k_ParamKey_ResourceType, resourceType);
 
-            return CreateInstance<ItemAcquiredPayload>(eventData);
+            return instance;
         }
     }
 }

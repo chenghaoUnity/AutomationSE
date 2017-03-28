@@ -81,14 +81,11 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">Custom event data (optional).</param>
         public static AchievementStepPayload CreateInstance(int stepIndex, string achievementId, IDictionary<string, object> eventData = null)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<AchievementStepPayload>(achievementId, eventData);
 
-            eventData.Add(k_ParamKey_StepIndex, stepIndex);
+            instance.SetParam(k_ParamKey_StepIndex, stepIndex);
 
-            return CreateInstance<AchievementStepPayload>(achievementId, eventData);
+            return instance;
         }
     }
 }

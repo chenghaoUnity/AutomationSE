@@ -146,15 +146,12 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">Custom event data (optional).</param>
         public static SocialSharePayload CreateInstance (string shareType, string socialNetwork, IDictionary<string, object> eventData = null)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<SocialSharePayload>(eventData);
 
-            eventData.Add(k_ParamKey_ShareType, shareType);
-            eventData.Add(k_ParamKey_SocialNetwork, socialNetwork);
+            instance.SetParam(k_ParamKey_ShareType, shareType);
+            instance.SetParam(k_ParamKey_SocialNetwork, socialNetwork);
 
-            return CreateInstance<SocialSharePayload>(eventData);
+            return instance;
         }
     }
 }

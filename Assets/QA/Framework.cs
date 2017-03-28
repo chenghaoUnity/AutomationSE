@@ -1215,7 +1215,11 @@ public class Framework : MonoBehaviour {
 		yield return www;
 
 		if (www.error == null) {
-			callback(www.text);
+			if (www.text == null) {
+				callback (null);
+			} else {
+				callback (www.text);
+			}
 		} else {
 			callback(www.error);
 		}

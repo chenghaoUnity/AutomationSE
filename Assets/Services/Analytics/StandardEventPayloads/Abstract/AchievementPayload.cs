@@ -59,14 +59,11 @@ namespace UnityEngine.Analytics.Experimental
         /// <typeparam name="T">Payload type that inherits from <see cref="AchievementPayload"/>.</typeparam>
         protected static T CreateInstance<T> (string achievementId, IDictionary<string, object> eventData = null) where T : AchievementPayload
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<T>(eventData);
 
-            eventData.Add(k_ParamKey_AchievementId, achievementId);
+            instance.SetParam(k_ParamKey_AchievementId, achievementId);
 
-            return CreateInstance<T>(eventData);
+            return instance;
         }
     }
 }

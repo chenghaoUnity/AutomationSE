@@ -100,14 +100,11 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">Custom event data (optional).</param>
         new public static ScreenVisitPayload CreateInstance (string screenName, IDictionary<string, object> eventData = null)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<ScreenVisitPayload>(eventData);
 
-            eventData.Add(k_ParamKey_ScreenName, screenName);
+            instance.SetParam(k_ParamKey_ScreenName, screenName);
 
-            return CreateInstance<ScreenVisitPayload>(eventData);
+            return instance;
         }
     }
 }

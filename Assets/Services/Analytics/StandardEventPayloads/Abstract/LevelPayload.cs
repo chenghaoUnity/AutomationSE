@@ -74,14 +74,11 @@ namespace UnityEngine.Analytics.Experimental
         /// <typeparam name="T">Payload type that inherits from <see cref="LevelPayload"/>.</typeparam>
         protected static T CreateInstance<T> (string levelName, IDictionary<string, object> eventData = null) where T : LevelPayload
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<T>(eventData);
 
-            eventData.Add(k_ParamKey_LevelName, levelName);
+            instance.SetParam(k_ParamKey_LevelName, levelName);
 
-            return CreateInstance<T>(eventData);
+            return instance;
         }
 
         /// <summary>
@@ -94,15 +91,12 @@ namespace UnityEngine.Analytics.Experimental
         /// <typeparam name="T">Payload type that inherits from <see cref="LevelPayload"/>.</typeparam>
         protected static T CreateInstance<T> (int levelIndex, string levelName = null, IDictionary<string, object> eventData = null) where T : LevelPayload
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<T>(eventData);
 
-            eventData.Add(k_ParamKey_LevelIndex, levelIndex);
-            eventData.Add(k_ParamKey_LevelName, levelName);
+            instance.SetParam(k_ParamKey_LevelIndex, levelIndex);
+            instance.SetParam(k_ParamKey_LevelName, levelName);
 
-            return CreateInstance<T>(eventData);
+            return instance;
         }
     }
 }

@@ -78,14 +78,11 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">Custom event data (optional).</param>
         new public static CutsceneSkipPayload CreateInstance(string cutsceneName, IDictionary<string, object> eventData = null)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<CutsceneSkipPayload>(eventData);
 
-            eventData.Add(k_ParamKey_CutsceneName, cutsceneName);
+            instance.SetParam(k_ParamKey_CutsceneName, cutsceneName);
 
-            return CreateInstance<CutsceneSkipPayload>(eventData);
+            return instance;
         }
     }
 }

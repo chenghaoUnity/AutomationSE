@@ -101,16 +101,13 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">Custom event data (optional).</param>
         public static StoreItemClickPayload CreateInstance (StoreType storeType, string itemId, string itemName = null, IDictionary<string, object> eventData = null)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<StoreItemClickPayload>(eventData);
 
-            eventData.Add(k_ParamKey_StoreType, GetStandardParamValue(storeType));
-            eventData.Add(k_ParamKey_ItemId, itemId);
-            eventData.Add(k_ParamKey_ItemName, itemName);
+            instance.SetParam(k_ParamKey_StoreType, GetStandardParamValue(storeType));
+            instance.SetParam(k_ParamKey_ItemId, itemId);
+            instance.SetParam(k_ParamKey_ItemName, itemName);
 
-            return CreateInstance<StoreItemClickPayload>(eventData);
+            return instance;
         }
     }
 }

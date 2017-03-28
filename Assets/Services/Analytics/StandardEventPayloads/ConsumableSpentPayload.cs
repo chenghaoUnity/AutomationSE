@@ -110,6 +110,7 @@ namespace UnityEngine.Analytics.Experimental
             }
         }
 
+#if UNITY_5_5_OR_NEWER
         /// <summary>
         /// Creates a new instance of ConsumableSpentPayload and adds parameters to event data.
         /// </summary>
@@ -123,6 +124,21 @@ namespace UnityEngine.Analytics.Experimental
         {
             return CreateInstance(name, (object)amount, balance, itemPurchased, eventData);
         }
+#else
+        /// <summary>
+        /// Creates a new instance of ConsumableSpentPayload and adds parameters to event data.
+        /// </summary>
+        /// <returns>A new instance of <see cref="ConsumableSpentPayload"/>.</returns>
+        /// <param name="name">The name of the consumable resource spent.</param>
+        /// <param name="amount">The number of consumable resources spent.</param>
+        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
+        /// <param name="itemPurchased">The item purchased with the consumable resource.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static ConsumableSpentPayload CreateInstance (string name, int amount, int balance, string itemPurchased, IDictionary<string, object> eventData)
+        {
+            return CreateInstance(name, (object)amount, balance, itemPurchased, eventData);
+        }
+#endif
 
         /// <summary>
         /// Creates a new instance of ConsumableSpentPayload and adds parameters to event data.
@@ -138,6 +154,7 @@ namespace UnityEngine.Analytics.Experimental
             return CreateInstance(name, (object)amount, balance, itemPurchased, eventData);
         }
 
+#if UNITY_5_5_OR_NEWER
         /// <summary>
         /// Creates a new instance of ConsumableSpentPayload and adds parameters to event data.
         /// </summary>
@@ -151,20 +168,32 @@ namespace UnityEngine.Analytics.Experimental
         {
             return CreateInstance(name, (object)amount, balance, itemPurchased, eventData);
         }
+#else
+        /// <summary>
+        /// Creates a new instance of ConsumableSpentPayload and adds parameters to event data.
+        /// </summary>
+        /// <returns>A new instance of <see cref="ConsumableSpentPayload"/>.</returns>
+        /// <param name="name">The name of the consumable resource spent.</param>
+        /// <param name="amount">The number of consumable resources spent.</param>
+        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
+        /// <param name="itemPurchased">The item purchased with the consumable resource.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static ConsumableSpentPayload CreateInstance (string name, decimal amount, decimal balance, string itemPurchased, IDictionary<string, object> eventData)
+        {
+            return CreateInstance(name, (object)amount, balance, itemPurchased, eventData);
+        }
+#endif
 
         static ConsumableSpentPayload CreateInstance (string name, object amount, object balance, string itemPurchased, IDictionary<string, object> eventData)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<ConsumableSpentPayload>(eventData);
 
-            eventData.Add(k_ParamKey_Name, name);
-            eventData.Add(k_ParamKey_Amount, amount);
-            eventData.Add(k_ParamKey_Balance, balance);
-            eventData.Add(k_ParamKey_Purchase, itemPurchased);
+            instance.SetParam(k_ParamKey_Name, name);
+            instance.SetParam(k_ParamKey_Amount, amount);
+            instance.SetParam(k_ParamKey_Balance, balance);
+            instance.SetParam(k_ParamKey_Purchase, itemPurchased);
 
-            return CreateInstance<ConsumableSpentPayload>(eventData);
+            return instance;
         }
     }
 }

@@ -100,14 +100,11 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">Custom event data (optional).</param>
         new public static UserSignupPayload CreateInstance (string authorizationNetwork, IDictionary<string, object> eventData = null)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<UserSignupPayload>(eventData);
 
-            eventData.Add(k_ParamKey_AuthorizationNetwork, authorizationNetwork);
+            instance.SetParam(k_ParamKey_AuthorizationNetwork, authorizationNetwork);
 
-            return CreateInstance<UserSignupPayload>(eventData);
+            return instance;
         }
     }
 }

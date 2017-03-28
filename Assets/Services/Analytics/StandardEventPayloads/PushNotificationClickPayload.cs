@@ -78,14 +78,11 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">Custom event data (optional).</param>
         new public static PushNotificationClickPayload CreateInstance (string messageId, IDictionary<string, object> eventData = null)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<PushNotificationClickPayload>(eventData);
 
-            eventData.Add(k_ParamKey_MessageId, messageId);
+            instance.SetParam(k_ParamKey_MessageId, messageId);
 
-            return CreateInstance<PushNotificationClickPayload>(eventData);
+            return instance;
         }
     }
 }

@@ -133,6 +133,7 @@ namespace UnityEngine.Analytics.Experimental
             }
         }
 
+#if UNITY_5_5_OR_NEWER
         /// <summary>
         /// Creates a new instance of ConsumableAcquiredPayload and adds parameters to event data.
         /// </summary>
@@ -162,6 +163,37 @@ namespace UnityEngine.Analytics.Experimental
         {
             return CreateInstance(name, type, source, (object)amount, balance, eventData);
         }
+#else
+        /// <summary>
+        /// Creates a new instance of ConsumableAcquiredPayload and adds parameters to event data.
+        /// </summary>
+        /// <returns>A new instance of <see cref="ConsumableAcquiredPayload"/>.</returns>
+        /// <param name="name">The name of the consumable resource acquired.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the consumable resource was acquired.</param>
+        /// <param name="amount">The number of consumable resources acquired.</param>
+        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static ConsumableAcquiredPayload CreateInstance (string name, AcquisitionType type, AcquisitionSource source, int amount, int balance, IDictionary<string, object> eventData)
+        {
+            return CreateInstance(name, type, GetStandardParamValue(source), amount, balance, eventData);
+        }
+
+        /// <summary>
+        /// Creates a new instance of ConsumableAcquiredPayload and adds parameters to event data.
+        /// </summary>
+        /// <returns>A new instance of <see cref="ConsumableAcquiredPayload"/>.</returns>
+        /// <param name="name">The name of the consumable resource acquired.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the consumable resource was acquired.</param>
+        /// <param name="amount">The number of consumable resources acquired.</param>
+        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static ConsumableAcquiredPayload CreateInstance (string name, AcquisitionType type, string source, int amount, int balance, IDictionary<string, object> eventData)
+        {
+            return CreateInstance(name, type, source, (object)amount, balance, eventData);
+        }
+#endif
 
         /// <summary>
         /// Creates a new instance of ConsumableAcquiredPayload and adds parameters to event data.
@@ -193,6 +225,7 @@ namespace UnityEngine.Analytics.Experimental
             return CreateInstance(name, type, source, (object)amount, balance, eventData);
         }
 
+#if UNITY_5_5_OR_NEWER
         /// <summary>
         /// Creates a new instance of ConsumableAcquiredPayload and adds parameters to event data.
         /// </summary>
@@ -222,21 +255,49 @@ namespace UnityEngine.Analytics.Experimental
         {
             return CreateInstance(name, type, source, (object)amount, balance, eventData);
         }
+#else
+        /// <summary>
+        /// Creates a new instance of ConsumableAcquiredPayload and adds parameters to event data.
+        /// </summary>
+        /// <returns>A new instance of <see cref="ConsumableAcquiredPayload"/>.</returns>
+        /// <param name="name">The name of the consumable resource acquired.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the consumable resource was acquired.</param>
+        /// <param name="amount">The number of consumable resources acquired.</param>
+        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static ConsumableAcquiredPayload CreateInstance (string name, AcquisitionType type, AcquisitionSource source, decimal amount, decimal balance, IDictionary<string, object> eventData)
+        {
+            return CreateInstance(name, type, GetStandardParamValue(source), amount, balance, eventData);
+        }
+
+        /// <summary>
+        /// Creates a new instance of ConsumableAcquiredPayload and adds parameters to event data.
+        /// </summary>
+        /// <returns>A new instance of <see cref="ConsumableAcquiredPayload"/>.</returns>
+        /// <param name="name">The name of the consumable resource acquired.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the consumable resource was acquired.</param>
+        /// <param name="amount">The number of consumable resources acquired.</param>
+        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static ConsumableAcquiredPayload CreateInstance (string name, AcquisitionType type, string source, decimal amount, decimal balance, IDictionary<string, object> eventData)
+        {
+            return CreateInstance(name, type, source, (object)amount, balance, eventData);
+        }
+#endif
 
         static ConsumableAcquiredPayload CreateInstance (string name, AcquisitionType type, string source, object amount, object balance, IDictionary<string, object> eventData)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<ConsumableAcquiredPayload>(eventData);
 
-            eventData.Add(k_ParamKey_Type, GetStandardParamValue(type));
-            eventData.Add(k_ParamKey_Source, source);
-            eventData.Add(k_ParamKey_Name, name);
-            eventData.Add(k_ParamKey_Amount, amount);
-            eventData.Add(k_ParamKey_Balance, balance);
+            instance.SetParam(k_ParamKey_Type, GetStandardParamValue(type));
+            instance.SetParam(k_ParamKey_Source, source);
+            instance.SetParam(k_ParamKey_Name, name);
+            instance.SetParam(k_ParamKey_Amount, amount);
+            instance.SetParam(k_ParamKey_Balance, balance);
 
-            return CreateInstance<ConsumableAcquiredPayload>(eventData);
+            return instance;
         }
     }
 }

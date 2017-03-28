@@ -132,15 +132,12 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">Custom event data (optional).</param>
         public static LevelUpPayload CreateInstance (string oldLevelName, string newLevelName, IDictionary<string, object> eventData = null)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<LevelUpPayload>(eventData);
 
-            eventData.Add(k_ParamKey_OldLevelName, oldLevelName);
-            eventData.Add(k_ParamKey_NewLevelName, newLevelName);
+            instance.SetParam(k_ParamKey_OldLevelName, oldLevelName);
+            instance.SetParam(k_ParamKey_NewLevelName, newLevelName);
 
-            return CreateInstance<LevelUpPayload>(eventData);
+            return instance;
         }
 
         /// <summary>
@@ -166,17 +163,14 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">Custom event data (optional).</param>
         public static LevelUpPayload CreateInstance (int oldLevelIndex, int newLevelIndex, string oldLevelName, string newLevelName, IDictionary<string, object> eventData = null)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<LevelUpPayload>(eventData);
 
-            eventData.Add(k_ParamKey_OldLevelIndex, oldLevelIndex);
-            eventData.Add(k_ParamKey_NewLevelIndex, newLevelIndex);
-            eventData.Add(k_ParamKey_OldLevelName, oldLevelName);
-            eventData.Add(k_ParamKey_NewLevelName, newLevelName);
+            instance.SetParam(k_ParamKey_OldLevelIndex, oldLevelIndex);
+            instance.SetParam(k_ParamKey_NewLevelIndex, newLevelIndex);
+            instance.SetParam(k_ParamKey_OldLevelName, oldLevelName);
+            instance.SetParam(k_ParamKey_NewLevelName, newLevelName);
 
-            return CreateInstance<LevelUpPayload>(eventData);
+            return instance;
         }
     }
 }

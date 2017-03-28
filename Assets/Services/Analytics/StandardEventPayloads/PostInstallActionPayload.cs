@@ -68,14 +68,11 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">Custom event data (optional).</param>
         new public static PostInstallActionPayload CreateInstance (string actionId = null, IDictionary<string, object> eventData = null)
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<PostInstallActionPayload>(eventData);
 
-            eventData.Add(k_ParamKey_ActionId, actionId);
+            instance.SetParam(k_ParamKey_ActionId, actionId);
 
-            return CreateInstance<PostInstallActionPayload>(eventData);
+            return instance;
         }
     }
 }

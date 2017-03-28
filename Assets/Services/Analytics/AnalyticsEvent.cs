@@ -21,7 +21,7 @@ namespace UnityEngine.Analytics.Experimental
     /// </remarks>
     public static class AnalyticsEvent
     {
-        static readonly string k_SdkVersion = "0.1.1";
+        static readonly string k_SdkVersion = "0.1.2";
 
         static readonly string k_ArgumentException_EmptyString = "String cannot be empty.";
         static readonly string k_ArgumentException_PayloadType = "Payload type must inherit from AnalyticsEventPayload.";
@@ -181,6 +181,7 @@ namespace UnityEngine.Analytics.Experimental
             return Create(eventName, eventData).Send();
         }
 
+#if UNITY_5_4_OR_NEWER
         /// <summary>
         /// Sends an analytics event using the specified <c>eventName</c> and <c>position</c>.
         /// </summary>
@@ -201,6 +202,7 @@ namespace UnityEngine.Analytics.Experimental
 
             return Analytics.CustomEvent(eventName, position);
         }
+#endif
 
         /// <summary>
         /// Deprecated. Please use event specific AnalyticsEvent methods instead.
@@ -526,6 +528,7 @@ namespace UnityEngine.Analytics.Experimental
             return AnalyticsEventPayload.CreateInstance<ChatMessageSentPayload>(eventData).Send();
         }
 
+#if UNITY_5_5_OR_NEWER
         /// <summary>
         /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>int</c> values.
         /// <remarks>
@@ -567,6 +570,89 @@ namespace UnityEngine.Analytics.Experimental
         {
             return ConsumableAcquiredPayload.CreateInstance(name, type, source, amount, balance, eventData).Send();
         }
+#else
+        /// <summary>
+        /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource acquired.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the consumable resource was acquired.</param>
+        /// <param name="amount">The number of consumable resources acquired.</param>
+        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
+        public static AnalyticsResult ConsumableAcquired (string name, AcquisitionType type, AcquisitionSource source, int amount, int balance)
+        {
+            return ConsumableAcquiredPayload.CreateInstance(name, type, source, amount, balance, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource acquired.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the consumable resource was acquired.</param>
+        /// <param name="amount">The number of consumable resources acquired.</param>
+        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static AnalyticsResult ConsumableAcquired (string name, AcquisitionType type, AcquisitionSource source, int amount, int balance, IDictionary<string, object> eventData)
+        {
+            return ConsumableAcquiredPayload.CreateInstance(name, type, source, amount, balance, eventData).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource acquired.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the consumable resource was acquired.</param>
+        /// <param name="amount">The number of consumable resources acquired.</param>
+        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
+        public static AnalyticsResult ConsumableAcquired (string name, AcquisitionType type, string source, int amount, int balance)
+        {
+            return ConsumableAcquiredPayload.CreateInstance(name, type, source, amount, balance, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource acquired.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the consumable resource was acquired.</param>
+        /// <param name="amount">The number of consumable resources acquired.</param>
+        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static AnalyticsResult ConsumableAcquired (string name, AcquisitionType type, string source, int amount, int balance, IDictionary<string, object> eventData)
+        {
+            return ConsumableAcquiredPayload.CreateInstance(name, type, source, amount, balance, eventData).Send();
+        }
+#endif
 
         /// <summary>
         /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>float</c> values.
@@ -610,6 +696,7 @@ namespace UnityEngine.Analytics.Experimental
             return ConsumableAcquiredPayload.CreateInstance(name, type, source, amount, balance, eventData).Send();
         }
 
+#if UNITY_5_5_OR_NEWER
         /// <summary>
         /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>decimal</c> values.
         /// <remarks>
@@ -651,7 +738,91 @@ namespace UnityEngine.Analytics.Experimental
         {
             return ConsumableAcquiredPayload.CreateInstance(name, type, source, amount, balance, eventData).Send();
         }
+#else
+        /// <summary>
+        /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource acquired.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the consumable resource was acquired.</param>
+        /// <param name="amount">The number of consumable resources acquired.</param>
+        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
+        public static AnalyticsResult ConsumableAcquired (string name, AcquisitionType type, AcquisitionSource source, decimal amount, decimal balance)
+        {
+            return ConsumableAcquiredPayload.CreateInstance(name, type, source, amount, balance, null).Send();
+        }
 
+        /// <summary>
+        /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource acquired.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the consumable resource was acquired.</param>
+        /// <param name="amount">The number of consumable resources acquired.</param>
+        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static AnalyticsResult ConsumableAcquired (string name, AcquisitionType type, AcquisitionSource source, decimal amount, decimal balance, IDictionary<string, object> eventData)
+        {
+            return ConsumableAcquiredPayload.CreateInstance(name, type, source, amount, balance, eventData).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource acquired.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the consumable resource was acquired.</param>
+        /// <param name="amount">The number of consumable resources acquired.</param>
+        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
+        public static AnalyticsResult ConsumableAcquired (string name, AcquisitionType type, string source, decimal amount, decimal balance)
+        {
+            return ConsumableAcquiredPayload.CreateInstance(name, type, source, amount, balance, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource acquired.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the consumable resource was acquired.</param>
+        /// <param name="amount">The number of consumable resources acquired.</param>
+        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static AnalyticsResult ConsumableAcquired (string name, AcquisitionType type, string source, decimal amount, decimal balance, IDictionary<string, object> eventData)
+        {
+            return ConsumableAcquiredPayload.CreateInstance(name, type, source, amount, balance, eventData).Send();
+        }
+#endif
+
+#if UNITY_5_5_OR_NEWER
         /// <summary>
         /// Sends a <c>consumable_spent</c> event using the ConsumableSpentPayload with <c>int</c> values.
         /// <remarks>
@@ -671,6 +842,64 @@ namespace UnityEngine.Analytics.Experimental
         {
             return ConsumableSpentPayload.CreateInstance(name, amount, balance, itemPurchased, eventData).Send();
         }
+#else
+        /// <summary>
+        /// Sends a <c>consumable_spent</c> event using the ConsumableSpentPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player spends a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource spend rates.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource spent.</param>
+        /// <param name="amount">The number of consumable resources spent.</param>
+        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
+        public static AnalyticsResult ConsumableSpent (string name, int amount, int balance)
+        {
+            return ConsumableSpentPayload.CreateInstance(name, amount, balance, null, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>consumable_spent</c> event using the ConsumableSpentPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player spends a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource spend rates.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource spent.</param>
+        /// <param name="amount">The number of consumable resources spent.</param>
+        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
+        /// <param name="itemPurchased">The item purchased with the consumable resource.</param>
+        public static AnalyticsResult ConsumableSpent (string name, int amount, int balance, string itemPurchased)
+        {
+            return ConsumableSpentPayload.CreateInstance(name, amount, balance, itemPurchased).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>consumable_spent</c> event using the ConsumableSpentPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player spends a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource spend rates.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource spent.</param>
+        /// <param name="amount">The number of consumable resources spent.</param>
+        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
+        /// <param name="itemPurchased">The item purchased with the consumable resource.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static AnalyticsResult ConsumableSpent (string name, int amount, int balance, string itemPurchased, IDictionary<string, object> eventData)
+        {
+            return ConsumableSpentPayload.CreateInstance(name, amount, balance, itemPurchased, eventData).Send();
+        }
+#endif
 
         /// <summary>
         /// Sends a <c>consumable_spent</c> event using the ConsumableSpentPayload with <c>float</c> values.
@@ -692,6 +921,7 @@ namespace UnityEngine.Analytics.Experimental
             return ConsumableSpentPayload.CreateInstance(name, amount, balance, itemPurchased, eventData).Send();
         }
 
+#if UNITY_5_5_OR_NEWER
         /// <summary>
         /// Sends a <c>consumable_spent</c> event using the ConsumableSpentPayload with <c>decimal</c> values.
         /// <remarks>
@@ -711,7 +941,66 @@ namespace UnityEngine.Analytics.Experimental
         {
             return ConsumableSpentPayload.CreateInstance(name, amount, balance, itemPurchased, eventData).Send();
         }
+#else
+        /// <summary>
+        /// Sends a <c>consumable_spent</c> event using the ConsumableSpentPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player spends a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource spend rates.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource spent.</param>
+        /// <param name="amount">The number of consumable resources spent.</param>
+        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
+        public static AnalyticsResult ConsumableSpent (string name, decimal amount, decimal balance)
+        {
+            return ConsumableSpentPayload.CreateInstance(name, amount, balance, null, null).Send();
+        }
 
+        /// <summary>
+        /// Sends a <c>consumable_spent</c> event using the ConsumableSpentPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player spends a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource spend rates.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource spent.</param>
+        /// <param name="amount">The number of consumable resources spent.</param>
+        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
+        /// <param name="itemPurchased">The item purchased with the consumable resource.</param>
+        public static AnalyticsResult ConsumableSpent (string name, decimal amount, decimal balance, string itemPurchased)
+        {
+            return ConsumableSpentPayload.CreateInstance(name, amount, balance, itemPurchased, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>consumable_spent</c> event using the ConsumableSpentPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player spends a consumable resource.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into consumable resource spend rates.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the consumable resource spent.</param>
+        /// <param name="amount">The number of consumable resources spent.</param>
+        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
+        /// <param name="itemPurchased">The item purchased with the consumable resource.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static AnalyticsResult ConsumableSpent (string name, decimal amount, decimal balance, string itemPurchased, IDictionary<string, object> eventData)
+        {
+            return ConsumableSpentPayload.CreateInstance(name, amount, balance, itemPurchased, eventData).Send();
+        }
+#endif
+
+#if UNITY_5_5_OR_NEWER
         /// <summary>
         /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
         /// <remarks>
@@ -759,6 +1048,229 @@ namespace UnityEngine.Analytics.Experimental
         {
             return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, purchaseQty, eventData).Send();
         }
+#else
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, AcquisitionSource source, int amount, int balance)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, null, null, 1, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, AcquisitionSource source, int amount, int balance, string purchaseId)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, null, 1, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        /// <param name="purchaseName">The name of the store item purchased.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, AcquisitionSource source, int amount, int balance, string purchaseId, string purchaseName)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, 1, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        /// <param name="purchaseName">The name of the store item purchased.</param>
+        /// <param name="purchaseQty">The quantity of store items purchased.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, AcquisitionSource source, int amount, int balance, string purchaseId, string purchaseName, int purchaseQty)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, purchaseQty, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        /// <param name="purchaseName">The name of the store item purchased.</param>
+        /// <param name="purchaseQty">The quantity of store items purchased.</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, AcquisitionSource source, int amount, int balance, string purchaseId, string purchaseName, int purchaseQty, IDictionary<string, object> eventData)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, purchaseQty, eventData).Send();
+        }
+
+
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, string source, int amount, int balance)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, null, null, 1, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, string source, int amount, int balance, string purchaseId)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, null, 1, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        /// <param name="purchaseName">The name of the store item purchased.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, string source, int amount, int balance, string purchaseId, string purchaseName)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, 1, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        /// <param name="purchaseName">The name of the store item purchased.</param>
+        /// <param name="purchaseQty">The quantity of store items purchased.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, string source, int amount, int balance, string purchaseId, string purchaseName, int purchaseQty)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, purchaseQty, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        /// <param name="purchaseName">The name of the store item purchased.</param>
+        /// <param name="purchaseQty">The quantity of store items purchased.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, string source, int amount, int balance, string purchaseId, string purchaseName, int purchaseQty, IDictionary<string, object> eventData)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, purchaseQty, eventData).Send();
+        }
+#endif
 
         /// <summary>
         /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>float</c> values.
@@ -808,6 +1320,7 @@ namespace UnityEngine.Analytics.Experimental
             return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, purchaseQty, eventData).Send();
         }
 
+#if UNITY_5_5_OR_NEWER
         /// <summary>
         /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>decimal</c> values.
         /// <remarks>
@@ -855,6 +1368,230 @@ namespace UnityEngine.Analytics.Experimental
         {
             return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, purchaseQty, eventData).Send();
         }
+#else
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, AcquisitionSource source, decimal amount, decimal balance)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, null, null, 1, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, AcquisitionSource source, decimal amount, decimal balance, string purchaseId)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, null, 1, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        /// <param name="purchaseName">The name of the store item purchased.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, AcquisitionSource source, decimal amount, decimal balance, string purchaseId, string purchaseName)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, 1, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        /// <param name="purchaseName">The name of the store item purchased.</param>
+        /// <param name="purchaseQty">The quantity of store items purchased.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, AcquisitionSource source, decimal amount, decimal balance, string purchaseId, string purchaseName, int purchaseQty)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, purchaseQty, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        /// <param name="purchaseName">The name of the store item purchased.</param>
+        /// <param name="purchaseQty">The quantity of store items purchased.</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, AcquisitionSource source, decimal amount, decimal balance, string purchaseId, string purchaseName, int purchaseQty, IDictionary<string, object> eventData)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, purchaseQty, eventData).Send();
+        }
+
+
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, string source, decimal amount, decimal balance)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, null, null, 1, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, string source, decimal amount, decimal balance, string purchaseId)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, null, 1, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        /// <param name="purchaseName">The name of the store item purchased.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, string source, decimal amount, decimal balance, string purchaseId, string purchaseName)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, 1, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        /// <param name="purchaseName">The name of the store item purchased.</param>
+        /// <param name="purchaseQty">The quantity of store items purchased.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, string source, decimal amount, decimal balance, string purchaseId, string purchaseName, int purchaseQty)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, purchaseQty, null).Send();
+        }
+
+        /// <summary>
+        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>decimal</c> values.
+        /// <remarks>
+        /// Send this event when the player purchases or earns in-game currency.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="name">The name of the in-game currency.</param>
+        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="source">The source by which the currency was acquired.</param>
+        /// <param name="amount">The amount of currency acquired.</param>
+        /// <param name="balance">The new total balance, including the currency acquired.</param>
+        /// <param name="purchaseId">The ID of the store item purchased.</param>
+        /// <param name="purchaseName">The name of the store item purchased.</param>
+        /// <param name="purchaseQty">The quantity of store items purchased.</param>
+        /// <param name="eventData">Custom event data.</param>
+        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, string source, decimal amount, decimal balance, string purchaseId, string purchaseName, int purchaseQty, IDictionary<string, object> eventData)
+        {
+            return CurrencyAcquiredPayload.CreateInstance(name, type, source, amount, balance, purchaseId, purchaseName, purchaseQty, eventData).Send();
+        }
+#endif
+
 
         /// <summary>
         /// Sends a <c>cutscene_skip</c> event using the CutsceneSkipPayload.

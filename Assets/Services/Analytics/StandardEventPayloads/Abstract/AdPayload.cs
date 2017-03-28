@@ -102,16 +102,13 @@ namespace UnityEngine.Analytics.Experimental
         /// <typeparam name="T">Payload type that inherits from <see cref="AdPayload"/>.</typeparam>
         protected static T CreateInstance<T> (bool rewarded, string advertisingNetwork = null, string placementId = null, IDictionary<string, object> eventData = null) where T : AdPayload
         {
-            if (eventData == null)
-            {
-                eventData = new Dictionary<string, object>();
-            }
+            var instance = CreateInstance<T>(eventData);
 
-            eventData.Add(k_ParamKey_PlacementId, placementId);
-            eventData.Add(k_ParamKey_Network, advertisingNetwork);
-            eventData.Add(k_ParamKey_Rewarded, rewarded);
+            instance.SetParam(k_ParamKey_PlacementId, placementId);
+            instance.SetParam(k_ParamKey_Network, advertisingNetwork);
+            instance.SetParam(k_ParamKey_Rewarded, rewarded);
 
-            return CreateInstance<T>(eventData);
+            return instance;
         }
     }
 }
