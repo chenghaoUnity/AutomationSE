@@ -8,7 +8,7 @@ namespace UnityEngine.Analytics.Experimental
     /// <summary>
     /// The base class from which all standard event payload classes derive.
     /// </summary>
-    [Serializable, CreateAssetMenu(fileName = "CustomEventPayload.asset", menuName = "Analytics Events/Custom", order = 0)]
+    [Serializable, CreateAssetMenu(fileName = "CustomEventPayload.asset", menuName = "Analytics Payloads/Custom", order = 0)]
     public class AnalyticsEventPayload : ScriptableObject
     {
         static readonly string k_WarningFormat_NullValue = "Unable to validate '{0}' param value is of type '{1}'. Value is 'null'.";
@@ -19,16 +19,14 @@ namespace UnityEngine.Analytics.Experimental
         static readonly string k_StandardEventPrefix = string.Empty; // "unity.";
         static readonly string k_Error_TooManyParams = "Too many event parameters.";
         static readonly string k_Error_NameNullOrEmpty = "Event name cannot be null or empty.";
-        static readonly string k_Error_KeyValueCountNotEqual = "Number of keys must equal the number of values.";
         static readonly string k_PrefsKey_MaxParams = "AnalyticsEventPayload.maxParams";
         static readonly int k_DefaultMaxParams = 10;
 
-        [SerializeField, ReadOnlyField]
+        [SerializeField, ReadOnlyField] 
         string m_EventName;
-        [SerializeField, HideInInspector]
-        readonly List<string> m_EventDataKeys = new List<string>();
-        [SerializeField, HideInInspector]
-        readonly List<object> m_EventDataValues = new List<object>();
+
+        [SerializeField, HideInInspector] 
+        List<AnalyticsEventParam> m_EventParams = new List<AnalyticsEventParam>();
 
         /// <summary>
         /// DO NOT reference m_EventData. Use GetEventData instead.
@@ -284,17 +282,13 @@ namespace UnityEngine.Analytics.Experimental
         /// <returns>The payload event data.</returns>
         public Dictionary<string, object> GetEventData ()
         {
-            if (m_EventDataKeys.Count != m_EventDataValues.Count)
-            {
-                OnValidationFailed(k_Error_KeyValueCountNotEqual);
-            }
-
             m_EventData.Clear();
+            RemoveEmptyParams();
 
-            for (int i = 0; i < m_EventDataKeys.Count; i++)
+            for (int i = 0; i < m_EventParams.Count; i++)
             {
-                ValidateDataField(m_EventDataKeys[i], m_EventDataValues[i]);
-                m_EventData.Add(m_EventDataKeys[i], m_EventDataValues[i]);
+                ValidateDataField(m_EventParams[i].name, m_EventParams[i].value);
+                m_EventData.Add(m_EventParams[i].name, m_EventParams[i].value);
             }
 
             return m_EventData;
@@ -310,14 +304,14 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="eventData">The payload event data.</param>
         public void SetEventData (IDictionary<string, object> eventData)
         {
-            m_EventDataKeys.Clear();
-            m_EventDataValues.Clear();
+            m_EventParams.Clear();
 
-            if (eventData == null) return;
-
-            foreach (KeyValuePair<string, object> field in eventData)
+            if (eventData != null)
             {
-                SetParam(field.Key, field.Value);
+                for (int i = 0; i < eventData.Keys.Count(); i++)
+                {
+                    SetParam(eventData.Keys.ElementAt(i), eventData.Values.ElementAt(i));
+                }
             }
         }
 
@@ -328,7 +322,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <param name="key">The event data key.</param>
         public bool HasParam (string key)
         {
-            return (m_EventDataKeys.IndexOf(key) >= 0);
+            return (m_EventParams.FindIndex(x => x.name == key) >= 0);
         }
 
         /// <summary>
@@ -339,75 +333,69 @@ namespace UnityEngine.Analytics.Experimental
         /// <typeparam name="T">The expected value type.</typeparam>
         public T GetParam<T> (string key)
         {
-            var index = m_EventDataKeys.IndexOf(key);
+            var eventParam = m_EventParams.FirstOrDefault(x => x.name == key);
 
-            if (index >= 0)
+            if (eventParam == null) 
             {
-                var param = m_EventDataValues[index];
-
-                if (typeof(T).IsEnum)
-                {
-                    return ConvertStringToEnum<T>((string)param);
-                }
-
-                return (T)param;
+                return default(T);
             }
 
-            return default(T);
+            if (eventParam.type != typeof(T))
+            {
+                throw new ArgumentException("T must match param value type: " + eventParam.type);
+            }
+
+            if (eventParam.type.IsEnum)
+            {
+                return eventParam.GetEnumValue<T>();
+            }
+
+            return (T)eventParam.value;
         }
 
         /// <summary>
         /// Sets the specified event data field.
         /// <remarks>
-        /// If the <c>value</c> is either <c>null</c> or an empty string, the field will not be added to event data.
+        /// If the <c>key</c> or <c>value</c> is either <c>null</c> or an empty string, the field will not be added to event data.
         /// </remarks>
         /// </summary>
         /// <param name="key">The event data key.</param>
         /// <param name="value">The event data value.</param>
         public void SetParam (string key, object value)
         {
-            if (m_EventDataKeys.Count != m_EventDataValues.Count)
-            {
-                OnValidationFailed(k_Error_KeyValueCountNotEqual);
-            }
-
-            if (value == null || (value is string && string.IsNullOrEmpty((string)value)))
+            if (string.IsNullOrEmpty(key) || value == null || (value is string && string.IsNullOrEmpty((string)value)))
             {
                 return;
             }
 
-            ValidateDataField(key, value);
+            var eventParam = new AnalyticsEventParam(key, value);
 
-            if (value.GetType().IsEnum)
+            if (eventParam.value == null)
             {
-                if (value is StoreType ||
-                    value is AcquisitionType ||
-                    value is AcquisitionSource ||
-                    value is AdvertisingNetwork ||
-                    value is AuthorizationNetwork ||
-                    value is SocialNetwork ||
-                    value is ShareType ||
-                    value is ScreenName)
-                {
-                    value = ConvertEnumToString(value);
-                }
+                return;
             }
 
-            var index = m_EventDataKeys.IndexOf(key);
+            ValidateDataField(eventParam.name, eventParam.value);
 
-            if (index >= 0)
+            var index = m_EventParams.FindIndex(x => x.name == key);
+
+            if (index < 0)
             {
-                m_EventDataValues[index] = value;
+                if (m_EventParams.Count >= maxParams)
+                {
+                    RemoveEmptyParams();
+                }
+
+                if (m_EventParams.Count >= maxParams)
+                {
+                    throw new InvalidOperationException(k_Error_TooManyParams);
+                }
+
+                m_EventParams.Add(eventParam);
             }
             else
             {
-                if (m_EventDataKeys.Count >= maxParams)
-                {
-                    OnValidationFailed(k_Error_TooManyParams);
-                }
-
-                m_EventDataKeys.Add(key);
-                m_EventDataValues.Add(value);
+                m_EventParams[index].SetValue(value);
             }
         }
 
@@ -436,12 +424,12 @@ namespace UnityEngine.Analytics.Experimental
 
             // Enable verbose logging by adding the following symbol to Scripting Define Symbols in Player Settings.
 #if DEBUG_ANALYTICS_STANDARD_EVENTS
-            verboseLog = string.Concat("\n  Event Name: ", eventName);
-            verboseLog += string.Format("\n  Event Data ({0} params):", m_EventDataKeys.Count);
+            verboseLog = string.Concat("\n  Payload Type: ", GetType());
+            verboseLog += string.Format("\n  Event Data ({0} params):", m_EventParams.Count);
 
-            for (int i = 0; i < m_EventDataKeys.Count; i++)
+            for (int i = 0; i < m_EventParams.Count; i++)
             {
-                verboseLog += string.Format("\n    Key: '{0}';  Value: '{1}'", m_EventDataKeys[i], m_EventDataValues[i]);
+                verboseLog += string.Format("\n    Key: '{0}';  Value: '{1}'", m_EventParams[i].name, m_EventParams[i].value);
             }
 #endif
 
@@ -450,19 +438,34 @@ namespace UnityEngine.Analytics.Experimental
                 case AnalyticsResult.Ok:
                     if (AnalyticsEvent.debugMode)
                     {
-                        Debug.LogFormat("Successfully sent '{0}' (Result: '{1}').{2}", GetType(), result, verboseLog);
+                        Debug.LogFormat("Successfully sent '{0}' event (Result: '{1}').{2}", eventName, result, verboseLog);
                     }
                     break;
                 case AnalyticsResult.InvalidData:
                 case AnalyticsResult.TooManyItems:
-                    Debug.LogErrorFormat("Failed to send '{0}' (Result: '{1}').{2}", GetType(), result, verboseLog);
+                    Debug.LogErrorFormat("Failed to send '{0}' event (Result: '{1}').{2}", eventName, result, verboseLog);
                     break;
                 default:
-                    Debug.LogWarningFormat("Unable to send '{0}' (Result: '{1}').{2}", GetType(), result, verboseLog);
+                    Debug.LogWarningFormat("Unable to send '{0}' event (Result: '{1}').{2}", eventName, result, verboseLog);
                     break;
             }
 
             return result;
+        }
+
+        void RemoveEmptyParams ()
+        {
+            var emptyParams = m_EventParams.FindAll(
+                x => string.IsNullOrEmpty(x.name) || (x.value is string && string.IsNullOrEmpty((string)x.value) || x.value == null)
+            );
+
+            if (emptyParams != null && emptyParams.Count > 0)
+            {
+                for (int i = emptyParams.Count - 1; i >= 0; i--)
+                {
+                    m_EventParams.Remove(emptyParams[i]);
+                }
+            }
         }
 
         static string JoinWords (string conjunction, string[] words)
