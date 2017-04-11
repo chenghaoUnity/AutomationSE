@@ -47,17 +47,14 @@ public class Framework : MonoBehaviour {
 	}
 
 	public void Start() {
-
-		#if !UNITY_EDITOR
 		verifyMode = false;
 		testRun ();
+		#if UNITY_5_5_OR_NEWER
+			StartCoroutine(automationTestRun());
 		#endif
 	}
-
-	public IEnumerator automationTestRun() {
 		
-		verifyMode = false;
-		testRun ();
+	public IEnumerator automationTestRun() {
 
 		string status = "Not Ready";
 
@@ -1250,6 +1247,7 @@ public class Framework : MonoBehaviour {
 			}
 		}
 			
+		UnityEngine.Analytics.Analytics.FlushEvents ();
 		GameObject.Find("Text").GetComponent<Text> ().text = "Finished! " + (passed) + " / " + (resultTable.Count)  + " Passed!";
 	}
 
