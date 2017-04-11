@@ -1247,7 +1247,10 @@ public class Framework : MonoBehaviour {
 			}
 		}
 			
+		#if UNITY_5_5_OR_NEWER
 		UnityEngine.Analytics.Analytics.FlushEvents ();
+		#endif
+
 		GameObject.Find("Text").GetComponent<Text> ().text = "Finished! " + (passed) + " / " + (resultTable.Count)  + " Passed!";
 	}
 
