@@ -2,8 +2,8 @@ fileFormatVersion: 2
 guid: 3a924f3a807044de9cc602f2133520f8
 labels:
 - gvh
-- gvh_teditor
 - gvh_v1.2.10.0
+- gvh_teditor
 timeCreated: 1473798236
 licenseType: Pro
 PluginImporter:
@@ -12,9 +12,6 @@ PluginImporter:
   executionOrder: {}
   isPreloaded: 0
   platformData:
-    Any:
-      enabled: 0
-      settings: {}
     Editor:
       enabled: 1
       settings:
@@ -23,6 +20,9 @@ PluginImporter:
       enabled: 0
       settings:
         CPU: AnyCPU
+    data:
+      enabled: 0
+      settings: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 

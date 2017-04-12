@@ -16,22 +16,22 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 4
   m_Component:
-  - component: {fileID: 4327736664428356}
-  - component: {fileID: 20333306282312402}
-  - component: {fileID: 92508430434426286}
-  - component: {fileID: 124918942224779286}
-  - component: {fileID: 81883213826512620}
-  - component: {fileID: 114248986716709440}
-  - component: {fileID: 114513839544724490}
+  - 4: {fileID: 4327736664428356}
+  - 20: {fileID: 20333306282312402}
+  - 92: {fileID: 92508430434426286}
+  - 124: {fileID: 124918942224779286}
+  - 81: {fileID: 81883213826512620}
+  - 114: {fileID: 114248986716709440}
+  - 114: {fileID: 114513839544724490}
   m_Layer: 0
   m_Name: Main Camera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4327736664428356
 Transform:
   m_ObjectHideFlags: 1
@@ -41,10 +41,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &20333306282312402
 Camera:
   m_ObjectHideFlags: 1
