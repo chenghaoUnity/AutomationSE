@@ -498,7 +498,7 @@ PlayerSettings:
   - UNet_ServiceEnabled::UNet_ServiceEnabled
   - Unity_Ads_ServiceEnabled::Unity_Ads_ServiceEnabled
   Analytics_ServiceEnabled::Analytics_ServiceEnabled: False
-  Build_ServiceEnabled::Build_ServiceEnabled: True
+  Build_ServiceEnabled::Build_ServiceEnabled: False
   Collab_ServiceEnabled::Collab_ServiceEnabled: False
   ErrorHub_ServiceEnabled::ErrorHub_ServiceEnabled: False
   Game_Performance_ServiceEnabled::Game_Performance_ServiceEnabled: False
@@ -506,7 +506,7 @@ PlayerSettings:
   Purchasing_ServiceEnabled::Purchasing_ServiceEnabled: False
   UNet_ServiceEnabled::UNet_ServiceEnabled: True
   Unity_Ads_ServiceEnabled::Unity_Ads_ServiceEnabled: False
-  cloudProjectId: e7776b0e-fbb4-4586-b422-4c40883b3e55
-  projectName: Standard Event SDK
-  organizationId: unity-analytics-qa
+  cloudProjectId: 7fe25676-cf8d-476a-a28d-7fa420ecdb6e
+  projectName: RemoteConfigPlugin (1)
+  organizationId: unity-turnalan
   cloudEnabled: 0
