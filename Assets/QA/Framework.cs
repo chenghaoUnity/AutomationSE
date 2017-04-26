@@ -47,10 +47,10 @@ public class Framework : MonoBehaviour {
 	}
 
 	public void Start() {
-		verifyMode = false;
-		testRun ();
+		//verifyMode = false;
+		// testRun ();
 		#if UNITY_5_5_OR_NEWER
-			StartCoroutine(automationTestRun());
+			// StartCoroutine(automationTestRun());
 		#endif
 	}
 		
@@ -114,7 +114,6 @@ public class Framework : MonoBehaviour {
 		testSuite.Add (test28 ());
 		testSuite.Add (test29 ());
 		testSuite.Add (test30 ());
-		testSuite.Add (test31 ());
 		testSuite.Add (test32 ());
 		testSuite.Add (test33 ());
 		testSuite.Add (test34 ());
@@ -541,6 +540,10 @@ public class Framework : MonoBehaviour {
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check post_ad_action event (2)", "Ok", e, 20853);
 		}
+
+		if (runOrder < maxTest) {
+			yield return StartCoroutine (testSuite [runOrder]);
+		} 
 	}
 
 	public IEnumerator test19() {
@@ -892,24 +895,6 @@ public class Framework : MonoBehaviour {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
 	}
-
-	public IEnumerator test31() {
-		runOrder++;
-		showProgess (runOrder);
-
-		yield return new WaitForSeconds(timeDelay);
-		/// try {
-		// 	TestRunHelper (runOrder.ToString("D2") + " Check push_notification_sent event", "Ok", AnalyticsEvent.PushNotificationSent("message_id_server"), 20865);
-		//  TestRunJsonVerify("push_notification_sent/0", runOrder.ToString("D2") + " Check push_notification_sent event (Server)", 20865, "message_id_server");
-		// } catch (Exception e) {
-		// TestRunException (runOrder.ToString("D2") + " Check push_notification_sent event", "Ok", e, 20865);
-		// }
-
-
-		if (runOrder < maxTest) {
-			yield return StartCoroutine (testSuite [runOrder]);
-		} 
-	}
 		
 	public IEnumerator test32() {
 		runOrder++;
@@ -1198,7 +1183,7 @@ public class Framework : MonoBehaviour {
 		float percentage = (float)progress / (float)(maxTest - 1);
 		decimal d = decimal.Round (decimal.Parse ((percentage * 100).ToString()), 2);
 
-		GameObject.Find("Text").GetComponent<Text>().text = "Please wait, running " + (d)  + "%  ...";
+		GameObject.Find("Text").GetComponent<Text>().text = "Please wait, running " + (d)  + "%  ..." ;
 		GameObject.Find ("Slider").GetComponent<Slider> ().value = (float) d / 100;
 	}
 
