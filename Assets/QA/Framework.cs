@@ -898,12 +898,12 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			// TestRunHelper (runOrder.ToString("D2") + " Check push_notification_sent event", "Ok", AnalyticsEvent.PushNotificationSent("message_id_server"), 20865);
-			// TestRunJsonVerify("push_notification_sent/0", runOrder.ToString("D2") + " Check push_notification_sent event (Server)", 20865, "message_id_server");
-		} catch (Exception e) {
-			// TestRunException (runOrder.ToString("D2") + " Check push_notification_sent event", "Ok", e, 20865);
-		}
+		/// try {
+		// 	TestRunHelper (runOrder.ToString("D2") + " Check push_notification_sent event", "Ok", AnalyticsEvent.PushNotificationSent("message_id_server"), 20865);
+		//  TestRunJsonVerify("push_notification_sent/0", runOrder.ToString("D2") + " Check push_notification_sent event (Server)", 20865, "message_id_server");
+		// } catch (Exception e) {
+		// TestRunException (runOrder.ToString("D2") + " Check push_notification_sent event", "Ok", e, 20865);
+		// }
 
 
 		if (runOrder < maxTest) {

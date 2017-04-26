@@ -104,6 +104,9 @@ namespace UnityEngine.Analytics.Experimental
 		{
 #if UNITY_ANALYTICS
 			return Analytics.CustomEvent(eventName, eventData);
+			return AnalyticsResult.UnsupportedPlatform;
+#else
+
 #endif
 		}
 
@@ -415,91 +418,6 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>int</c> values.
-        /// <remarks>
-        /// Send this event when the player purchases or earns a consumable resource.
-        /// </remarks>
-        /// </summary>
-        /// <remarks>
-        /// This standard event can provide insight into consumable resource accumulation rates with respect to premium vs. soft acquisitions.
-        /// </remarks>
-        /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="name">The name of the consumable resource acquired.</param>
-        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
-        /// <param name="source">The source by which the consumable resource was acquired.</param>
-        /// <param name="amount">The number of consumable resources acquired.</param>
-        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
-        /// <param name="eventData">Custom event data (optional).</param>
-        public static AnalyticsResult ConsumableAcquired (string name, AcquisitionType type, AcquisitionSource source, int amount, int balance, IDictionary<string, object> eventData = null)
-        {
-            m_EventData.Clear();
-
-			if (string.IsNullOrEmpty(name))
-			{
-				OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "consumable_name"));
-			}
-			else
-			{
-				m_EventData.Add("consumable_name", name);
-			}
-
-			m_EventData.Add("type", SplitCamelCase(type.ToString()));
-			m_EventData.Add("source", SplitCamelCase(source.ToString()));
-			m_EventData.Add("consumable_amount", amount);
-			m_EventData.Add("consumable_balance", balance);
-
-			AddCustomEventData(eventData);
-
-			return Custom("consumalbe_acquired", m_EventData);
-        }
-
-        /// <summary>
-        /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>int</c> values.
-        /// <remarks>
-        /// Send this event when the player purchases or earns a consumable resource.
-        /// </remarks>
-        /// </summary>
-        /// <remarks>
-        /// This standard event can provide insight into consumable resource accumulation rates with respect to premium vs. soft acquisitions.
-        /// </remarks>
-        /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="name">The name of the consumable resource acquired.</param>
-        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
-        /// <param name="source">The source by which the consumable resource was acquired.</param>
-        /// <param name="amount">The number of consumable resources acquired.</param>
-        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
-        /// <param name="eventData">Custom event data (optional).</param>
-        public static AnalyticsResult ConsumableAcquired (string name, AcquisitionType type, string source, int amount, int balance, IDictionary<string, object> eventData = null)
-        {
-            m_EventData.Clear();
-
-			if (string.IsNullOrEmpty(name))
-			{
-				OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "consumable_name"));
-			}
-			else
-			{
-				m_EventData.Add("consumable_name", name);
-			}
-
-			m_EventData.Add("type", SplitCamelCase(type.ToString()));
-			if (string.IsNullOrEmpty(source))
-			{
-				OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "source"));
-			}
-			else
-			{
-				m_EventData.Add("source", source);
-			}
-			m_EventData.Add("consumable_amount", amount);
-			m_EventData.Add("consumable_balance", balance);
-
-			AddCustomEventData(eventData);
-
-			return Custom("consumalbe_acquired", m_EventData);
-        }
-
-        /// <summary>
         /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>float</c> values.
         /// <remarks>
         /// Send this event when the player purchases or earns a consumable resource.
@@ -585,45 +503,6 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>consumable_spent</c> event using the ConsumableSpentPayload with <c>int</c> values.
-        /// <remarks>
-        /// Send this event when the player spends a consumable resource.
-        /// </remarks>
-        /// </summary>
-        /// <remarks>
-        /// This standard event can provide insight into consumable resource spend rates.
-        /// </remarks>
-        /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="name">The name of the consumable resource spent.</param>
-        /// <param name="amount">The number of consumable resources spent.</param>
-        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
-        /// <param name="itemPurchased">The item purchased with the consumable resource (optional).</param>
-        /// <param name="eventData">Custom event data (optional).</param>
-        public static AnalyticsResult ConsumableSpent (string name, int amount, int balance, string itemPurchased = null, IDictionary<string, object> eventData = null)
-        {
-            m_EventData.Clear();
-
-			if (string.IsNullOrEmpty(name))
-			{
-				OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "consumable_name"));
-			}
-			else
-			{
-				m_EventData.Add("consumable_name", name);
-			}
-			m_EventData.Add("consumable_amount", amount);
-			m_EventData.Add("consumable_balance", balance);
-			if (!string.IsNullOrEmpty(itemPurchased))
-			{
-				m_EventData.Add("item_purchased", itemPurchased);
-			}
-
-			AddCustomEventData(eventData);
-
-			return Custom("consumable_spent", m_EventData);
-        }
-
-        /// <summary>
         /// Sends a <c>consumable_spent</c> event using the ConsumableSpentPayload with <c>float</c> values.
         /// <remarks>
         /// Send this event when the player spends a consumable resource.
@@ -660,115 +539,6 @@ namespace UnityEngine.Analytics.Experimental
 			AddCustomEventData(eventData);
 
 			return Custom("consumable_spent", m_EventData);
-        }
-
-        /// <summary>
-        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
-        /// <remarks>
-        /// Send this event when the player purchases or earns in-game currency.
-        /// </remarks>
-        /// </summary>
-        /// <remarks>
-        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
-        /// </remarks>
-        /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="name">The name of the in-game currency.</param>
-        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
-        /// <param name="source">The source by which the currency was acquired.</param>
-        /// <param name="amount">The amount of currency acquired.</param>
-        /// <param name="balance">The new total balance, including the currency acquired.</param>
-        /// <param name="purchaseId">The ID of the store item purchased (optional).</param>
-        /// <param name="purchaseName">The name of the store item purchased (optional).</param>
-        /// <param name="purchaseQty">The quantity of store items purchased (optional).</param>
-        /// <param name="eventData">Custom event data (optional).</param>
-        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, AcquisitionSource source, int amount, int balance, string purchaseId = null, string purchaseName = null, int purchaseQty = 1, IDictionary<string, object> eventData = null)
-        {
-            m_EventData.Clear();
-
-			if (string.IsNullOrEmpty(name))
-			{
-				OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "currency_name"));
-			}
-			else
-			{
-				m_EventData.Add("currency_name", name);
-			}
-
-			m_EventData.Add("type", SplitCamelCase(type.ToString()));
-			m_EventData.Add("source", SplitCamelCase(source.ToString()));
-			m_EventData.Add("currency_amount", amount);
-			m_EventData.Add("currency_balance", balance);
-			if (!string.IsNullOrEmpty(purchaseId))
-			{
-				m_EventData.Add("purchase_id", purchaseId);
-			}
-			if (!string.IsNullOrEmpty(purchaseName))
-			{
-				m_EventData.Add("purchase_name", purchaseName);
-			}
-			m_EventData.Add("purchase_qty", purchaseQty);
-
-			AddCustomEventData(eventData);
-
-			return Custom("currency_acquired", m_EventData);
-        }
-
-        /// <summary>
-        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>int</c> values.
-        /// <remarks>
-        /// Send this event when the player purchases or earns in-game currency.
-        /// </remarks>
-        /// </summary>
-        /// <remarks>
-        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
-        /// </remarks>
-        /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="name">The name of the in-game currency.</param>
-        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
-        /// <param name="source">The source by which the currency was acquired.</param>
-        /// <param name="amount">The amount of currency acquired.</param>
-        /// <param name="balance">The new total balance, including the currency acquired.</param>
-        /// <param name="purchaseId">The ID of the store item purchased (optional).</param>
-        /// <param name="purchaseName">The name of the store item purchased (optional).</param>
-        /// <param name="purchaseQty">The quantity of store items purchased (optional).</param>
-        /// <param name="eventData">Custom event data (optional).</param>
-        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, string source, int amount, int balance, string purchaseId = null, string purchaseName = null, int purchaseQty = 1, IDictionary<string, object> eventData = null)
-        {
-            m_EventData.Clear();
-
-			if (string.IsNullOrEmpty(name))
-			{
-				OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "currency_name"));
-			}
-			else
-			{
-				m_EventData.Add("currency_name", name);
-			}
-
-			m_EventData.Add("type", SplitCamelCase(type.ToString()));
-			if (string.IsNullOrEmpty(source))
-			{
-				OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "source"));
-			}
-			else
-			{
-				m_EventData.Add("source", source);
-			}
-			m_EventData.Add("currency_amount", amount);
-			m_EventData.Add("currency_balance", balance);
-			if (!string.IsNullOrEmpty(purchaseId))
-			{
-				m_EventData.Add("purchase_id", purchaseId);
-			}
-			if (!string.IsNullOrEmpty(purchaseName))
-			{
-				m_EventData.Add("purchase_name", purchaseName);
-			}
-			m_EventData.Add("purchase_qty", purchaseQty);
-
-			AddCustomEventData(eventData);
-
-			return Custom("currency_acquired", m_EventData);
         }
 
         /// <summary>
