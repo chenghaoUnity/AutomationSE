@@ -325,7 +325,7 @@ public class Framework : MonoBehaviour {
 		yield return new WaitForSeconds(timeDelay);
 		try {
 			TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", AnalyticsEvent.CurrencyAcquired("currency_name_server", AcquisitionType.Soft, AcquisitionSource.Earned, 1, 2), 20845);
-			TestRunJsonVerify("currency_acquired/0", runOrder.ToString("D2") + " Check currency_acquired event (Server) (1)", 20845, "currency_name_server", "soft", "earned", "1", "2");
+			TestRunJsonVerify("currency_acquired/0", runOrder.ToString("D2") + " Check currency_acquired event (Server) (1)", 20845, "currency_name_server", "soft", "earned", "1", "2", "1");
 		} catch (Exception e) {
 			TestRunException (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", e, 20845);
 		}
@@ -1125,7 +1125,7 @@ public class Framework : MonoBehaviour {
 			// Traverse the expected result and real result, see if they can be matched
 			for (int i = 0; i < jsonvale.Count; i++) {
 				for (int j = 0; j < list.Count; j++) {
-					if (list [j].Equals(jsonvale [i].ToString ())) {
+					if (list [j].ToLower().Equals(jsonvale [i].ToString ().ToLower())) {
 						list.RemoveAt (j);
 						break;
 					}
