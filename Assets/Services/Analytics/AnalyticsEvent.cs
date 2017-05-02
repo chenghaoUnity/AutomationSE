@@ -15,10 +15,6 @@ namespace UnityEngine.Analytics.Experimental
 	/// <remarks>
 	/// If you expect to be sending the same standard event with some amount of frequency,
 	/// you may want to create an event payload and invoke the <c>Send</c> method when the event occurs.
-	/// <para>
-	/// Using a reference to a payload instance can provide improved efficiency by using the same payload
-	/// while updating the parameters of the payload prior to sending the payload with each reoccuring event.
-	/// </para>
 	/// </remarks>
 	public static partial class AnalyticsEvent
 	{
@@ -100,13 +96,18 @@ namespace UnityEngine.Analytics.Experimental
 		/// <value>An array of all standard event names.</value>
 		public static string[] standardEventNames { get { return k_StandardEventNames; } }
 
+		/// <summary>
+		/// Sends a custom event (eventName) with data (eventData)
+		/// </summary>
+		/// <returns>The result of the analytics event sent</returns>
+		/// <param name="eventName">The name of the event.</param>
+		/// <param name="eventData">Custom event data.</param>
 		public static AnalyticsResult Custom(string eventName, IDictionary<string, object> eventData = null)
 		{
 #if UNITY_ANALYTICS
 			return Analytics.CustomEvent(eventName, eventData);
-			return AnalyticsResult.UnsupportedPlatform;
 #else
-
+			return AnalyticsResult.UnsupportedPlatform;
 #endif
 		}
 
@@ -132,7 +133,7 @@ namespace UnityEngine.Analytics.Experimental
 		}
 
         /// <summary>
-        /// Sends an <c>achievement_step</c> event using the AchievementStepPayload.
+        /// Sends an <c>achievement_step</c> event.
         /// <remarks>
         /// Send this event when a requirement or step toward completing a multi-part achievement is complete.
         /// </remarks>
@@ -157,7 +158,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends an <c>achievement_unlocked</c> event using the AchievementUnlockedPayload.
+        /// Sends an <c>achievement_unlocked</c> event.
         /// <remarks>
         /// Send this event when all requirements to unlock an achievement have been met.
         /// </remarks>
@@ -180,14 +181,14 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends an <c>ad_complete</c> event using the AdCompletePayload.
+        /// Sends an <c>ad_complete</c> event.
         /// <remarks>
         /// Send this event when an ad is successfully viewed and not skipped.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can provide insight into ad completion rates among players, and may indicate the effectiveness of ads by placement in game.
-        /// The <c>ad_complete</c> event should be preceded by an <c>ad_start</c> event, sent using AnalyticsEvent.AdStart or AdStartPayload.Send.
+        /// The <c>ad_complete</c> event should be preceded by an <c>ad_start</c> event, sent using AnalyticsEvent.AdStart.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="rewarded">Set to <c>true</c> if a reward was offered for viewing the ad; otherwise, <c>false</c>.</param>
@@ -214,14 +215,14 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends an <c>ad_complete</c> event using the AdCompletePayload.
+        /// Sends an <c>ad_complete</c> event.
         /// <remarks>
         /// Send this event when an ad is successfully viewed and not skipped.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can provide insight into ad completion rates among players, and may indicate the effectiveness of ads by placement in game.
-        /// The <c>ad_complete</c> event should be preceded by an <c>ad_start</c> event, sent using AnalyticsEvent.AdStart or AdStartPayload.Send.
+        /// The <c>ad_complete</c> event should be preceded by an <c>ad_start</c> event, sent using AnalyticsEvent.AdStart.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="rewarded">Set to <c>true</c> if a reward was offered for viewing the ad; otherwise, <c>false</c>.</param>
@@ -234,7 +235,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends an <c>ad_offer</c> event using the AdOfferPayload.
+        /// Sends an <c>ad_offer</c> event.
         /// <remarks>
         /// Send this event when the player is offered the opportunity to view an ad.
         /// </remarks>
@@ -268,7 +269,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends an <c>ad_offer</c> event using the AdOfferPayload.
+        /// Sends an <c>ad_offer</c> event.
         /// <remarks>
         /// Send this event when the player is offered the opportunity to view an ad.
         /// </remarks>
@@ -288,14 +289,14 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends an <c>ad_skip</c> event using the AdSkipPayload.
+        /// Sends an <c>ad_skip</c> event.
         /// <remarks>
         /// Send this event when the player opts to skip a video ad during video playback.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can provide insight into video ad completion rates with regards to the placement in game.
-        /// The <c>ad_skip</c> event should be preceded by an <c>ad_start</c> event, sent using AnalyticsEvent.AdStart or AdStartPayload.Send.
+        /// The <c>ad_skip</c> event should be preceded by an <c>ad_start</c> event, sent using AnalyticsEvent.AdStart.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="rewarded">Set to <c>true</c> if a reward was offered for viewing the ad; otherwise, <c>false</c>.</param>
@@ -322,14 +323,14 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends an <c>ad_skip</c> event using the AdSkipPayload.
+        /// Sends an <c>ad_skip</c> event.
         /// <remarks>
         /// Send this event when the player opts to skip a video ad during video playback.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can provide insight into video ad completion rates with regards to the placement in game.
-        /// The <c>ad_skip</c> event should be preceded by an <c>ad_start</c> event, sent using AnalyticsEvent.AdStart or AdStartPayload.Send.
+        /// The <c>ad_skip</c> event should be preceded by an <c>ad_start</c> event, sent using AnalyticsEvent.AdStart.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="rewarded">Set to <c>true</c> if a reward was offered for viewing the ad; otherwise, <c>false</c>.</param>
@@ -342,15 +343,15 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends an <c>ad_start</c> event using the AdStartPayload.
+        /// Sends an <c>ad_start</c> event.
         /// <remarks>
         /// Send this event when an ad is shown.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can provide insight into how players are actually choosing to start watching an ad.
-        /// The <c>ad_start</c> event should precede <see cref="AdCompletePayload"><c>ad_complete</c></see>,
-        /// <see cref="AdSkipPayload"><c>ad_skip</c></see>, and <see cref="PostAdActionPayload"><c>post_ad_action</c></see> events.
+        /// The <c>ad_start</c> event should precede <c>ad_complete</c>,
+        /// <c>ad_skip</c>, and <c>post_ad_action</c> events.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="rewarded">Set to <c>true</c> if a reward was offered for viewing the ad; otherwise, <c>false</c>.</param>
@@ -377,15 +378,15 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends an <c>ad_start</c> event using the AdStartPayload.
+        /// Sends an <c>ad_start</c> event.
         /// <remarks>
         /// Send this event when an ad is shown.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can provide insight into how players are actually choosing to start watching an ad.
-        /// The <c>ad_start</c> event should precede <see cref="AdCompletePayload"><c>ad_complete</c></see>,
-        /// <see cref="AdSkipPayload"><c>ad_skip</c></see>, and <see cref="PostAdActionPayload"><c>post_ad_action</c></see> events.
+        /// The <c>ad_start</c> event should precede <c>ad_complete</c>,
+        /// <c>ad_skip</c>, and <c>post_ad_action</c> events.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="rewarded">Set to <c>true</c> if a reward was offered for viewing the ad; otherwise, <c>false</c>.</param>
@@ -398,7 +399,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>chat_msg_sent</c> event using the ChatMessageSentPayload.
+        /// Sends a <c>chat_msg_sent</c> event.
         /// <remarks>
         /// Send this event when the player sends a chat message in game.
         /// </remarks>
@@ -418,7 +419,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>float</c> values.
+        /// Sends a <c>consumable_acquired</c> event with <c>float</c> values.
         /// <remarks>
         /// Send this event when the player purchases or earns a consumable resource.
         /// </remarks>
@@ -457,7 +458,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>consumable_acquired</c> event using the ConsumableAcquiredPayload with <c>float</c> values.
+        /// Sends a <c>consumable_acquired</c> event with <c>float</c> values.
         /// <remarks>
         /// Send this event when the player purchases or earns a consumable resource.
         /// </remarks>
@@ -503,7 +504,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>consumable_spent</c> event using the ConsumableSpentPayload with <c>float</c> values.
+        /// Sends a <c>consumable_spent</c> event with <c>float</c> values.
         /// <remarks>
         /// Send this event when the player spends a consumable resource.
         /// </remarks>
@@ -542,7 +543,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>float</c> values.
+        /// Sends a <c>currency_acquired</c> event with <c>float</c> values.
         /// <remarks>
         /// Send this event when the player purchases or earns in-game currency.
         /// </remarks>
@@ -593,7 +594,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>currency_acquired</c> event using the CurrencyAcquiredPayload with <c>float</c> values.
+        /// Sends a <c>currency_acquired</c> event with <c>float</c> values.
         /// <remarks>
         /// Send this event when the player purchases or earns in-game currency.
         /// </remarks>
@@ -651,7 +652,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>cutscene_skip</c> event using the CutsceneSkipPayload.
+        /// Sends a <c>cutscene_skip</c> event.
         /// <remarks>
         /// Send this event when the player opts to skip a cutscene or cinematic screen.
         /// </remarks>
@@ -681,7 +682,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
 		/// <summary>
-		/// Sends a <c>cutscene_start</c> event using the CutsceneStartPayload.
+		/// Sends a <c>cutscene_start</c> event.
 		/// <remarks>
 		/// Send this event when the player opts to skip a cutscene or cinematic screen.
 		/// </remarks>
@@ -711,15 +712,15 @@ namespace UnityEngine.Analytics.Experimental
 		}
 
         /// <summary>
-        /// Sends a <c>game_over</c> event using the GameOverPayload.
+        /// Sends a <c>game_over</c> event.
         /// <remarks>
         /// Send this event when gameplay ends.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can help provide insight to duration of gameplay and progression rates among players.
-        /// The <c>game_over</c> event should be preceded by a <see cref="GameStartPayload"><c>game_start</c></see> event,
-        /// sent using AnalyticsEvent.GameStart or GameStartPayload.Send.
+        /// The <c>game_over</c> event should be preceded by a <c>game_start</c>event,
+        /// sent using AnalyticsEvent.GameStart.
         /// This event is intended for use with games that do not utilize a traditional level structure, or for games that advance through
         /// multiple levels over the course of a single gameplay while starting from a common entry level, such as 0 or 1.
         /// </remarks>
@@ -741,15 +742,15 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>game_over</c> event using the GameOverPayload.
+        /// Sends a <c>game_over</c> event.
         /// <remarks>
         /// Send this event when gameplay ends.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can help provide insight to duration of gameplay and progression rates among players.
-        /// The <c>game_start</c> event should precede the <see cref="GameOverPayload"><c>game_over</c></see> event,
-        /// sent using AnalyticsEvent.GameOver or GameOverPayload.Send.
+        /// The <c>game_start</c> event should precede the <c>game_over</c> event,
+        /// sent using AnalyticsEvent.GameOver.
         /// This event is intended for use with games that do not utilize a traditional level structure, or for games that advance through
         /// multiple levels over the course of a single gameplay while starting from a common entry level, such as 0 or 1.
         /// </remarks>
@@ -773,15 +774,15 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>game_start</c> event using the GameStartPayload.
+        /// Sends a <c>game_start</c> event.
         /// <remarks>
         /// Send this event when gameplay starts.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can help provide insight to duration of gameplay and progression rates among players.
-        /// The <c>game_start</c> event should precede the <see cref="GameOverPayload"><c>game_over</c></see> event,
-        /// sent using AnalyticsEvent.GameOver or GameOverPayload.Send.
+        /// The <c>game_start</c> event should precede the ><c>game_over</c> event,
+        /// sent using AnalyticsEvent.GameOver.
         /// This event is intended for use with games that do not utilize a traditional level structure, or for games that advance through
         /// multiple levels over the course of a single gameplay while starting from a common entry level, such as 0 or 1.
         /// </remarks>
@@ -797,7 +798,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
 		/// <summary>
-		/// Sends an <c>item_acquired</c> event using the ItemAcquiredPayload.
+		/// Sends an <c>item_acquired</c> event.
 		/// <remarks>
 		/// Send this event when the player purchases or earns a non-consumable item.
 		/// </remarks>
@@ -838,7 +839,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends an <c>item_acquired</c> event using the ItemAcquiredPayload.
+        /// Sends an <c>item_acquired</c> event.
         /// <remarks>
         /// Send this event when the player purchases or earns a non-consumable item.
         /// </remarks>
@@ -886,15 +887,15 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_complete</c> event using the LevelCompletePayload.
+        /// Sends a <c>level_complete</c> event.
         /// <remarks>
         /// Send this event when the player sucessfully completes a level.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can help provide insight into level progression rates among players.
-        /// The <c>level_complete</c> event should be preceded by a <see cref="LevelStartPayload"><c>level_start</c></see> event,
-        /// sent using AnalyticsEvent.LevelStart or LevelStartPayload.Send.
+        /// The <c>level_complete</c> event should be preceded by a <c>level_start</c> event,
+        /// sent using AnalyticsEvent.LevelStart.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="levelName">The level name.</param>
@@ -918,15 +919,15 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_complete</c> event using the LevelCompletePayload.
+        /// Sends a <c>level_complete</c> event.
         /// <remarks>
         /// Send this event when the player sucessfully completes a level.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can help provide insight into level progression rates among players.
-        /// The <c>level_complete</c> event should be preceded by a <see cref="LevelStartPayload"><c>level_start</c></see> event,
-        /// sent using AnalyticsEvent.LevelStart or LevelStartPayload.Send.
+        /// The <c>level_complete</c> event should be preceded by a <c>level_start</c> event,
+        /// sent using AnalyticsEvent.LevelStart.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="levelIndex">The level index or number.</param>
@@ -948,15 +949,15 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_fail</c> event using the LevelFailPayload.
+        /// Sends a <c>level_fail</c> event.
         /// <remarks>
         /// Send this event when the player fails to successfully complete a level.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can help provide insight into level progression rates among players, and potentially help predict when players may churn.
-        /// The <c>level_fail</c> event should be preceded by a <see cref="LevelStartPayload"><c>level_start</c></see> event,
-        /// sent using AnalyticsEvent.LevelStart or LevelStartPayload.Send.
+        /// The <c>level_fail</c> event should be preceded by a <c>level_start</c> event,
+        /// sent using AnalyticsEvent.LevelStart.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="levelName">The level name.</param>
@@ -980,15 +981,15 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_fail</c> event using the LevelFailPayload.
+        /// Sends a <c>level_fail</c> event.
         /// <remarks>
         /// Send this event when the player fails to successfully complete a level.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can help provide insight into level progression rates among players, and potentially help predict when players may churn.
-        /// The <c>level_fail</c> event should be preceded by a <see cref="LevelStartPayload"><c>level_start</c></see> event,
-        /// sent using AnalyticsEvent.LevelStart or LevelStartPayload.Send.
+        /// The <c>level_fail</c> event should be preceded by a <c>level_start</c> event,
+        /// sent using AnalyticsEvent.LevelStart.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="levelIndex">The level index or number.</param>
@@ -1010,15 +1011,15 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_quit</c> event using the LevelQuitPayload.
+        /// Sends a <c>level_quit</c> event.
         /// <remarks>
         /// Send this event when the player opts to quit from a level before completing it.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can help provide insight into gameplay attrition rates by level, and potentially help predict when players may churn.
-        /// The <c>level_quit</c> event should be preceded by a <see cref="LevelStartPayload"><c>level_start</c></see> event,
-        /// sent using AnalyticsEvent.LevelStart or LevelStartPayload.Send.
+        /// The <c>level_quit</c> event should be preceded by a <c>level_start</c> event,
+        /// sent using AnalyticsEvent.LevelStart.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="levelName">The level name.</param>
@@ -1042,15 +1043,15 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_quit</c> event using the LevelQuitPayload.
+        /// Sends a <c>level_quit</c> event.
         /// <remarks>
         /// Send this event when the player opts to quit from a level before completing it.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can help provide insight into gameplay attrition rates by level, and potentially help predict when players may churn.
-        /// The <c>level_quit</c> event should be preceded by a <see cref="LevelStartPayload"><c>level_start</c></see> event,
-        /// sent using AnalyticsEvent.LevelStart or LevelStartPayload.Send.
+        /// The <c>level_quit</c> event should be preceded by a <c>level_start</c> event,
+        /// sent using AnalyticsEvent.LevelStart.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="levelIndex">The level index or number.</param>
@@ -1072,7 +1073,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_skip</c> event using the LevelSkipPayload.
+        /// Sends a <c>level_skip</c> event.
         /// <remarks>
         /// Send this event when the player opts to skip a level in order to contiue onto the next without having to completing it first.
         /// </remarks>
@@ -1102,7 +1103,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_skip</c> event using the LevelSkipPayload.
+        /// Sends a <c>level_skip</c> event.
         /// <remarks>
         /// Send this event when the player opts to skip a level in order to contiue onto the next without having to completing it.
         /// </remarks>
@@ -1130,16 +1131,16 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_start</c> event using the LevelStartPayload.
+        /// Sends a <c>level_start</c> event.
         /// <remarks>
         /// Send this event when the player enters into a level.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can help provide insight into level progression rates among players.
-        /// The <c>level_start</c> event should precede most other level specific events, including <see cref="LevelCompletePayload">
-        /// <c>level_complete</c></see>, <see cref="LevelFailPayload"><c>level_fail</c></see>, and <see cref="LevelQuitPayload"><c>level_quit</c></see>.
-        /// The <see cref="LevelSkipPayload"><c>level_skip</c></see> event does not need to be preceded by <c>level_start</c>
+        /// The <c>level_start</c> event should precede most other level specific events, including 
+        /// <c>level_complete</c>, <c>level_fail</c>, and <c>level_quit</c>.
+        /// The <c>level_skip</c> event does not need to be preceded by <c>level_start</c>
         /// if the level is skipped without having to enter into the level.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
@@ -1164,16 +1165,16 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_start</c> event using the LevelStartPayload.
+        /// Sends a <c>level_start</c> event.
         /// <remarks>
         /// Send this event when the player enters into a level.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can help provide insight into level progression rates among players.
-        /// The <c>level_start</c> event should precede most other level specific events, including <see cref="LevelCompletePayload">
-        /// <c>level_complete</c></see>, <see cref="LevelFailPayload"><c>level_fail</c></see>, and <see cref="LevelQuitPayload"><c>level_quit</c></see>.
-        /// The <see cref="LevelSkipPayload"><c>level_skip</c></see> event does not need to be preceded by <c>level_start</c>
+        /// The <c>level_start</c> event should precede most other level specific events, including 
+        /// <c>level_complete</c>, <c>level_fail</c>, and <c>level_quit</c>.
+        /// The <c>level_skip</c> event does not need to be preceded by <c>level_start</c>
         /// if the level is skipped without having to enter into the level.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
@@ -1196,7 +1197,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_up</c> event using the LevelUpPayload.
+        /// Sends a <c>level_up</c> event.
         /// <remarks>
         /// Send this event when the player rank increases, or when the accumulated experience reaches the next level tier.
         /// </remarks>
@@ -1235,7 +1236,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_up</c> event using the LevelUpPayload.
+        /// Sends a <c>level_up</c> event.
         /// <remarks>
         /// Send this event when the player rank increases, or when the accumulated experience reaches the next level tier.
         /// </remarks>
@@ -1260,7 +1261,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>level_up</c> event using the LevelUpPayload.
+        /// Sends a <c>level_up</c> event.
         /// <remarks>
         /// Send this event when the player rank increases, or when the accumulated experience reaches the next level tier.
         /// </remarks>
@@ -1303,7 +1304,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>post_ad_action</c> event using the PostAdActionPayload.
+        /// Sends a <c>post_ad_action</c> event.
         /// <remarks>
         /// Send this event with the first action a player takes after an ad is shown, or after an ad is offered but not shown.
         /// </remarks>
@@ -1337,7 +1338,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>post_ad_action</c> event using the PostAdActionPayload.
+        /// Sends a <c>post_ad_action</c> event.
         /// <remarks>
         /// Send this event with the first action a player takes after an ad is shown, or after an ad is offered but not shown.
         /// </remarks>
@@ -1368,7 +1369,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>first_interaction</c> event using the PostInstallActionPayload.
+        /// Sends a <c>first_interaction</c> event.
         /// <remarks>
         /// Send this event with the first action the user takes after install.
         /// </remarks>
@@ -1395,7 +1396,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>push_notification_click</c> event using the PushNotificationClickPayload.
+        /// Sends a <c>push_notification_click</c> event.
         /// <remarks>
         /// Send this event when the player clicks on a push notification.
         /// </remarks>
@@ -1425,7 +1426,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>push_notification_enable</c> event using the PushNotificationEnablePayload.
+        /// Sends a <c>push_notification_enable</c> event.
         /// <remarks>
         /// Send this event when the player enables or grants permission for the game to use push notifications.
         /// </remarks>
@@ -1445,7 +1446,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>screen_visit</c> event using the ScreenVisitPayload.
+        /// Sends a <c>screen_visit</c> event.
         /// <remarks>
         /// Send this event when the player opens a menu or visits a screen in the game.
         /// </remarks>
@@ -1468,7 +1469,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>screen_visit</c> event using the ScreenVisitPayload.
+        /// Sends a <c>screen_visit</c> event.
         /// <remarks>
         /// Send this event when the player opens a menu or visits a screen in the game.
         /// </remarks>
@@ -1498,7 +1499,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>social_share</c> event using the SocialSharePayload.
+        /// Sends a <c>social_share</c> event.
         /// <remarks>
         /// Send this event when the player posts a message about the game through social media.
         /// </remarks>
@@ -1509,6 +1510,8 @@ namespace UnityEngine.Analytics.Experimental
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
         /// <param name="socialNetwork">The network used in the social engagement.</param>
+		/// <param name="senderId">The id of the sender (optional)</param>
+		/// <param name="recipientId">The id of the recipient (optional)</param>
         /// <param name="eventData">Custom event data (optional).</param>
 		public static AnalyticsResult SocialShare (ShareType shareType, SocialNetwork socialNetwork, string senderId = null, string recipientId = null, IDictionary<string, object> eventData = null)
         {
@@ -1532,7 +1535,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>social_share</c> event using the SocialSharePayload.
+        /// Sends a <c>social_share</c> event.
         /// <remarks>
         /// Send this event when the player posts a message about the game through social media.
         /// </remarks>
@@ -1543,6 +1546,8 @@ namespace UnityEngine.Analytics.Experimental
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
         /// <param name="socialNetwork">The network used in the social engagement.</param>
+		/// <param name="senderId">The id of the sender (optional)</param>
+		/// <param name="recipientId">The id of the recipient (optional)</param>
         /// <param name="eventData">Custom event data (optional).</param>
 		public static AnalyticsResult SocialShare (ShareType shareType, string socialNetwork, string senderId = null, string recipientId = null, IDictionary<string, object> eventData = null)
         {
@@ -1572,7 +1577,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>social_share</c> event using the SocialSharePayload.
+        /// Sends a <c>social_share</c> event.
         /// <remarks>
         /// Send this event when the player posts a message about the game through social media.
         /// </remarks>
@@ -1583,6 +1588,8 @@ namespace UnityEngine.Analytics.Experimental
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
         /// <param name="socialNetwork">The network used in the social engagement.</param>
+		/// <param name="senderId">The id of the sender (optional)</param>
+		/// <param name="recipientId">The id of the recipient (optional)</param>
         /// <param name="eventData">Custom event data (optional).</param>
 		public static AnalyticsResult SocialShare (string shareType, SocialNetwork socialNetwork, string senderId = null, string recipientId = null, IDictionary<string, object> eventData = null)
         {
@@ -1612,7 +1619,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>social_share</c> event using the SocialSharePayload.
+        /// Sends a <c>social_share</c> event.
         /// <remarks>
         /// Send this event when the player posts a message about the game through social media.
         /// </remarks>
@@ -1623,6 +1630,8 @@ namespace UnityEngine.Analytics.Experimental
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
         /// <param name="socialNetwork">The network used in the social engagement.</param>
+		/// <param name="senderId">The id of the sender (optional)</param>
+		/// <param name="recipientId">The id of the recipient (optional)</param>
         /// <param name="eventData">Custom event data (optional).</param>
 		public static AnalyticsResult SocialShare (string shareType, string socialNetwork, string senderId = null, string recipientId = null, IDictionary<string, object> eventData = null)
         {
@@ -1660,9 +1669,9 @@ namespace UnityEngine.Analytics.Experimental
 
 
 		/// <summary>
-		/// Sends a <c>social_share</c> event using the SocialSharePayload.
+		/// Sends a <c>social_share_accept</c> event.
 		/// <remarks>
-		/// Send this event when the player posts a message about the game through social media.
+		/// Send this event when a player reacts to a social share event sent by another user.
 		/// </remarks>
 		/// </summary>
 		/// <remarks>
@@ -1671,6 +1680,8 @@ namespace UnityEngine.Analytics.Experimental
 		/// <returns>The result of the analytics event sent.</returns>
 		/// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
 		/// <param name="socialNetwork">The network used in the social engagement.</param>
+		/// <param name="senderId">The id of the sender (optional)</param>
+		/// <param name="recipientId">The id of the recipient (optional)</param>
 		/// <param name="eventData">Custom event data (optional).</param>
 		public static AnalyticsResult SocialShareAccept(ShareType shareType, SocialNetwork socialNetwork, string senderId = null, string recipientId = null, IDictionary<string, object> eventData = null)
 		{
@@ -1694,9 +1705,9 @@ namespace UnityEngine.Analytics.Experimental
 		}
 
 		/// <summary>
-		/// Sends a <c>social_share</c> event using the SocialSharePayload.
+		/// Sends a <c>social_share_accept</c> event.
 		/// <remarks>
-		/// Send this event when the player posts a message about the game through social media.
+		/// SSend this event when a player reacts to a social share event sent by another user.
 		/// </remarks>
 		/// </summary>
 		/// <remarks>
@@ -1705,6 +1716,8 @@ namespace UnityEngine.Analytics.Experimental
 		/// <returns>The result of the analytics event sent.</returns>
 		/// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
 		/// <param name="socialNetwork">The network used in the social engagement.</param>
+		/// <param name="senderId">The id of the sender (optional)</param>
+		/// <param name="recipientId">The id of the recipient (optional)</param>
 		/// <param name="eventData">Custom event data (optional).</param>
 		public static AnalyticsResult SocialShareAccept(ShareType shareType, string socialNetwork, string senderId = null, string recipientId = null, IDictionary<string, object> eventData = null)
 		{
@@ -1734,9 +1747,9 @@ namespace UnityEngine.Analytics.Experimental
 		}
 
 		/// <summary>
-		/// Sends a <c>social_share</c> event using the SocialSharePayload.
+		/// Sends a <c>social_share_accept</c> event.
 		/// <remarks>
-		/// Send this event when the player posts a message about the game through social media.
+		/// Send this event when a player reacts to a social share event sent by another user.
 		/// </remarks>
 		/// </summary>
 		/// <remarks>
@@ -1745,6 +1758,8 @@ namespace UnityEngine.Analytics.Experimental
 		/// <returns>The result of the analytics event sent.</returns>
 		/// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
 		/// <param name="socialNetwork">The network used in the social engagement.</param>
+		/// <param name="senderId">The id of the sender (optional)</param>
+		/// <param name="recipientId">The id of the recipient (optional)</param>
 		/// <param name="eventData">Custom event data (optional).</param>
 		public static AnalyticsResult SocialShareAccept(string shareType, SocialNetwork socialNetwork, string senderId = null, string recipientId = null, IDictionary<string, object> eventData = null)
 		{
@@ -1774,9 +1789,9 @@ namespace UnityEngine.Analytics.Experimental
 		}
 
 		/// <summary>
-		/// Sends a <c>social_share</c> event using the SocialSharePayload.
+		/// Sends a <c>social_share_accept</c> event.
 		/// <remarks>
-		/// Send this event when the player posts a message about the game through social media.
+		/// Send this event when a player reacts to a social share event sent by another user.
 		/// </remarks>
 		/// </summary>
 		/// <remarks>
@@ -1785,6 +1800,8 @@ namespace UnityEngine.Analytics.Experimental
 		/// <returns>The result of the analytics event sent.</returns>
 		/// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
 		/// <param name="socialNetwork">The network used in the social engagement.</param>
+		/// <param name="senderId">The id of the sender (optional)</param>
+		/// <param name="recipientId">The id of the recipient (optional)</param>
 		/// <param name="eventData">Custom event data (optional).</param>
 		public static AnalyticsResult SocialShareAccept(string shareType, string socialNetwork, string senderId = null, string recipientId = null, IDictionary<string, object> eventData = null)
 		{
@@ -1821,7 +1838,7 @@ namespace UnityEngine.Analytics.Experimental
 		}
 
         /// <summary>
-        /// Sends a <c>store_item_click</c> event using the StoreItemClickPayload.
+        /// Sends a <c>store_item_click</c> event.
         /// <remarks>
         /// Send this event when the player clicks on an item in the store.
         /// </remarks>
@@ -1858,7 +1875,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>store_opened</c> event using the StoreOpenedPayload.
+        /// Sends a <c>store_opened</c> event.
         /// <remarks>
         /// Send this event when the player opens a store in game.
         /// </remarks>
@@ -1881,15 +1898,15 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>tutorial_complete</c> event using the TutorialCompletePayload.
+        /// Sends a <c>tutorial_complete</c> event.
         /// <remarks>
         /// Send this event when the player completes a tutorial.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can provide insight into tutorial completion rates among players.
-        /// The <c>tutorial_complete</c> event should be preceded by an <see cref="TutorialStartPayload"><c>tutorial_start</c></see> event,
-        /// sent using AnalyticsEvent.TutorialStart or TutorialStartPayload.Send.
+        /// The <c>tutorial_complete</c> event should be preceded by an <c>tutorial_start</c> event,
+        /// sent using AnalyticsEvent.TutorialStart.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="tutorialId">The tutorial name or ID (optional).</param>
@@ -1909,15 +1926,15 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>tutorial_skip</c> event using the TutorialSkipPayload.
+        /// Sends a <c>tutorial_skip</c> event.
         /// <remarks>
         /// Send this event when the player opts to skip a tutorial.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can provide insight into tutorial progression rates among players.
-        /// The <c>tutorial_complete</c> event should be preceded by an <see cref="TutorialStartPayload"><c>tutorial_start</c></see> event,
-        /// sent using AnalyticsEvent.TutorialStart or TutorialStartPayload.Send.
+        /// The <c>tutorial_complete</c> event should be preceded by an <c>tutorial_start</c> event,
+        /// sent using AnalyticsEvent.TutorialStart.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="tutorialId">The tutorial name or ID (optional).</param>
@@ -1937,7 +1954,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>tutorial_start</c> event using the TutorialStartPayload.
+        /// Sends a <c>tutorial_start</c> event.
         /// <remarks>
         /// Send this event when the player starts a tutorial.
         /// </remarks>
@@ -1963,7 +1980,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>tutorial_step</c> event using the TutorialStepPayload.
+        /// Sends a <c>tutorial_step</c> event.
         /// <remarks>
         /// Send this event when the player completes a step or stage in a multi-part tutorial.
         /// </remarks>
@@ -1991,7 +2008,7 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>user_signup</c> event using the UserSignupPayload.
+        /// Sends a <c>user_signup</c> event.
         /// <remarks>
         /// Send this event when the player registers for an account or logs in for the first time in game.
         /// </remarks>
@@ -2021,7 +2038,7 @@ namespace UnityEngine.Analytics.Experimental
 		}
 
         /// <summary>
-        /// Sends a <c>user_signup</c> event using the UserSignupPayload.
+        /// Sends a <c>user_signup</c> event.
         /// <remarks>
         /// Send this event when the player registers for an account or logs in for the first time in game.
         /// </remarks>
@@ -2043,11 +2060,6 @@ namespace UnityEngine.Analytics.Experimental
 			return Custom("user_signup", m_EventData);
         }
 
-		/// <summary>
-		/// Override this method to customize how invalid event data is handled.
-		/// </summary>
-		/// <param name="message">An error message indicating why validation failed, and how to fix it.</param>
-		/// <exception cref="AnalyticsEventPayloadException">Thrown by default.</exception>
 		private static void OnValidationFailed(string message)
 		{
 			throw new AnalyticsEventPayloadException(message);
