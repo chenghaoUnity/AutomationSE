@@ -142,7 +142,7 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunHelper (runOrder.ToString("D2") + " Check if version number is correct", "0.1.0", AnalyticsEvent.sdkVersion, 20660);
+		TestRunHelper ("version_number", "0.1.0", AnalyticsEvent.sdkVersion, 20660);
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -153,21 +153,14 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check first_interaction event (1)", "Ok", AnalyticsEvent.FirstInteraction(), 20661);
-			TestRunJsonVerify("first_interaction/0", runOrder.ToString("D2") + " Check first_interaction event (Server) (1)", 20661, null);
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check first_interaction event (1)", "Ok", e, 20661);
-		}
+		int number = 0;
+		string eventName = "first_interaction";
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check first_interaction event (2)", "Ok", AnalyticsEvent.FirstInteraction("action_id_server"), 20661);
-			TestRunJsonVerify("first_interaction/1", runOrder.ToString("D2") + " Check first_interaction event (Server) (2)", 20661, "action_id_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check first_interaction event (2)", "Ok", e, 20661);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.FirstInteraction (), 20661, null);
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.FirstInteraction("action_id_server"), 20661, "action_id_server");
 			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -178,21 +171,14 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_start event (1)", "Ok", AnalyticsEvent.TutorialStart(), 20662);
-			TestRunJsonVerify("tutorial_start/0", runOrder.ToString("D2") + " Check tutorial_start event (Server) (1)", 20662, null);
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString ("D2") + " Check tutorial_start event (1)", "Ok", e, 20662);
-		}
+		int number = 0;
+		string eventName = "tutorial_start";
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_start event (2)", "Ok", AnalyticsEvent.TutorialStart("tutorial_id_server"), 20662);
-			TestRunJsonVerify("tutorial_start/1", runOrder.ToString("D2") + " Check tutorial_start event (Server) (2)", 20662, "tutorial_id_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check tutorial_start event (2)", "Ok", e, 20662);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.TutorialStart(), 20662, null);
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.TutorialStart("tutorial_id_server"), 20662, "tutorial_id_server");
 			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -203,21 +189,14 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_step event (1)", "Ok", AnalyticsEvent.TutorialStep(0), 20663);
-			TestRunJsonVerify("tutorial_step/0", runOrder.ToString("D2") + " Check tutorial_step event (Server) (1)", 20663, "0");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check tutorial_step event (1)", "Ok", e, 20663);
-		}
+		int number = 0;
+		string eventName = "tutorial_step";
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.TutorialStep(0), 20663, "0");
 			
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_step event (2)", "Ok", AnalyticsEvent.TutorialStep(0, "tutorial_id_server"), 20663);
-			TestRunJsonVerify("tutorial_step/1", runOrder.ToString("D2") + " Check tutorial_step event (Server) (2)", 20663, "0", "tutorial_id_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check tutorial_step event (2)", "Ok", e, 20663);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.TutorialStep(0, "tutorial_id_server"), 20663, "0", "tutorial_id_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -228,22 +207,15 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
+		int number = 0;
+		string eventName = "tutorial_complete";
+
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_complete event (1)", "Ok", AnalyticsEvent.TutorialComplete(), 20840);
-			TestRunJsonVerify("tutorial_complete/0", runOrder.ToString("D2") + " Check tutorial_complete event (Server) (1)", 20840, null);
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check tutorial_complete event (1)", "Ok", e, 20840);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.TutorialComplete(), 20840, null);
 			
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_complete event (2)", "Ok", AnalyticsEvent.TutorialComplete("tutorial_id_server"), 20840);
-			TestRunJsonVerify("tutorial_complete/1", runOrder.ToString("D2") + " Check tutorial_complete event (Server) (2)", 20840, "tutorial_id_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check tutorial_complete event (2)", "Ok", e, 20840);
-		}
-			
+		TestRunner (eventName, number++, AnalyticsEvent.TutorialComplete("tutorial_id_server"), 20840, "tutorial_id_server");
+
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -253,21 +225,14 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
+		int number = 0;
+		string eventName = "tutorial_skip";
+
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_skip event (1)", "Ok", AnalyticsEvent.TutorialSkip(), 20841);
-			TestRunJsonVerify("tutorial_skip/0", runOrder.ToString("D2") + " Check tutorial_skip event (Server) (1)", 20841, null);
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check tutorial_skip event (1)", "Ok", e, 20841);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.TutorialSkip(), 20841, null);
 			
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check tutorial_skip event (2)", "Ok", AnalyticsEvent.TutorialSkip("tutorial_id_server"), 20841);
-			TestRunJsonVerify("tutorial_skip/1", runOrder.ToString("D2") + " Check tutorial_skip event (Server) (2)", 20841, "tutorial_id_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check tutorial_skip event (2)", "Ok", e, 20841);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.TutorialSkip("tutorial_id_server"), 20841, "tutorial_id_server");
 			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -278,40 +243,29 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
+		int number = 0;
+		string eventName = "store_opened";
+
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check store_opened event", "Ok", AnalyticsEvent.StoreOpened(StoreType.Soft), 20842);
-			TestRunJsonVerify("store_opened/0", runOrder.ToString("D2") + " Check store_opened event (Server)", 20842, "soft");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check store_opened event", "Ok", e, 20842);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.StoreOpened(StoreType.Soft), 20842, "soft");
 			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
 	}
-
-	// ????
+		
 	public IEnumerator test08() {
 		runOrder++;
 		showProgess (runOrder);
 
+		int number = 0;
+		string eventName = "store_item_click";
 	
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check store_item_click event (1)", "Ok", AnalyticsEvent.StoreItemClick(StoreType.Soft,"item_id_server"), 20843);
-			TestRunJsonVerify("store_item_click/0", runOrder.ToString("D2") + " Check store_item_click event (Server) (1)", 20843, "soft", "item_id_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check store_item_click event (1)", "Ok", e, 20843);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.StoreItemClick(StoreType.Premium,"item_id_server"), 20843, "premium", "item_id_server");
 			
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check store_item_click event (2)", "Ok", AnalyticsEvent.StoreItemClick(StoreType.Soft, "item_id_server", "item_name_server"), 20843);
-			TestRunJsonVerify("store_item_click/1", runOrder.ToString("D2") + " Check store_item_click event (Server) (2)", 20843, "soft", "item_id_server", "item_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check store_item_click event (2)", "Ok", e, 20843);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.StoreItemClick(StoreType.Premium, "item_id_server", "item_name_server"), 20843, "premium", "item_id_server", "item_name_server");
 			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -322,22 +276,14 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", AnalyticsEvent.CurrencyAcquired("currency_name_server", AcquisitionType.Soft, AcquisitionSource.Earned, 1, 2), 20845);
-			TestRunJsonVerify("currency_acquired/0", runOrder.ToString("D2") + " Check currency_acquired event (Server) (1)", 20845, "currency_name_server", "soft", "earned", "1", "2", "1");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check currency_acquired event (1)", "Ok", e, 20845);
-		}
-
+		int number = 0;
+		string eventName = "currency_acquired";
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check currency_acquired event (2)", "Ok", AnalyticsEvent.CurrencyAcquired("currency_name_server", AcquisitionType.Soft, AcquisitionSource.Earned, 1, 2, "purchaseID_server", "purchaseName_server", 1), 20845);
-			TestRunJsonVerify("currency_acquired/1", runOrder.ToString("D2") + " Check currency_acquired event (Server) (2)", 20845, "currency_name_server", "soft", "earned", "1", "2", "purchaseID_server", "purchaseName_server", "1");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check currency_acquired event (2)", "Ok", e, 20845);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.CurrencyAcquired("currency_name_server", AcquisitionType.Soft, AcquisitionSource.None, 1, 2), 20845, "currency_name_server", "soft", "none", "1", "2", "1");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.CurrencyAcquired("currency_name_server", AcquisitionType.Premium, AcquisitionSource.Store, 1, 2, "purchaseID_server", "purchaseName_server", 1), 20845, "currency_name_server", "premium", "store", "1", "2", "purchaseID_server", "purchaseName_server", "1");
 			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -348,13 +294,11 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
+		int number = 0;
+		string eventName = "consumable_acquired";
+
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check consumable_acquired event", "Ok", AnalyticsEvent.ConsumableAcquired("cpnsumable_name_server", AcquisitionType.Soft, AcquisitionSource.Earned, 1, 2), 20846);
-			TestRunJsonVerify("consumable_acquired/0", runOrder.ToString("D2") + " Check consumable_acquired event (Server)", 20846, "1", "2", "soft", "earned", "cpnsumable_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check consumable_acquired event (1)", "Ok", e, 20846);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.ConsumableAcquired ("cpnsumable_name_server", AcquisitionType.Premium, AcquisitionSource.Earned, 1, 2), 20846, "cpnsumable_name_server", "premium", "earned", "1", "2");
 			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -365,23 +309,14 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check consumable_spent event (1)", "Ok", AnalyticsEvent.ConsumableSpent("consumable_name_server", 1, 2), 20847);
-			TestRunJsonVerify("consumable_spent/0", runOrder.ToString("D2") + " Check consumable_spent event (Server) (1)", 20847, "1", "2", "consumable_name_server");
-		
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check consumable_spent event (1)", "Ok", e, 20847);
-		}
-
+		int number = 0;
+		string eventName = "consumable_spent";
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check consumable_spent event (2)", "Ok", AnalyticsEvent.ConsumableSpent("consumable_name_server", 1, 2, "itemPurchased_server"), 20847);
-			TestRunJsonVerify("consumable_spent/1", runOrder.ToString("D2") + " Check consumable_spent event (Server) (2)", 20847, "1", "2", "consumable_name_server", "itemPurchased_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check consumable_spent event (2)", "Ok", e, 20847);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.ConsumableSpent("consumable_name_server", 1, 2), 20847, "consumable_name_server", "1", "2");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ConsumableSpent("consumable_name_server", 1, 2, "itemPurchased_server"), 20847, "consumable_name_server", "1", "2", "itemPurchased_server");
 			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -392,23 +327,24 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check item_acquired event (1)", "Ok", AnalyticsEvent.ItemAcquired("item_name_server", AcquisitionType.Soft, AcquisitionSource.Earned), 20848);
-			TestRunJsonVerify("item_acquired/0", runOrder.ToString("D2") + " Check item_acquired event (Server) (1)", 20848, "soft", "earned", "item_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check item_acquired event (1)", "Ok", e, 20848);
-		}
-
+		int number = 0;
+		string eventName = "item_acquired";
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check item_acquired event (2)", "Ok", AnalyticsEvent.ItemAcquired("item_name_server", AcquisitionType.Soft, AcquisitionSource.Earned, "resourceType_server"), 20848);
-			TestRunJsonVerify("item_acquired/1", runOrder.ToString("D2") + " Check item_acquired event (Server) (2)", 20848, "soft", "earned", "item_name_server", "resourceType_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check item_acquired event (2)", "Ok", e, 20848);
-		}
-			
+		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired("item_name_server", AcquisitionType.Premium, AcquisitionSource.Promotion), 20848, "item_name_server", "premium", "promotion");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired("item_name_server", AcquisitionType.Premium, AcquisitionSource.Gift, "resourceType_server"), 20848, "item_name_server", "premium", "gift", "resourceType_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired("item_name_server", AcquisitionType.Premium, AcquisitionSource.RewardedAd, "resourceType_server"), 20848, "item_name_server", "premium", "rewarded_ad", "resourceType_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired("item_name_server", AcquisitionType.Premium, AcquisitionSource.TimedReward, "resourceType_server"), 20848, "item_name_server", "premium", "timed_reward", "resourceType_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired("item_name_server", AcquisitionType.Premium, AcquisitionSource.SocialReward, "resourceType_server"), 20848, "item_name_server", "premium", "social_reward", "resourceType_server");
+
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -418,24 +354,14 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 	
+		int number = 0;
+		string eventName = "ad_offer";
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", AnalyticsEvent.AdOffer(true), 20849);
-			TestRunJsonVerify("ad_offer/0", runOrder.ToString("D2") + " Check ad_offer event (Server) (1)", 20849, "True");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check ad_offer event (1)", "Ok", e, 20849);
-		}
-
+		TestRunner (eventName, number++, AnalyticsEvent.AdOffer(true), 20849, "True");
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check ad_offer event (2)", "Ok", AnalyticsEvent.AdOffer(true, "network_server", "placementId_server"), 20849);
-			TestRunJsonVerify("ad_offer/1", runOrder.ToString("D2") + " Check ad_offer event (Server) (2)", 20849, "True", "network_server", "placementId_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check ad_offer event (2)", "Ok", e, 20849);
-		}
-			
+		TestRunner (eventName, number++,AnalyticsEvent.AdOffer(true, AdvertisingNetwork.Aarki, "placementId_server"), 20849, "True", "aarki", "placementId_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -446,22 +372,14 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", AnalyticsEvent.AdStart(true), 20850);
-			TestRunJsonVerify("ad_start/0", runOrder.ToString("D2") + " Check ad_start event (Server) (1)", 20850, "True");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check ad_start event (1)", "Ok", e, 20850);
-		}
-
+		int number = 0;
+		string eventName = "ad_start";
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check ad_start event (2)", "Ok", AnalyticsEvent.AdStart(true, "network_server", "placementId_server"), 20850);
-			TestRunJsonVerify("ad_start/1", runOrder.ToString("D2") + " Check ad_start event (Server) (2)", 20850, "True", "network_server", "placementId_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check ad_start event (2)", "Ok", e, 20850);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.AdStart(true), 20850, "True");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++,  AnalyticsEvent.AdStart(true, AdvertisingNetwork.AdAction, "placementId_server"), 20850, "True", "adaction", "placementId_server");
 			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -472,23 +390,15 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", AnalyticsEvent.AdComplete(true), 20851);
-			TestRunJsonVerify("ad_complete/0", runOrder.ToString("D2") + " Check ad_complete event (Server) (1)", 20851, "True");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check ad_complete event (1)", "Ok", e, 20851);
-		}
-
+		int number = 0;
+		string eventName = "ad_complete";
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check ad_complete event (2)", "Ok", AnalyticsEvent.AdComplete(true, "network_server", "placementId_server"), 20851);
-			TestRunJsonVerify("ad_complete/1", runOrder.ToString("D2") + " Check ad_complete event (Server) (2)", 20851, "True", "network_server", "placementId_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check ad_complete event (2)", "Ok", e, 20851);
-		}
-			
+		TestRunner (eventName, number++, AnalyticsEvent.AdComplete(true), 20851, "True");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.AdComplete(true, AdvertisingNetwork.AdapTv, "placementId_server"), 20851, "True", "adaptv", "placementId_server");
+
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -498,22 +408,14 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", AnalyticsEvent.AdSkip(true), 20852);
-			TestRunJsonVerify("ad_skip/0", runOrder.ToString("D2") + " Check ad_skip event (Server) (1)", 20852, "True");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check ad_skip event (1)", "Ok", e, 20852);
-		}
-
+		int number = 0;
+		string eventName = "ad_skip";
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check ad_skip event (2)", "Ok", AnalyticsEvent.AdSkip(true, "network_server", "placementId_server"), 20852);
-			TestRunJsonVerify("ad_skip/1", runOrder.ToString("D2") + " Check ad_skip event (Server) (2)", 20852, "True", "network_server", "placementId_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check ad_skip event (2)", "Ok", e, 20852);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.AdSkip(true), 20852, "True");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.AdSkip(true, AdvertisingNetwork.UnityAds, "placementId_server"), 20852, "True", "unityads", "placementId_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -524,22 +426,14 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (1)", "Ok", AnalyticsEvent.PostAdAction(true), 20853);
-			TestRunJsonVerify("post_ad_action/0", runOrder.ToString("D2") + " Check post_ad_action event (Server) (1)", 20853, "True");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check post_ad_action event (1)", "Ok", e, 20853);
-		}
-
+		int number = 0;
+		string eventName = "post_ad_action";
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check post_ad_action event (2)", "Ok", AnalyticsEvent.PostAdAction(true, "network_server", "placementId_server"), 20853);
-			TestRunJsonVerify("post_ad_action/1", runOrder.ToString("D2") + " Check post_ad_action event (Server) (2)", 20853, "True", "network_server", "placementId_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check post_ad_action event (2)", "Ok", e, 20853);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.PostAdAction(true), 20853, "True");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.PostAdAction(true, AdvertisingNetwork.Twitter, "placementId_server"), 20853, "True", "twitter", "placementId_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -550,14 +444,59 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check screen_visit event", "Ok", AnalyticsEvent.ScreenVisit(ScreenName.Achievements), 20854);
-			TestRunJsonVerify("screen_visit/0", runOrder.ToString("D2") + " Check screen_visit event (Server)", 20854, "achievements");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check screen_visit event", "Ok", e, 20854);
-		}
+		int number = 0;
+		string eventName = "screen_visit";
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.None), 20854, "none");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.MainMenu), 20854, "main_menu");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.Settings), 20854, "settings");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.Map), 20854, "map");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.Lose), 20854, "lose");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.Win), 20854, "win");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.Credits), 20854, "credits");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.Title), 20854, "title");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.IAPPromo), 20854, "iap_promo");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.CrossPromo), 20854, "cross_promo");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.FeaturePromo), 20854, "feature_promo");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.Hint), 20854, "hint");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.Pause), 20854, "pause");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.Inventory), 20854, "inventory");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.Leaderboard), 20854, "leaderboard");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.Achievements), 20854, "achievements");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ScreenVisit(ScreenName.Lobby), 20854, "lobby");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -568,13 +507,11 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
+		int number = 0;
+		string eventName = "cutscene_start";
+
 		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check cutscene_start event", "Ok", AnalyticsEvent.CutsceneStart("scene_name_server"), 20855);
-			TestRunJsonVerify("cutscene_start/0", runOrder.ToString("D2") + " Check cutscene_start event (Server)", 20855, "scene_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check cutscene_start event", "Ok", e, 20855);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.CutsceneStart("scene_name_server"), 20855, "scene_name_server");
 			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -585,14 +522,11 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check cutscene_skip event", "Ok", AnalyticsEvent.CutsceneSkip("scene_name_server"), 20855);
-			TestRunJsonVerify("cutscene_skip/0", runOrder.ToString("D2") + " Check cutscene_skip event (Server)", 20855, "scene_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check cutscene_skip event", "Ok", e, 20855);
-		}
+		int number = 0;
+		string eventName = "cutscene_skip";
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.CutsceneSkip("scene_name_server"), 20855, "scene_name_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -603,14 +537,11 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check game_start event", "Ok", AnalyticsEvent.GameStart(), 20856);
-			TestRunJsonVerify("game_start/0", runOrder.ToString("D2") + " Check game_start event (Server)", 20856, null);
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check game_start event", "Ok", e, 20856);
-		}
+		int number = 0;
+		string eventName = "game_start";
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.GameStart(), 20856, null);
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -621,41 +552,20 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check game_over event (1)", "Ok", AnalyticsEvent.GameOver(), 20857);
-			TestRunJsonVerify("game_over/0", runOrder.ToString("D2") + " Check game_over event (Server) (1)", 20857, null);
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check game_over event (1)", "Ok", e, 20857);
-		}
+		int number = 0;
+		string eventName = "game_over";
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.GameOver(), 20857, null);
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check game_over event (2)", "Ok", AnalyticsEvent.GameOver(0), 20857);
-			TestRunJsonVerify("game_over/1", runOrder.ToString("D2") + " Check game_over event (Server) (2)", 20857, "0");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check game_over event (2)", "Ok", e, 20857);
-		}
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.GameOver(0), 20857, "0");
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.GameOver("level_name_server"), 20857, "level_name_server");
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check game_over event (3)", "Ok", AnalyticsEvent.GameOver("level_name_server"), 20857);
-			TestRunJsonVerify("game_over/2", runOrder.ToString("D2") + " Check game_over event (Server) (3)", 20857, "level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check game_over event (3)", "Ok", e, 20857);
-		}
-
-
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check game_over event (4)", "Ok", AnalyticsEvent.GameOver(0, "level_name_server"), 20857);
-			TestRunJsonVerify("game_over/3", runOrder.ToString("D2") + " Check game_over event (Server) (4)", 20857, "0", "level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check game_over event (4)", "Ok", e, 20857);
-		}
-
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.GameOver(0, "level_name_server"), 20857, "0", "level_name_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -666,32 +576,17 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_start event (1)", "Ok", AnalyticsEvent.LevelStart(0), 20858);
-			TestRunJsonVerify("level_start/0", runOrder.ToString("D2") + " Check level_start event (Server) (1)", 20858, "0");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_start event (1)", "Ok", e, 20858);
-		}
-
+		int number = 0;
+		string eventName = "level_start";
 
 		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_start event (2)", "Ok", AnalyticsEvent.LevelStart ("level_name_server"), 20858);
-			TestRunJsonVerify("level_start/1", runOrder.ToString("D2") + " Check level_start event (Server) (2)", 20858, "level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_start event (2)", "Ok", e, 20858);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.LevelStart(0), 20858, "0");
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelStart ("level_name_server"), 20858, "level_name_server");
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_start event (3)", "Ok", AnalyticsEvent.LevelStart (0, "level_name_server"), 20858);
-			TestRunJsonVerify("level_start/2", runOrder.ToString("D2") + " Check level_start event (Server) (3)", 20858, "0", "level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_start event (3)", "Ok", e, 20858);
-		}
-
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelStart (0, "level_name_server"), 20858, "0", "level_name_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -702,33 +597,18 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_complete event (1)", "Ok", AnalyticsEvent.LevelComplete(0), 20859);
-			TestRunJsonVerify("level_complete/0", runOrder.ToString("D2") + " Check level_complete event (Server) (1)", 20859, "0");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_complete event (1)", "Ok", e, 20859);
-		}
-
+		int number = 0;
+		string eventName = "level_complete";
 
 		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_complete event (2)", "Ok", AnalyticsEvent.LevelComplete ("level_name_server"), 20859);
-			TestRunJsonVerify("level_complete/1", runOrder.ToString("D2") + " Check level_complete event (Server) (2)", 20859, "level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_complete event (2)", "Ok", e, 20859);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.LevelComplete(0), 20859, "0");
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelComplete("level_name_server"), 20859, "level_name_server");
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_complete event (3)", "Ok", AnalyticsEvent.LevelComplete (0, "level_name_server"), 20859);
-			TestRunJsonVerify("level_complete/2", runOrder.ToString("D2") + "Check level_complete event (Server) (3)", 20859, "0", "level_name_server");
-		} catch (Exception e) { 
-			TestRunException (runOrder.ToString("D2") + " Check level_complete event (3)", "Ok", e, 20859);
-		}
-
-
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelComplete(0, "level_name_server"), 20859, "0", "level_name_server");
+	
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -738,32 +618,17 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_fail event (1)", "Ok", AnalyticsEvent.LevelFail (0), 20860);
-			TestRunJsonVerify("level_fail/0", runOrder.ToString("D2") + " Check level_fail event (Server) (1)", 20860, "0");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_fail event (1)", "Ok", e, 20860);
-		}
+		int number = 0;
+		string eventName = "level_fail";
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelFail(0), 20860, "0");
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_fail event (2)", "Ok", AnalyticsEvent.LevelFail ("level_name_server"), 20860);
-			TestRunJsonVerify("level_fail/1", runOrder.ToString("D2") + " Check level_fail event (Server) (2)", 20860, "level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_fail event (2)", "Ok", e, 20860);
-		}
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelFail("level_name_server"), 20860, "level_name_server");
 
-
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_fail event (3)", "Ok", AnalyticsEvent.LevelFail (0, "level_name_server"), 20860);
-			TestRunJsonVerify("level_fail/2", runOrder.ToString("D2") + " Check level_fail event (Server) (3)", 20860, "0", "level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_fail event (3)", "Ok", e, 20860);
-		}
-
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelFail (0, "level_name_server"), 20860, "0", "level_name_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -774,32 +639,17 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_quit event (1)", "Ok", AnalyticsEvent.LevelQuit (0), 20861);
-			TestRunJsonVerify("level_quit/0", runOrder.ToString("D2") + " Check level_quit event (Server) (1)", 20861, "0");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_quit event (1)", "Ok", e, 20861);
-		}
+		int number = 0;
+		string eventName = "level_quit";
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelQuit(0), 20861, "0");
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_quit event (2)", "Ok", AnalyticsEvent.LevelQuit ("level_name_server"), 20861);
-			TestRunJsonVerify("level_quit/1", runOrder.ToString("D2") + " Check level_quit event (Server) (2)", 20861, "level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_quit event (2)", "Ok", e, 20861);
-		}
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelQuit ("level_name_server"), 20861, "level_name_server");
 
-
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_quit event (3)", "Ok", AnalyticsEvent.LevelQuit (0, "level_name_server"), 20861);
-			TestRunJsonVerify("level_quit/2", runOrder.ToString("D2") + " Check level_quit event (Server) (3)", 20861, "0", "level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_quit event (3)", "Ok", e, 20861);
-		}
-
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelQuit (0, "level_name_server"), 20861, "0", "level_name_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -810,32 +660,17 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (1)", "Ok", AnalyticsEvent.LevelSkip (0), 20862);
-			TestRunJsonVerify("level_skip/0", runOrder.ToString("D2") + " Check level_skip event (Server) (1)", 20862, "0");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_skip event (1)", "Ok", e, 20862);
-		}
-
+		int number = 0;
+		string eventName = "level_skip";
 
 		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (2)", "Ok", AnalyticsEvent.LevelSkip ("level_name_server"), 20862);
-			TestRunJsonVerify("level_skip/1", runOrder.ToString("D2") + " Check level_skip event (Server) (2)", 20862, "level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_skip event (2)", "Ok", e, 20862);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.LevelSkip (0), 20862, "0");
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelSkip ("level_name_server"), 20862, "level_name_server");
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_skip event (3)", "Ok", AnalyticsEvent.LevelSkip (0, "level_name_server"), 20862);
-			TestRunJsonVerify("level_skip/2", runOrder.ToString("D2") + " Check level_skip event (Server) (3)", 20862, "0", "level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_skip event (3)", "Ok", e, 20862);
-		}
-
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelSkip (0, "level_name_server"), 20862, "0", "level_name_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -846,32 +681,14 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_up event (1)", "Ok", AnalyticsEvent.LevelUp (0, 1), 20863);
-			TestRunJsonVerify("level_up/0", runOrder.ToString("D2") + " Check level_up event (Server) (1)", 20863, "0", "1");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_up event (1)", "Ok", e, 20863);
-		}
+		int number = 0;
+		string eventName = "level_up";
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelUp  ("new_level_name_server"), 20863, "new_level_name_server");
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_up event (2)", "Ok", AnalyticsEvent.LevelUp  ("old_level_name_server", "new_level_name_server"), 20863);
-			TestRunJsonVerify("level_up/1", runOrder.ToString("D2") + " Check level_up event (Server) (2)", 20863,  "old_level_name_server", "new_level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_up event (2)", "Ok", e, 20863);
-		}
-
-
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check level_up event (3)", "Ok", AnalyticsEvent.LevelUp(0, 1, "old_level_name_server" ,"new_level_name_server"), 20863);
-			TestRunJsonVerify("level_up/2", runOrder.ToString("D2") + " Check level_up event (Server) (3)", 20863, "0", "1", "old_level_name_server", "new_level_name_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check level_up event (3)", "Ok", e, 20863);
-		}
-
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.LevelUp(1 ,"new_level_name_server"), 20863, "1", "new_level_name_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -882,14 +699,11 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check push_notification_enable event", "Ok", AnalyticsEvent.PushNotificationEnable(), 20864);
-			TestRunJsonVerify("push_notification_enable/0", runOrder.ToString("D2") + " Check push_notification_enable event (Server)", 20864, null);
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check push_notification_enable event", "Ok", e, 20864);
-		}
+		int number = 0;
+		string eventName = "push_notification_enable";
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.PushNotificationEnable(), 20864, null);
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -900,14 +714,11 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check push_notification_click event", "Ok", AnalyticsEvent.PushNotificationClick("message_id_server"), 20865);
-			TestRunJsonVerify("push_notification_click/0", runOrder.ToString("D2") + " Check push_notification_click event (Server)", 20865, "message_id_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check push_notification_click event", "Ok", e, 20865);
-		}
+		int number = 0;
+		string eventName = "push_notification_click";
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.PushNotificationClick("message_id_server"), 20865, "message_id_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -918,14 +729,11 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check chat_msg_sent event", "Ok", AnalyticsEvent.ChatMessageSent(), 20866);
-			TestRunJsonVerify("chat_msg_sent/0", runOrder.ToString("D2") + " Check chat_msg_sent event (Server)", 20866, null);
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check chat_msg_sent event", "Ok", e, 20866);
-		}
+		int number = 0;
+		string eventName = "chat_msg_sent";
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ChatMessageSent(), 20866, null);
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -936,14 +744,11 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds (timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check achievement_unlocked event", "Ok", AnalyticsEvent.AchievementUnlocked("achievement_id_server"), 20867);
-			TestRunJsonVerify("achievement_unlocked/0", runOrder.ToString("D2") + " Check achievement_unlocked event (Server)", 20867, "achievement_id_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check achievement_unlocked event", "Ok", e, 20867);
-		}
+		int number = 0;
+		string eventName = "achievement_unlocked";
 
+		yield return new WaitForSeconds (timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.AchievementUnlocked("achievement_id_server"), 20867, "achievement_id_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -955,14 +760,11 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check achievement_step event", "Ok", AnalyticsEvent.AchievementStep(0, "achievement_id_server"), 20868);
-			TestRunJsonVerify("achievement_step/0", runOrder.ToString("D2") + " Check achievement_step event (Server)", 20868, "0", "achievement_id_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check achievement_step event", "Ok", e, 20868);
-		}
+		int number = 0;
+		string eventName = "achievement_step";
 
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.AchievementStep(0, "achievement_id_server"), 20868, "0", "achievement_id_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -973,13 +775,26 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
+		int number = 0;
+		string eventName = "user_signup";
+
 		yield return new WaitForSeconds(timeDelay); 
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check user_signup event", "Ok", AnalyticsEvent.UserSignup(AuthorizationNetwork.Facebook), 20869);
-			TestRunJsonVerify("user_signup/0", runOrder.ToString("D2") + " Check user_signup event (Server)", 20869, "facebook");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check user_signup event", "Ok", e, 20869);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.UserSignup (AuthorizationNetwork.Facebook), 20869, "facebook");
+
+		yield return new WaitForSeconds(timeDelay); 
+		TestRunner (eventName, number++, AnalyticsEvent.UserSignup (AuthorizationNetwork.GameCenter), 20869, "gamecenter");
+
+		yield return new WaitForSeconds(timeDelay); 
+		TestRunner (eventName, number++, AnalyticsEvent.UserSignup (AuthorizationNetwork.Google), 20869, "google");
+
+		yield return new WaitForSeconds(timeDelay); 
+		TestRunner (eventName, number++, AnalyticsEvent.UserSignup (AuthorizationNetwork.Internal), 20869, "internal");
+
+		yield return new WaitForSeconds(timeDelay); 
+		TestRunner (eventName, number++, AnalyticsEvent.UserSignup (AuthorizationNetwork.None), 20869, "none");
+
+		yield return new WaitForSeconds(timeDelay); 
+		TestRunner (eventName, number++, AnalyticsEvent.UserSignup (AuthorizationNetwork.Twitter), 20869, "twitter");
 
 
 		if (runOrder < maxTest) {
@@ -991,21 +806,14 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check social_share event (1)", "Ok", AnalyticsEvent.SocialShare (ShareType.Achievement, SocialNetwork.Facebook), 20870);
-			TestRunJsonVerify("social_share/0", runOrder.ToString("D2") + " Check social_share event (Server) (1)", 20870, "achievement", "facebook");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check social_share event (1)", "Ok", e, 20870);
-		}
+		int number = 0;
+		string eventName = "social_share";
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check social_share event (2)", "Ok", AnalyticsEvent.SocialShare (ShareType.Achievement, SocialNetwork.Facebook, "sender_id_server", "recipient_id_server"), 20870);
-			TestRunJsonVerify("social_share/1", runOrder.ToString("D2") + " Check social_share event (Server) (2)", 20870, "achievement", "facebook", "sender_id_server", "recipient_id_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check social_share event (2)", "Ok", e, 20870);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.SocialShare (ShareType.Achievement, SocialNetwork.Facebook), 20870, "achievement", "facebook");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.SocialShare (ShareType.Image, SocialNetwork.GooglePlus, "sender_id_server", "recipient_id_server"), 20870, "image", "googleplus", "sender_id_server", "recipient_id_server");
 			
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -1016,21 +824,38 @@ public class Framework : MonoBehaviour {
 		runOrder++;
 		showProgess (runOrder);
 
-		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check social_share_accept event (1)", "Ok", AnalyticsEvent.SocialShareAccept (ShareType.Achievement, SocialNetwork.Facebook), 20870);
-			TestRunJsonVerify("social_share_accept/0", runOrder.ToString("D2") + " Check social_share_accept event (Server) (1)", 20870, "achievement", "facebook");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check social_share_accept event (1)", "Ok", e, 20870);
-		}
+		int number = 0;
+		string eventName = "social_share_accept";
 
 		yield return new WaitForSeconds(timeDelay);
-		try {
-			TestRunHelper (runOrder.ToString("D2") + " Check social_share_accept event (2)", "Ok", AnalyticsEvent.SocialShareAccept (ShareType.Achievement, SocialNetwork.Facebook, "sender_id_server", "recipient_id_server"), 20870);
-			TestRunJsonVerify("social_share_accept/1", runOrder.ToString("D2") + " Check social_share_accept event (Server) (2)", 20870, "achievement", "facebook", "sender_id_server", "recipient_id_server");
-		} catch (Exception e) {
-			TestRunException (runOrder.ToString("D2") + " Check social_share_accept event (2)", "Ok", e, 20870);
-		}
+		TestRunner (eventName, number++, AnalyticsEvent.SocialShareAccept (ShareType.Invite, SocialNetwork.Instagram), 20870, "invite", "instagram");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.SocialShareAccept (ShareType.None, SocialNetwork.None, "sender_id_server", "recipient_id_server"), 20870, "none", "none", "sender_id_server", "recipient_id_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.SocialShareAccept (ShareType.TextOnly, SocialNetwork.OK_ru, "sender_id_server", "recipient_id_server"), 20870, "text_only", "ok_ru", "sender_id_server", "recipient_id_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.SocialShareAccept (ShareType.Video, SocialNetwork.Pinterest, "sender_id_server", "recipient_id_server"), 20870, "video", "pinterest", "sender_id_server", "recipient_id_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.SocialShareAccept (ShareType.Video, SocialNetwork.QQ, "sender_id_server", "recipient_id_server"), 20870, "video", "qq", "sender_id_server", "recipient_id_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.SocialShareAccept (ShareType.Video, SocialNetwork.Twitter, "sender_id_server", "recipient_id_server"), 20870, "video", "twitter", "sender_id_server", "recipient_id_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.SocialShareAccept (ShareType.Video, SocialNetwork.VK, "sender_id_server", "recipient_id_server"), 20870, "video", "vk", "sender_id_server", "recipient_id_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.SocialShareAccept (ShareType.Video, SocialNetwork.WeChat, "sender_id_server", "recipient_id_server"), 20870, "video", "wechat", "sender_id_server", "recipient_id_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.SocialShareAccept (ShareType.Video, SocialNetwork.Weibo, "sender_id_server", "recipient_id_server"), 20870, "video", "weibo", "sender_id_server", "recipient_id_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.SocialShareAccept (ShareType.Video, SocialNetwork.Zhihu, "sender_id_server", "recipient_id_server"), 20870, "video", "zhihu", "sender_id_server", "recipient_id_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
@@ -1045,6 +870,18 @@ public class Framework : MonoBehaviour {
 		showReport ();
 	}
 
+	private void TestRunner(string eventName, int order, object payload, int caseNumber = 0, params string[] parameter)
+	{
+		string description = eventName + " (" + order.ToString ("D2") + ") ";
+
+		try {
+			TestRunHelper (description, "Ok", payload, caseNumber);
+			TestRunJsonVerify(eventName, order, description, caseNumber, parameter);
+		} catch (Exception e) {
+			TestRunException (description, "Ok", e, caseNumber);
+		}
+	}
+
 	// For checking status
 	private void TestRunHelper(string description, string expectedResult, object realResult, int caseNumber = 0) {
 
@@ -1052,6 +889,7 @@ public class Framework : MonoBehaviour {
 			return;
 		}
 
+		description = " Check " + description + " event ";
 		bool compare = expectedResult == realResult.ToString ();
 		string failReason = null;
 
@@ -1080,11 +918,14 @@ public class Framework : MonoBehaviour {
 		
 
 	// For verifying json
-	private void TestRunJsonVerify(string methodName, string description, int caseNumber, params string[] parameter) {
+	private void TestRunJsonVerify(string methodName, int order, string description, int caseNumber, params string[] parameter) {
 
 		if (verifyMode == false) {
 			return;
 		}
+
+		methodName = methodName + "/" + order.ToString ();
+		description = " Check " + description + " event (server)";
 
 		StartCoroutine(GetText(methodName, (parameterJson) =>
 			{
@@ -1125,7 +966,7 @@ public class Framework : MonoBehaviour {
 			// Traverse the expected result and real result, see if they can be matched
 			for (int i = 0; i < jsonvale.Count; i++) {
 				for (int j = 0; j < list.Count; j++) {
-					if (list [j].ToLower().Equals(jsonvale [i].ToString ().ToLower())) {
+					if (list [j].Equals(jsonvale [i].ToString ())) {
 						list.RemoveAt (j);
 						break;
 					}
@@ -1213,10 +1054,10 @@ public class Framework : MonoBehaviour {
 	private void pushResultToServer(TestCase testCase) {
 		string key = reference.Child("QAReport").Push().Key;
 		Dictionary<string, object> childUpdates = new Dictionary<string, object>();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion() +  "/Result/"] = testCase.getResult () == true ? "Pass" : "Fail";
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/Result/"] = testCase.getResult () == true ? "Pass" : "Fail";
 		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/UnityVersion/"] = Application.unityVersion;
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () +  "/FailReason/"] = testCase.getFailReason ();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () +  "/TestrailLink/"] = testCase.getCaseLink ();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/FailReason/"] = testCase.getFailReason ();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/TestrailLink/"] = testCase.getCaseLink ();
 		reference.UpdateChildrenAsync(childUpdates);
 	}
 
