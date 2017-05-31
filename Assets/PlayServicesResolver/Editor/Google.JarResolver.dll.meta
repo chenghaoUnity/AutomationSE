@@ -2,8 +2,8 @@ fileFormatVersion: 2
 guid: eda5ca45d13645c1a4892ece4f3b2275
 labels:
 - gvh
-- gvh_v1.2.10.0
 - gvh_teditor
+- gvh_v1.2.10.0
 timeCreated: 1489445711
 licenseType: Pro
 PluginImporter:
@@ -11,6 +11,7 @@ PluginImporter:
   iconMap: {}
   executionOrder: {}
   isPreloaded: 0
+  isOverridable: 0
   platformData:
     Editor:
       enabled: 1
