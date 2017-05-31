@@ -48,6 +48,21 @@
   <ItemGroup>
      <Compile Include="Assets\Firebase\Editor\AppDeps.cs" />
      <Compile Include="Assets\Firebase\Editor\AuthDeps.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\Editor\AnalyticsEventTrackerEditor.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\Editor\ListContainerDrawer.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\Payload\Editor\AnalyticsEventParamDrawer.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\Payload\Editor\AnalyticsEventParamListContainerDrawer.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\Payload\Editor\Attributes\StandardEventAttributes.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\Payload\Editor\EventPayloads\EventPayloads.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\Payload\Editor\StandardEventPayloadDrawer.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\TrackableProperty\Editor\CustomEnumPopup.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\TrackableProperty\Editor\TrackableFieldDrawer.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\TrackableProperty\Editor\TrackablePropertyDrawer.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\TrackableProperty\Editor\ValuePropertyDrawer.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\Editor\EventTriggerDrawer.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\Editor\TrackableTriggerDrawer.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\Editor\TriggerListContainerDrawer.cs" />
+     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\Editor\TriggerRuleDrawer.cs" />
      <None Include="Assets\Resources\branchInfo.txt" />
      <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-auth-unity\maven-metadata.xml" />
      <None Include="Assets\Firebase\Plugins\link.xml" />

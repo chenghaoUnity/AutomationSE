@@ -96,7 +96,6 @@ public class Framework : MonoBehaviour {
 		testSuite.Add (test10 ());
 		testSuite.Add (test11 ());
 		testSuite.Add (test12 ());
-		testSuite.Add (test13 ());
 		testSuite.Add (test14 ());
 		testSuite.Add (test15 ());
 		testSuite.Add (test16 ());
@@ -277,14 +276,14 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		int number = 0;
-		string eventName = "currency_acquired";
+		string eventName = "iap_transaction";
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunner (eventName, number++, AnalyticsEvent.CurrencyAcquired("currency_name_server", AcquisitionType.Soft, AcquisitionSource.None, 1, 2), 20845, "currency_name_server", "soft", "none", "1", "2", "1");
+		TestRunner (eventName, number++, AnalyticsEvent.IAPTransaction("transactionContext_server", 0.1f, "itemId_server"), 20845, "transactionContext_server", "0.1", "itemId_server");
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunner (eventName, number++, AnalyticsEvent.CurrencyAcquired("currency_name_server", AcquisitionType.Premium, AcquisitionSource.Store, 1, 2, "purchaseID_server", "purchaseName_server", 1), 20845, "currency_name_server", "premium", "store", "1", "2", "purchaseID_server", "purchaseName_server", "1");
-			
+		TestRunner (eventName, number++, AnalyticsEvent.IAPTransaction("transactionContext_server", 0.1f, "itemId_server", "itemType_server", "level_server", "transactionID_server"), 20845, "transactionContext_server", "0.1", "itemId_server", "itemType_server", "level_server", "transactionID_server");
+
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -295,11 +294,17 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		int number = 0;
-		string eventName = "consumable_acquired";
+		string eventName = "item_acquired";
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunner (eventName, number++, AnalyticsEvent.ConsumableAcquired ("cpnsumable_name_server", AcquisitionType.Premium, AcquisitionSource.Earned, 1, 2), 20846, "cpnsumable_name_server", "premium", "earned", "1", "2");
-			
+		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired (AcquisitionType.Soft, "transactionContext_server", 0.1f, "itemId_server"), 20846, "soft", "transactionContext_server", "0.1", "itemId_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired (AcquisitionType.Soft, "transactionContext_server", 0.1f, "itemId_server", "itemType_server", "level_server", "transactionID_server"), 20846, "soft", "transactionContext_server", "0.1", "itemId_server", "itemType_server", "level_server", "transactionID_server");
+
+		yield return new WaitForSeconds(timeDelay);
+		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired (AcquisitionType.Soft, "transactionContext_server", 0.1f, "itemId_server", 0.2f, "itemType_server", "level_server", "transactionID_server"), 20846, "soft", "transactionContext_server", "0.1", "itemId_server", "0.2","itemType_server", "level_server", "transactionID_server");
+
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);
 		} 
@@ -310,40 +315,16 @@ public class Framework : MonoBehaviour {
 		showProgess (runOrder);
 
 		int number = 0;
-		string eventName = "consumable_spent";
+		string eventName = "item_spent";
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunner (eventName, number++, AnalyticsEvent.ConsumableSpent("consumable_name_server", 1, 2), 20847, "consumable_name_server", "1", "2");
+		TestRunner (eventName, number++, AnalyticsEvent.ItemSpent (AcquisitionType.Soft, "transactionContext_server", 0.1f, "itemId_server"), 20846, "soft", "transactionContext_server", "0.1", "itemId_server");
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunner (eventName, number++, AnalyticsEvent.ConsumableSpent("consumable_name_server", 1, 2, "itemPurchased_server"), 20847, "consumable_name_server", "1", "2", "itemPurchased_server");
-			
-		if (runOrder < maxTest) {
-			yield return StartCoroutine (testSuite [runOrder]);
-		} 
-	}
-
-	public IEnumerator test13() {
-		runOrder++;
-		showProgess (runOrder);
-
-		int number = 0;
-		string eventName = "item_acquired";
+		TestRunner (eventName, number++, AnalyticsEvent.ItemSpent (AcquisitionType.Soft, "transactionContext_server", 0.1f, "itemId_server", "itemType_server", "level_server", "transactionID_server"), 20846, "soft", "transactionContext_server", "0.1", "itemId_server", "itemType_server", "level_server", "transactionID_server");
 
 		yield return new WaitForSeconds(timeDelay);
-		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired("item_name_server", AcquisitionType.Premium, AcquisitionSource.Promotion), 20848, "item_name_server", "premium", "promotion");
-
-		yield return new WaitForSeconds(timeDelay);
-		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired("item_name_server", AcquisitionType.Premium, AcquisitionSource.Gift, "resourceType_server"), 20848, "item_name_server", "premium", "gift", "resourceType_server");
-
-		yield return new WaitForSeconds(timeDelay);
-		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired("item_name_server", AcquisitionType.Premium, AcquisitionSource.RewardedAd, "resourceType_server"), 20848, "item_name_server", "premium", "rewarded_ad", "resourceType_server");
-
-		yield return new WaitForSeconds(timeDelay);
-		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired("item_name_server", AcquisitionType.Premium, AcquisitionSource.TimedReward, "resourceType_server"), 20848, "item_name_server", "premium", "timed_reward", "resourceType_server");
-
-		yield return new WaitForSeconds(timeDelay);
-		TestRunner (eventName, number++, AnalyticsEvent.ItemAcquired("item_name_server", AcquisitionType.Premium, AcquisitionSource.SocialReward, "resourceType_server"), 20848, "item_name_server", "premium", "social_reward", "resourceType_server");
+		TestRunner (eventName, number++, AnalyticsEvent.ItemSpent (AcquisitionType.Soft, "transactionContext_server", 0.1f, "itemId_server", 0.2f, "itemType_server", "level_server", "transactionID_server"), 20846, "soft", "transactionContext_server", "0.1", "itemId_server", "0.2","itemType_server", "level_server", "transactionID_server");
 
 		if (runOrder < maxTest) {
 			yield return StartCoroutine (testSuite [runOrder]);

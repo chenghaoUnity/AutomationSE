@@ -53,6 +53,63 @@ namespace UnityEngine.Analytics.Experimental
 #endif
         }
 
+        static void OnValidationFailed (string message)
+        {
+            throw new ArgumentException(message);
+        }
+
+        static void AddCustomEventData (IDictionary<string, object> eventData)
+        {
+            if (eventData == null) return;
+
+            for (int i = 0; i < eventData.Count; i++)
+            {
+                var param = eventData.ElementAt(i);
+
+                if (!m_EventData.ContainsKey(param.Key))
+                {
+                    m_EventData.Add(param.Key, param.Value);
+                }
+            }
+        }
+
+        static string SplitCamelCase (string input)
+        {
+            input = Regex.Replace(input, "([a-z](?=[A-Z]))", "$0_");
+            return Regex.Replace(input, "(?<!_|^)[A-Z][a-z]", "_$0");
+        }
+
+        /// <summary>
+        /// Converts a Standard Event enum value to its standardized string value.
+        /// <remarks>
+        /// Any Non-Standard Event enum values provided are simply converted to string.
+        /// </remarks>
+        /// </summary>
+        /// <returns>The standard string value for the provided enum value.</returns>
+        /// <param name="enumValue">The num value.</param>
+        public static string EnumToString (object enumValue)
+        {
+            var result = enumValue.ToString();
+
+            if (enumValue is AdvertisingNetwork ||
+                enumValue is AuthorizationNetwork ||
+                enumValue is SocialNetwork)
+            {
+                return result.ToLower();
+            }
+
+            if (enumValue is AcquisitionSource ||
+                enumValue is AcquisitionType ||
+                enumValue is ScreenName ||
+                enumValue is ShareType ||
+                enumValue is StoreType)
+            {
+                return SplitCamelCase(result).ToLower();
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Sends a custom event (eventName) with data (eventData)
         /// </summary>
@@ -124,55 +181,6 @@ namespace UnityEngine.Analytics.Experimental
             }
 
             return result;
-        }
-
-        static void AddCustomEventData (IDictionary<string, object> eventData)
-        {
-            if (eventData == null) return;
-
-            for (int i = 0; i < eventData.Count; i++)
-            {
-                var param = eventData.ElementAt(i);
-
-                if (!m_EventData.ContainsKey(param.Key))
-                {
-                    m_EventData.Add(param.Key, param.Value);
-                }
-            }
-        }
-
-        static string EnumToString (object enumValue)
-        {
-            var result = enumValue.ToString();
-
-            if (enumValue is AdvertisingNetwork ||
-                enumValue is AuthorizationNetwork ||
-                enumValue is SocialNetwork)
-            {
-                return result.ToLower();
-            }
-
-            if (enumValue is AcquisitionSource ||
-                enumValue is AcquisitionType ||
-                enumValue is ScreenName ||
-                enumValue is ShareType ||
-                enumValue is StoreType)
-            {
-                return SplitCamelCase(result).ToLower();
-            }
-
-            return result;
-        }
-
-        static string SplitCamelCase (string input)
-        {
-            input = Regex.Replace(input, "([a-z](?=[A-Z]))", "$0_");
-            return Regex.Replace(input, "(?<!_|^)[A-Z][a-z]", "_$0");
-        }
-
-        static void OnValidationFailed (string message)
-        {
-            throw new ArgumentException(message);
         }
 
         /// <summary>
@@ -485,251 +493,6 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
-        /// Sends a <c>consumable_acquired</c> event with <c>float</c> values.
-        /// <remarks>
-        /// Send this event when the player purchases or earns a consumable resource.
-        /// </remarks>
-        /// </summary>
-        /// <remarks>
-        /// This standard event can provide insight into consumable resource accumulation rates with respect to premium vs. soft acquisitions.
-        /// </remarks>
-        /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="name">The name of the consumable resource acquired.</param>
-        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
-        /// <param name="source">The source by which the consumable resource was acquired.</param>
-        /// <param name="amount">The number of consumable resources acquired.</param>
-        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
-        /// <param name="eventData">Custom event data (optional).</param>
-        public static AnalyticsResult ConsumableAcquired (string name, AcquisitionType type, AcquisitionSource source, float amount, float balance, IDictionary<string, object> eventData = null)
-        {
-            m_EventData.Clear();
-
-            if (string.IsNullOrEmpty(name))
-            {
-                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "consumable_name"));
-            }
-            else
-            {
-                m_EventData.Add("consumable_name", name);
-            }
-
-            m_EventData.Add("type", EnumToString(type));
-            m_EventData.Add("source", EnumToString(source));
-            m_EventData.Add("consumable_amount", amount);
-            m_EventData.Add("consumable_balance", balance);
-
-            AddCustomEventData(eventData);
-
-            return Custom("consumalbe_acquired", m_EventData);
-        }
-
-        /// <summary>
-        /// Sends a <c>consumable_acquired</c> event with <c>float</c> values.
-        /// <remarks>
-        /// Send this event when the player purchases or earns a consumable resource.
-        /// </remarks>
-        /// </summary>
-        /// <remarks>
-        /// This standard event can provide insight into consumable resource accumulation rates with respect to premium vs. soft acquisitions.
-        /// </remarks>
-        /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="name">The name of the consumable resource acquired.</param>
-        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
-        /// <param name="source">The source by which the consumable resource was acquired.</param>
-        /// <param name="amount">The number of consumable resources acquired.</param>
-        /// <param name="balance">The new total balance, including the consumable resource acquired.</param>
-        /// <param name="eventData">Custom event data (optional).</param>
-        public static AnalyticsResult ConsumableAcquired (string name, AcquisitionType type, string source, float amount, float balance, IDictionary<string, object> eventData = null)
-        {
-            m_EventData.Clear();
-
-            if (string.IsNullOrEmpty(name))
-            {
-                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "consumable_name"));
-            }
-            else
-            {
-                m_EventData.Add("consumable_name", name);
-            }
-
-            m_EventData.Add("type", EnumToString(type));
-
-            if (string.IsNullOrEmpty(source))
-            {
-                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "source"));
-            }
-            else
-            {
-                m_EventData.Add("source", source);
-            }
-
-            m_EventData.Add("consumable_amount", amount);
-            m_EventData.Add("consumable_balance", balance);
-
-            AddCustomEventData(eventData);
-
-            return Custom("consumalbe_acquired", m_EventData);
-        }
-
-        /// <summary>
-        /// Sends a <c>consumable_spent</c> event with <c>float</c> values.
-        /// <remarks>
-        /// Send this event when the player spends a consumable resource.
-        /// </remarks>
-        /// </summary>
-        /// <remarks>
-        /// This standard event can provide insight into consumable resource spend rates.
-        /// </remarks>
-        /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="name">The name of the consumable resource spent.</param>
-        /// <param name="amount">The number of consumable resources spent.</param>
-        /// <param name="balance">The new total balance, minus the consumable resource spent.</param>
-        /// <param name="itemPurchased">The item purchased with the consumable resource (optional).</param>
-        /// <param name="eventData">Custom event data (optional).</param>
-        public static AnalyticsResult ConsumableSpent (string name, float amount, float balance, string itemPurchased = null, IDictionary<string, object> eventData = null)
-        {
-            m_EventData.Clear();
-
-            if (string.IsNullOrEmpty(name))
-            {
-                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "consumable_name"));
-            }
-            else
-            {
-                m_EventData.Add("consumable_name", name);
-            }
-
-            m_EventData.Add("consumable_amount", amount);
-            m_EventData.Add("consumable_balance", balance);
-
-            if (!string.IsNullOrEmpty(itemPurchased))
-            {
-                m_EventData.Add("item_purchased", itemPurchased);
-            }
-
-            AddCustomEventData(eventData);
-
-            return Custom("consumable_spent", m_EventData);
-        }
-
-        /// <summary>
-        /// Sends a <c>currency_acquired</c> event with <c>float</c> values.
-        /// <remarks>
-        /// Send this event when the player purchases or earns in-game currency.
-        /// </remarks>
-        /// </summary>
-        /// <remarks>
-        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
-        /// </remarks>
-        /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="name">The name of the in-game currency.</param>
-        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
-        /// <param name="source">The source by which the currency was acquired.</param>
-        /// <param name="amount">The amount of currency acquired.</param>
-        /// <param name="balance">The new total balance, including the currency acquired.</param>
-        /// <param name="purchaseId">The ID of the store item purchased (optional).</param>
-        /// <param name="purchaseName">The name of the store item purchased (optional).</param>
-        /// <param name="purchaseQty">The quantity of store items purchased (optional).</param>
-        /// <param name="eventData">Custom event data (optional).</param>
-        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, AcquisitionSource source, float amount, float balance, string purchaseId = null, string purchaseName = null, int purchaseQty = 1, IDictionary<string, object> eventData = null)
-        {
-            m_EventData.Clear();
-
-            if (string.IsNullOrEmpty(name))
-            {
-                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "currency_name"));
-            }
-            else
-            {
-                m_EventData.Add("currency_name", name);
-            }
-
-            m_EventData.Add("type", EnumToString(type));
-            m_EventData.Add("source", EnumToString(source));
-            m_EventData.Add("currency_amount", amount);
-            m_EventData.Add("currency_balance", balance);
-
-            if (!string.IsNullOrEmpty(purchaseId))
-            {
-                m_EventData.Add("purchase_id", purchaseId);
-            }
-
-            if (!string.IsNullOrEmpty(purchaseName))
-            {
-                m_EventData.Add("purchase_name", purchaseName);
-            }
-
-            m_EventData.Add("purchase_qty", purchaseQty);
-
-            AddCustomEventData(eventData);
-
-            return Custom("currency_acquired", m_EventData);
-        }
-
-        /// <summary>
-        /// Sends a <c>currency_acquired</c> event with <c>float</c> values.
-        /// <remarks>
-        /// Send this event when the player purchases or earns in-game currency.
-        /// </remarks>
-        /// </summary>
-        /// <remarks>
-        /// This standard event can provide insight into currency accumulation rates with respect to premium vs. soft acquisitions.
-        /// </remarks>
-        /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="name">The name of the in-game currency.</param>
-        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
-        /// <param name="source">The source by which the currency was acquired.</param>
-        /// <param name="amount">The amount of currency acquired.</param>
-        /// <param name="balance">The new total balance, including the currency acquired.</param>
-        /// <param name="purchaseId">The ID of the store item purchased (optional).</param>
-        /// <param name="purchaseName">The name of the store item purchased (optional).</param>
-        /// <param name="purchaseQty">The quantity of store items purchased (optional).</param>
-        /// <param name="eventData">Custom event data (optional).</param>
-        public static AnalyticsResult CurrencyAcquired (string name, AcquisitionType type, string source, float amount, float balance, string purchaseId = null, string purchaseName = null, int purchaseQty = 1, IDictionary<string, object> eventData = null)
-        {
-            m_EventData.Clear();
-
-            if (string.IsNullOrEmpty(name))
-            {
-                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "currency_name"));
-            }
-            else
-            {
-                m_EventData.Add("currency_name", name);
-            }
-
-            m_EventData.Add("type", EnumToString(type));
-
-            if (string.IsNullOrEmpty(source))
-            {
-                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "source"));
-            }
-            else
-            {
-                m_EventData.Add("source", source);
-            }
-
-            m_EventData.Add("currency_amount", amount);
-            m_EventData.Add("currency_balance", balance);
-
-            if (!string.IsNullOrEmpty(purchaseId))
-            {
-                m_EventData.Add("purchase_id", purchaseId);
-            }
-
-            if (!string.IsNullOrEmpty(purchaseName))
-            {
-                m_EventData.Add("purchase_name", purchaseName);
-            }
-
-            m_EventData.Add("purchase_qty", purchaseQty);
-
-            AddCustomEventData(eventData);
-
-            return Custom("currency_acquired", m_EventData);
-        }
-
-        /// <summary>
         /// Sends a <c>cutscene_skip</c> event.
         /// <remarks>
         /// Send this event when the player opts to skip a cutscene or cinematic screen.
@@ -904,41 +667,127 @@ namespace UnityEngine.Analytics.Experimental
         }
 
         /// <summary>
+        /// Sends an <c>iap_transaction</c> event.
+        /// <remarks>
+        /// Send this event when the player spends real-world money to make an In-App Purchase.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// Provides information regarding the acquisition of items via IAP. This can provide insight into both real-world income, as well as game economy balance.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="transactionContext">In what context (store, gift, reward) was the item acquired?</param>
+        /// <param name="price">The price of the purchased item.</param>
+        /// <param name="itemId">A name or unique identifier for the acquired item.</param>
+        /// <param name="itemType">The category of the item that was acquired.</param>
+        /// <param name="level">The name or id of the level where the item was acquired (optional).</param>
+        /// <param name="transactionId">A unique identifier for the specific transaction that occurred. You can use this to group multiple events into a single transaction. (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        public static AnalyticsResult IAPTransaction (string transactionContext, float price, string itemId, string itemType = null, string level = null, string transactionId = null, IDictionary<string, object> eventData = null)
+        {
+            m_EventData.Clear();
+
+            if (string.IsNullOrEmpty(transactionContext))
+            {
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "transaction_context"));
+            }
+            else
+            {
+                m_EventData.Add("transaction_context", transactionContext);
+            }
+
+            if (string.IsNullOrEmpty(itemId))
+            {
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "item_id"));
+            }
+            else
+            {
+                m_EventData.Add("item_id", itemId);
+            }
+
+            if (!string.IsNullOrEmpty(itemType))
+            {
+                m_EventData.Add("item_type", itemType);
+            }
+
+            if (!string.IsNullOrEmpty(level))
+            {
+                m_EventData.Add("level", level);
+            }
+
+            if (!string.IsNullOrEmpty(transactionId))
+            {
+                m_EventData.Add("transaction_id", transactionId);
+            }
+
+            m_EventData.Add("price", price);
+
+            AddCustomEventData(eventData);
+
+            return Custom("iap_transaction", m_EventData);
+        }
+
+        /// <summary>
         /// Sends an <c>item_acquired</c> event.
         /// <remarks>
-        /// Send this event when the player purchases or earns a non-consumable item.
+        /// Send this event when the user acquires a resource within the game. Note that in some games acquisitions can occur quite frequently.
+        /// To avoid sending events too frequently, it might be sensible to batch item_acquired events.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can provide insight into item accumulation rates between players,
-        /// and the effect non-consumable items might have on in-game economies.
+        /// and the effect that might have on in-game economies.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="name">The name of the item acquired.</param>
-        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
-        /// <param name="source">The source by which the item was acquired.</param>
-        /// <param name="resourceType">The resource used to acquire the item (optional).</param>
+        /// <param name="currencyType">Set to AcquisitionType.Premium if the item was purchased with real money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="transactionContext">In what context (store, gift, reward, crafting) was the item acquired?</param>
+        /// <param name="amount">The unit quantity of the item that was acquired.</param>
+        /// <param name="itemId">A name or unique identifier for the acquired item.</param>
+        /// <param name="balance">The balance of the acquired item.</param>
+        /// <param name="itemType">The category of the item that was acquired.</param>
+        /// <param name="level">The name or id of the level where the item was acquired (optional).</param>
+        /// <param name="transactionId">A unique identifier for the specific transaction that occurred. You can use this to group multiple events into a single transaction. (optional).</param>
         /// <param name="eventData">Custom event data (optional).</param>
-        public static AnalyticsResult ItemAcquired (string name, AcquisitionType type, AcquisitionSource source, string resourceType = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult ItemAcquired (AcquisitionType currencyType, string transactionContext, float amount, string itemId, float balance, string itemType = null, string level = null, string transactionId = null, IDictionary<string, object> eventData = null)
         {
             m_EventData.Clear();
 
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(transactionContext))
             {
-                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "item_name"));
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "transaction_context"));
             }
             else
             {
-                m_EventData.Add("item_name", name);
+                m_EventData.Add("transaction_context", transactionContext);
             }
 
-            if (!string.IsNullOrEmpty(resourceType))
+            if (string.IsNullOrEmpty(itemId))
             {
-                m_EventData.Add("resource_type", resourceType);
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "item_id"));
+            }
+            else
+            {
+                m_EventData.Add("item_id", itemId);
             }
 
-            m_EventData.Add("type", EnumToString(type));
-            m_EventData.Add("source", EnumToString(source));
+            if (!string.IsNullOrEmpty(itemType))
+            {
+                m_EventData.Add("item_type", itemType);
+            }
+
+            if (!string.IsNullOrEmpty(level))
+            {
+                m_EventData.Add("level", level);
+            }
+
+            if (!string.IsNullOrEmpty(transactionId))
+            {
+                m_EventData.Add("transaction_id", transactionId);
+            }
+
+            m_EventData.Add("currency_type", EnumToString(currencyType));
+            m_EventData.Add("amount", amount);
+            m_EventData.Add("balance", balance);
 
             AddCustomEventData(eventData);
 
@@ -948,57 +797,200 @@ namespace UnityEngine.Analytics.Experimental
         /// <summary>
         /// Sends an <c>item_acquired</c> event.
         /// <remarks>
-        /// Send this event when the player purchases or earns a non-consumable item.
+        /// Send this event when the user acquires a resource within the game. Note that in some games acquisitions can occur quite frequently. 
+        /// To avoid sending events too frequently, it might be sensible to batch item_acquired events.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can provide insight into item accumulation rates between players,
-        /// and the effect non-consumable items might have on in-game economies.
+        /// and the effect that might have on in-game economies.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="name">The name of the item acquired.</param>
-        /// <param name="type">Set to AcquisitionType.Premium if purchased with real-world money; otherwise, AcqusitionType.Soft.</param>
-        /// <param name="source">The source by which the item was acquired.</param>
-        /// <param name="resourceType">The type of resource used to acquire the item (optional).</param>
+        /// <param name="currencyType">Set to AcquisitionType.Premium if the item was purchased with real money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="transactionContext">In what context (store, gift, reward, crafting) was the item acquired?</param>
+        /// <param name="amount">The unit quantity of the item that was acquired.</param>
+        /// <param name="itemId">A name or unique identifier for the acquired item.</param>
+        /// <param name="itemType">The category of the item that was acquired.</param>
+        /// <param name="level">The name or id of the level where the item was acquired (optional).</param>
+        /// <param name="transactionId">A unique identifier for the specific transaction that occurred. You can use this to group multiple events into a single transaction. (optional).</param>
         /// <param name="eventData">Custom event data (optional).</param>
-        public static AnalyticsResult ItemAcquired (string name, AcquisitionType type, string source, string resourceType = null, IDictionary<string, object> eventData = null)
+        public static AnalyticsResult ItemAcquired (AcquisitionType currencyType, string transactionContext, float amount, string itemId, string itemType = null, string level = null, string transactionId = null, IDictionary<string, object> eventData = null)
         {
             m_EventData.Clear();
 
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(transactionContext))
             {
-                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "item_name"));
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "transaction_context"));
             }
             else
             {
-                m_EventData.Add("item_name", name);
+                m_EventData.Add("transaction_context", transactionContext);
             }
 
-            if (!string.IsNullOrEmpty(resourceType))
+            if (string.IsNullOrEmpty(itemId))
             {
-                m_EventData.Add("resource_type", resourceType);
-            }
-
-            m_EventData.Add("type", EnumToString(type));
-
-            if (string.IsNullOrEmpty(source))
-            {
-                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "source"));
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "item_id"));
             }
             else
             {
-                m_EventData.Add("source", source);
+                m_EventData.Add("item_id", itemId);
             }
+
+            if (!string.IsNullOrEmpty(itemType))
+            {
+                m_EventData.Add("item_type", itemType);
+            }
+
+            if (!string.IsNullOrEmpty(level))
+            {
+                m_EventData.Add("level", level);
+            }
+
+            if (!string.IsNullOrEmpty(transactionId))
+            {
+                m_EventData.Add("transaction_id", transactionId);
+            }
+
+            m_EventData.Add("currency_type", EnumToString(currencyType));
+            m_EventData.Add("amount", amount);
 
             AddCustomEventData(eventData);
 
             return Custom("item_acquired", m_EventData);
+        }
+
+        /// <summary>
+        /// Sends an <c>item_spent</c> event.
+        /// <remarks>
+        /// Send this event when the player spends an item.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// Send this event when the user acquires a resource within the game. Note that in some games acquisitions can occur quite frequently. To avoid sending events too frequently, it might be sensible to batch item_acquired events.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="currencyType">Set to AcquisitionType.Premium if the item was purchased with real money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="transactionContext">In what context (store, gift, reward, crafting) was the item spent?</param>
+        /// <param name="amount">The unit quantity of the item that was spent.</param>
+        /// <param name="itemId">A name or unique identifier for the spent item.</param>
+        /// <param name="balance">The balance of the acquired item.</param>
+        /// <param name="itemType">The category of the item that was spent.</param>
+        /// <param name="level">The name or id of the level where the item was acquired (optional).</param>
+        /// <param name="transactionId">A unique identifier for the specific transaction that occurred. You can use this to group multiple events into a single transaction. (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        public static AnalyticsResult ItemSpent (AcquisitionType currencyType, string transactionContext, float amount, string itemId, float balance, string itemType = null, string level = null, string transactionId = null, IDictionary<string, object> eventData = null)
+        {
+            m_EventData.Clear();
+
+            if (string.IsNullOrEmpty(transactionContext))
+            {
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "transaction_context"));
+            }
+            else
+            {
+                m_EventData.Add("transaction_context", transactionContext);
+            }
+
+            if (string.IsNullOrEmpty(itemId))
+            {
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "item_id"));
+            }
+            else
+            {
+                m_EventData.Add("item_id", itemId);
+            }
+
+            if (!string.IsNullOrEmpty(itemType))
+            {
+                m_EventData.Add("item_type", itemType);
+            }
+
+            if (!string.IsNullOrEmpty(level))
+            {
+                m_EventData.Add("level", level);
+            }
+
+            if (!string.IsNullOrEmpty(transactionId))
+            {
+                m_EventData.Add("transaction_id", transactionId);
+            }
+
+            m_EventData.Add("currency_type", EnumToString(currencyType));
+            m_EventData.Add("amount", amount);
+            m_EventData.Add("balance", balance);
+
+            AddCustomEventData(eventData);
+
+            return Custom("item_spent", m_EventData);
+        }
+
+        /// <summary>
+        /// Sends an <c>item_spent</c> event.
+        /// <remarks>
+        /// Send this event when the player spends an item.
+        /// </remarks>
+        /// </summary>
+        /// <remarks>
+        /// Send this event when the user acquires a resource within the game. Note that in some games acquisitions can occur quite frequently. To avoid sending events too frequently, it might be sensible to batch item_acquired events.
+        /// </remarks>
+        /// <returns>The result of the analytics event sent.</returns>
+        /// <param name="currencyType">Set to AcquisitionType.Premium if the item was purchased with real money; otherwise, AcqusitionType.Soft.</param>
+        /// <param name="transactionContext">In what context (store, gift, reward, crafting) was the item spent?</param>
+        /// <param name="amount">The unit quantity of the item that was spent.</param>
+        /// <param name="itemId">A name or unique identifier for the spent item.</param>
+        /// <param name="itemType">The category of the item that was spent.</param>
+        /// <param name="level">The name or id of the level where the item was spent (optional).</param>
+        /// <param name="transactionId">A unique identifier for the specific transaction that occurred. You can use this to group multiple events into a single transaction. (optional).</param>
+        /// <param name="eventData">Custom event data (optional).</param>
+        public static AnalyticsResult ItemSpent (AcquisitionType currencyType, string transactionContext, float amount, string itemId, string itemType = null, string level = null, string transactionId = null, IDictionary<string, object> eventData = null)
+        {
+            m_EventData.Clear();
+
+            if (string.IsNullOrEmpty(transactionContext))
+            {
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "transaction_context"));
+            }
+            else
+            {
+                m_EventData.Add("transaction_context", transactionContext);
+            }
+
+            if (string.IsNullOrEmpty(itemId))
+            {
+                OnValidationFailed(string.Format(k_ErrorFormat_RequiredParamNotSet, "item_id"));
+            }
+            else
+            {
+                m_EventData.Add("item_id", itemId);
+            }
+
+            if (!string.IsNullOrEmpty(itemType))
+            {
+                m_EventData.Add("item_type", itemType);
+            }
+
+            if (!string.IsNullOrEmpty(level))
+            {
+                m_EventData.Add("level", level);
+            }
+
+            if (!string.IsNullOrEmpty(transactionId))
+            {
+                m_EventData.Add("transaction_id", transactionId);
+            }
+
+            m_EventData.Add("currency_type", EnumToString(currencyType));
+            m_EventData.Add("amount", amount);
+
+            AddCustomEventData(eventData);
+
+            return Custom("item_spent", m_EventData);
         }
 
         /// <summary>
         /// Sends a <c>level_complete</c> event.
         /// <remarks>
-        /// Send this event when the player sucessfully completes a level.
+        /// Send this event when the player successfully completes a level.
         /// </remarks>
         /// </summary>
         /// <remarks>
@@ -1030,7 +1022,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <summary>
         /// Sends a <c>level_complete</c> event.
         /// <remarks>
-        /// Send this event when the player sucessfully completes a level.
+        /// Send this event when the player successfully completes a level.
         /// </remarks>
         /// </summary>
         /// <remarks>
@@ -1187,7 +1179,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <summary>
         /// Sends a <c>level_skip</c> event.
         /// <remarks>
-        /// Send this event when the player opts to skip a level in order to contiue onto the next without having to completing it first.
+        /// Send this event when the player opts to skip a level in order to continue onto the next without having to completing it first.
         /// </remarks>
         /// </summary>
         /// <remarks>
@@ -1444,7 +1436,7 @@ namespace UnityEngine.Analytics.Experimental
         /// </remarks>
         /// </summary>
         /// <remarks>
-        /// This standard event can provide insight into the level of player engagement with push notificaitons.
+        /// This standard event can provide insight into the level of player engagement with push notifications.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="messageId">The message name or ID.</param>
@@ -1474,7 +1466,7 @@ namespace UnityEngine.Analytics.Experimental
         /// </remarks>
         /// </summary>
         /// <remarks>
-        /// This standard event can provide insight into player acceptance rates for push notificaitons.
+        /// This standard event can provide insight into player acceptance rates for push notifications.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="eventData">Custom event data (optional).</param>
@@ -1550,7 +1542,7 @@ namespace UnityEngine.Analytics.Experimental
         /// This standard event can provide insight into social engagement trends.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
+        /// <param name="shareType">The mode of sharing, or media type used in the social engagement.</param>
         /// <param name="socialNetwork">The network used in the social engagement.</param>
         /// <param name="senderId">The id of the sender (optional)</param>
         /// <param name="recipientId">The id of the recipient (optional)</param>
@@ -1587,7 +1579,7 @@ namespace UnityEngine.Analytics.Experimental
         /// This standard event can provide insight into social engagement trends.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
+        /// <param name="shareType">The mode of sharing, or media type used in the social engagement.</param>
         /// <param name="socialNetwork">The network used in the social engagement.</param>
         /// <param name="senderId">The id of the sender (optional)</param>
         /// <param name="recipientId">The id of the recipient (optional)</param>
@@ -1631,7 +1623,7 @@ namespace UnityEngine.Analytics.Experimental
         /// This standard event can provide insight into social engagement trends.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
+        /// <param name="shareType">The mode of sharing, or media type used in the social engagement.</param>
         /// <param name="socialNetwork">The network used in the social engagement.</param>
         /// <param name="senderId">The id of the sender (optional)</param>
         /// <param name="recipientId">The id of the recipient (optional)</param>
@@ -1675,7 +1667,7 @@ namespace UnityEngine.Analytics.Experimental
         /// This standard event can provide insight into social engagement trends.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
+        /// <param name="shareType">The mode of sharing, or media type used in the social engagement.</param>
         /// <param name="socialNetwork">The network used in the social engagement.</param>
         /// <param name="senderId">The id of the sender (optional)</param>
         /// <param name="recipientId">The id of the recipient (optional)</param>
@@ -1728,7 +1720,7 @@ namespace UnityEngine.Analytics.Experimental
         /// This standard event can provide insight into social engagement trends.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
+        /// <param name="shareType">The mode of sharing, or media type used in the social engagement.</param>
         /// <param name="socialNetwork">The network used in the social engagement.</param>
         /// <param name="senderId">The id of the sender (optional)</param>
         /// <param name="recipientId">The id of the recipient (optional)</param>
@@ -1758,14 +1750,14 @@ namespace UnityEngine.Analytics.Experimental
         /// <summary>
         /// Sends a <c>social_share_accept</c> event.
         /// <remarks>
-        /// SSend this event when a player reacts to a social share event sent by another user.
+        /// Send this event when a player reacts to a social share event sent by another user.
         /// </remarks>
         /// </summary>
         /// <remarks>
         /// This standard event can provide insight into social engagement trends.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
+        /// <param name="shareType">The mode of sharing, or media type used in the social engagement.</param>
         /// <param name="socialNetwork">The network used in the social engagement.</param>
         /// <param name="senderId">The id of the sender (optional)</param>
         /// <param name="recipientId">The id of the recipient (optional)</param>
@@ -1810,7 +1802,7 @@ namespace UnityEngine.Analytics.Experimental
         /// This standard event can provide insight into social engagement trends.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
+        /// <param name="shareType">The mode of sharing, or media type used in the social engagement.</param>
         /// <param name="socialNetwork">The network used in the social engagement.</param>
         /// <param name="senderId">The id of the sender (optional)</param>
         /// <param name="recipientId">The id of the recipient (optional)</param>
@@ -1855,7 +1847,7 @@ namespace UnityEngine.Analytics.Experimental
         /// This standard event can provide insight into social engagement trends.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
-        /// <param name="shareType">The mode of sharing, or media type used in the social engagment.</param>
+        /// <param name="shareType">The mode of sharing, or media type used in the social engagement.</param>
         /// <param name="socialNetwork">The network used in the social engagement.</param>
         /// <param name="senderId">The id of the sender (optional)</param>
         /// <param name="recipientId">The id of the recipient (optional)</param>
@@ -1904,7 +1896,7 @@ namespace UnityEngine.Analytics.Experimental
         /// </remarks>
         /// </summary>
         /// <remarks>
-        /// This standard event can provide insight into player engagment with store inventory.
+        /// This standard event can provide insight into player engagement with store inventory.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="storeType">Set to StoreType.Premium if purchases use real-world money; otherwise, StoreType.Soft</param>
@@ -1946,7 +1938,7 @@ namespace UnityEngine.Analytics.Experimental
         /// </remarks>
         /// </summary>
         /// <remarks>
-        /// This standard event can provide insight into potential player engagment with store inventory.
+        /// This standard event can provide insight into potential player engagement with store inventory.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="storeType">Set to StoreType.Premium if purchases use real-world money; otherwise, StoreType.Soft</param>
