@@ -10,9 +10,6 @@ namespace UnityEngine.Analytics.Experimental.Tracker
     [Serializable]
     public class AnalyticsEventParam
     {
-        #if UNITY_EDITOR
-        // Editor-specific properties
-        #pragma warning disable 0414
         public enum RequirementType
         {
             None,
@@ -28,14 +25,17 @@ namespace UnityEngine.Analytics.Experimental.Tracker
         }
 
         [SerializeField]
-        string m_Tooltip = "";
-
-        [SerializeField]
         string m_GroupID;
         public string groupID
         {
             get { return m_GroupID; }
         }
+
+        #if UNITY_EDITOR
+        // Editor-specific properties
+        #pragma warning disable 0414
+        [SerializeField]
+        string m_Tooltip = "";
         #pragma warning restore
         #endif
 

@@ -730,7 +730,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <summary>
         /// Sends an <c>item_acquired</c> event.
         /// <remarks>
-        /// Send this event when the user acquires a resource within the game. Note that in some games acquisitions can occur quite frequently.
+        /// Send this event when the player acquires an item within the game. Note that in some games acquisitions can occur quite frequently. 
         /// To avoid sending events too frequently, it might be sensible to batch item_acquired events.
         /// </remarks>
         /// </summary>
@@ -797,7 +797,7 @@ namespace UnityEngine.Analytics.Experimental
         /// <summary>
         /// Sends an <c>item_acquired</c> event.
         /// <remarks>
-        /// Send this event when the user acquires a resource within the game. Note that in some games acquisitions can occur quite frequently. 
+        /// Send this event when the player acquires an item within the game. Note that in some games acquisitions can occur quite frequently. 
         /// To avoid sending events too frequently, it might be sensible to batch item_acquired events.
         /// </remarks>
         /// </summary>
@@ -861,12 +861,9 @@ namespace UnityEngine.Analytics.Experimental
 
         /// <summary>
         /// Sends an <c>item_spent</c> event.
-        /// <remarks>
-        /// Send this event when the player spends an item.
-        /// </remarks>
         /// </summary>
         /// <remarks>
-        /// Send this event when the user acquires a resource within the game. Note that in some games acquisitions can occur quite frequently. To avoid sending events too frequently, it might be sensible to batch item_acquired events.
+        /// Send this event when the user expends any resource within the game. Note that in some games expenditures can occur quite frequently. To avoid sending events too frequently, it might be sensible to batch item_spent events.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="currencyType">Set to AcquisitionType.Premium if the item was purchased with real money; otherwise, AcqusitionType.Soft.</param>
@@ -926,12 +923,9 @@ namespace UnityEngine.Analytics.Experimental
 
         /// <summary>
         /// Sends an <c>item_spent</c> event.
-        /// <remarks>
-        /// Send this event when the player spends an item.
-        /// </remarks>
         /// </summary>
         /// <remarks>
-        /// Send this event when the user acquires a resource within the game. Note that in some games acquisitions can occur quite frequently. To avoid sending events too frequently, it might be sensible to batch item_acquired events.
+        /// Send this event when the user expends any resource within the game. Note that in some games expenditures can occur quite frequently. To avoid sending events too frequently, it might be sensible to batch item_spent events.
         /// </remarks>
         /// <returns>The result of the analytics event sent.</returns>
         /// <param name="currencyType">Set to AcquisitionType.Premium if the item was purchased with real money; otherwise, AcqusitionType.Soft.</param>

@@ -1,7 +1,7 @@
 ﻿namespace UnityEngine.Analytics.Experimental
 {
     /// <summary>
-    /// The way in which an item, consumable, or currency was acquired.
+    /// The type of currency (premium or soft) used to acquire the item.
     /// </summary>
     public enum AcquisitionType
     {
