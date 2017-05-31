@@ -851,7 +851,7 @@ public class Framework : MonoBehaviour {
 		showReport ();
 	}
 
-	private void TestRunner(string eventName, int order, object payload, int caseNumber = 0, params string[] parameter)
+	private void TestRunner(string eventName, int order, object payload, int caseNumber, params string[] parameter)
 	{
 		string description = eventName + " (" + order.ToString ("D2") + ") ";
 
