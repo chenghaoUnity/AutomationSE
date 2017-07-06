@@ -13,8 +13,8 @@ using System;
 using LitJson;
 using UnityEngine.Networking;
 
-public class Framework : MonoBehaviour {
-
+public class Framework : MonoBehaviour 
+{
 	public List<TestCase> resultTable = new List<TestCase>();
 	public List<IEnumerator> testSuite = new List<IEnumerator>();
 
@@ -28,25 +28,16 @@ public class Framework : MonoBehaviour {
 	private DatabaseReference reference;
 	public bool verifyMode;
 
-	void Awake () {
-
-		if (Resources.Load ("branchInfo").ToString ().Contains ("v01")) {
-			branchInfo = "v01";
-		}
-
-		if (Resources.Load ("branchInfo").ToString ().Contains ("v02")) {
-			branchInfo = "v02";
-		}
-
-		if (Resources.Load ("branchInfo").ToString ().Contains ("master")) {
-			branchInfo = "master";
-		}
+	void Awake () 
+	{
+		branchInfo = Resources.Load ("branchInfo").ToString ().Replace('/', ' ');
 			
 		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://standard-event.firebaseio.com/");
 		reference = FirebaseDatabase.DefaultInstance.RootReference;
 	}
 
-	public void Start() {
+	public void Start() 
+	{
 		//verifyMode = false;
 		// testRun ();
 		#if UNITY_5_5_OR_NEWER
@@ -54,8 +45,8 @@ public class Framework : MonoBehaviour {
 		#endif
 	}
 		
-	public IEnumerator automationTestRun() {
-
+	public IEnumerator automationTestRun() 
+	{
 		string status = "Not Ready";
 
 		while (status != "Ready") {
