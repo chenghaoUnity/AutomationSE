@@ -30,14 +30,14 @@ public class Framework : MonoBehaviour
 
 	void Awake () 
 	{
-		branchInfo = Resources.Load ("branchInfo").ToString ().Replace('/', ' ');
-			
 		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://standard-event.firebaseio.com/");
 		reference = FirebaseDatabase.DefaultInstance.RootReference;
 	}
 
 	public void Start() 
 	{
+		branchInfo = Resources.Load ("branchInfo").ToString ().Replace('/', ' ');
+
 		//verifyMode = false;
 		// testRun ();
 		#if UNITY_5_5_OR_NEWER
