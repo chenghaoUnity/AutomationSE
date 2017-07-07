@@ -39,7 +39,7 @@ public class Framework : MonoBehaviour
 		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://standard-event.firebaseio.com/");
 		reference = FirebaseDatabase.DefaultInstance.RootReference;
 
-		branchInfo = Resources.Load ("branchInfo").ToString ().Replace('/', ' ');
+		branchInfo = Resources.Load ("branchInfo").ToString ().Trim ().Replace ("/", " ");
 		pushLog (branchInfo);
 
 		//verifyMode = false;
@@ -1038,6 +1038,6 @@ public class Framework : MonoBehaviour
 	}
 
 	private void pushLog(string log) {
-		GameObject.Find ("LOG").GetComponent<Text> ().text = log;
+		GameObject.Find ("LOG").GetComponent<Text> ().text = string.Format("|{0}|", log);
 	}
 }
