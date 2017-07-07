@@ -95,9 +95,6 @@
  <Reference Include="UnityEngine.Analytics">
  <HintPath>/Applications/Unity 5.3/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
- <Reference Include="Firebase.Editor">
- <HintPath>/Users/chenghao/GO/src/github.com/UnityTech/AutomationSE/Assets/Firebase/Editor/Firebase.Editor.dll</HintPath>
- </Reference>
  <Reference Include="Firebase.App">
  <HintPath>/Users/chenghao/GO/src/github.com/UnityTech/AutomationSE/Assets/Firebase/Plugins/Firebase.App.dll</HintPath>
  </Reference>
@@ -121,12 +118,6 @@
  </Reference>
  <Reference Include="Unity.Tasks">
  <HintPath>/Users/chenghao/GO/src/github.com/UnityTech/AutomationSE/Assets/Firebase/Plugins/Unity.Tasks.dll</HintPath>
- </Reference>
- <Reference Include="Google.IOSResolver">
- <HintPath>/Users/chenghao/GO/src/github.com/UnityTech/AutomationSE/Assets/PlayServicesResolver/Editor/Google.IOSResolver.dll</HintPath>
- </Reference>
- <Reference Include="Google.JarResolver">
- <HintPath>/Users/chenghao/GO/src/github.com/UnityTech/AutomationSE/Assets/PlayServicesResolver/Editor/Google.JarResolver.dll</HintPath>
  </Reference>
  <Reference Include="Google.VersionHandler">
  <HintPath>/Users/chenghao/GO/src/github.com/UnityTech/AutomationSE/Assets/PlayServicesResolver/Editor/Google.VersionHandler.dll</HintPath>
