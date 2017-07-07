@@ -1037,7 +1037,7 @@ public class Framework : MonoBehaviour
 	private void pushLog(string log) {
 		string key = reference.Child("QAReport").Push().Key;
 		Dictionary<string, object> childUpdates = new Dictionary<string, object>();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/LOG/"] = log;
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/LOG/"] = "The log is : " + log;
 		reference.UpdateChildrenAsync(childUpdates);
 	}
 }
