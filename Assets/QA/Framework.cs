@@ -37,6 +37,7 @@ public class Framework : MonoBehaviour
 	public void Start() 
 	{
 		branchInfo = Resources.Load ("branchInfo").ToString ().Replace('/', ' ');
+		pushLog (branchInfo);
 
 		//verifyMode = false;
 		// testRun ();
@@ -1033,4 +1034,10 @@ public class Framework : MonoBehaviour
 		reference.UpdateChildrenAsync(childUpdates);
 	}
 
+	private void pushLog(string log) {
+		string key = reference.Child("QAReport").Push().Key;
+		Dictionary<string, object> childUpdates = new Dictionary<string, object>();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/LOG/"] = log;
+		reference.UpdateChildrenAsync(childUpdates);
+	}
 }
