@@ -30,12 +30,15 @@ public class Framework : MonoBehaviour
 
 	void Awake () 
 	{
-		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://standard-event.firebaseio.com/");
-		reference = FirebaseDatabase.DefaultInstance.RootReference;
+		//FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://standard-event.firebaseio.com/");
+		//reference = FirebaseDatabase.DefaultInstance.RootReference;
 	}
 
 	public void Start() 
 	{
+		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://standard-event.firebaseio.com/");
+		reference = FirebaseDatabase.DefaultInstance.RootReference;
+
 		branchInfo = Resources.Load ("branchInfo").ToString ().Replace('/', ' ');
 		pushLog (branchInfo);
 
@@ -1035,9 +1038,6 @@ public class Framework : MonoBehaviour
 	}
 
 	private void pushLog(string log) {
-		string key = reference.Child("QAReport").Push().Key;
-		Dictionary<string, object> childUpdates = new Dictionary<string, object>();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/LOG/"] = "The log is : " + log;
-		reference.UpdateChildrenAsync(childUpdates);
+		GameObject.Find ("LOG").GetComponent<Text> ().text = log;
 	}
 }
