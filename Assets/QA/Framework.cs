@@ -42,31 +42,9 @@ public class Framework : MonoBehaviour
 		branchInfo = Resources.Load ("branchInfo").ToString ().Trim ().Replace ("/", " ");
 		pushLog (branchInfo);
 
-		//verifyMode = false;
-		// testRun ();
-		#if UNITY_5_5_OR_NEWER
-			// StartCoroutine(automationTestRun());
-		#endif
-	}
-		
-	public IEnumerator automationTestRun() 
-	{
-		string status = "Not Ready";
-
-		while (status != "Ready") {
-			yield return new WaitForSeconds (5);
-			StartCoroutine (GetText ("check", (result) => {
-				Debug.Log(result);
-				status = result;
-			}));
-		}
-
-		while (GameObject.Find ("Text").GetComponent<Text> ().text.Contains ("Please wait")) {
-			yield return new WaitForSeconds (1);
-		}
-
-		verifyMode = true;
+		verifyMode = false;
 		testRun ();
+
 	}
 
 	// Above is not relatived with creating test cases.
@@ -1025,6 +1003,11 @@ public class Framework : MonoBehaviour
 		#endif
 
 		GameObject.Find("Text").GetComponent<Text> ().text = "Finished! " + (passed) + " / " + (resultTable.Count)  + " Passed!";
+
+		if (!GameObject.Find ("Toggle").GetComponent<Toggle> ().isOn) 
+		{
+			Application.Quit ();
+		}
 	}
 
 	private void pushResultToServer(TestCase testCase) {
