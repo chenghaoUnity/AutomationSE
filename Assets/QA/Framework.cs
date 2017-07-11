@@ -822,6 +822,12 @@ public class Framework : MonoBehaviour
 	public IEnumerator finalization() {
 		yield return new WaitForSeconds (timeDelay);
 		showReport ();
+
+		yield return new WaitForSeconds (10f);
+		if (!GameObject.Find ("Toggle").GetComponent<Toggle> ().isOn) 
+		{
+			Application.Quit ();
+		}
 	}
 
 	private void TestRunner(string eventName, int order, object payload, int caseNumber, params string[] parameter)
@@ -1003,11 +1009,6 @@ public class Framework : MonoBehaviour
 		#endif
 
 		GameObject.Find("Text").GetComponent<Text> ().text = "Finished! " + (passed) + " / " + (resultTable.Count)  + " Passed!";
-
-		if (!GameObject.Find ("Toggle").GetComponent<Toggle> ().isOn) 
-		{
-			Application.Quit ();
-		}
 	}
 
 	private void pushResultToServer(TestCase testCase) {
