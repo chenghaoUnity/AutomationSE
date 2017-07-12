@@ -6,7 +6,6 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Unity.Editor;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using System.IO;
 using UnityEngine.Analytics.Experimental;
 using System;
@@ -39,7 +38,7 @@ public class Framework : MonoBehaviour
 		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://standard-event.firebaseio.com/");
 		reference = FirebaseDatabase.DefaultInstance.RootReference;
 
-		branchInfo = Resources.Load ("branchInfo").ToString ().Trim ().Replace ("/", " ");
+		branchInfo = Resources.Load ("branchInfo").ToString ().Trim ().Replace ("/", " ").Replace(".", " ");
 		pushLog (branchInfo);
 
 		verifyMode = false;

@@ -6,7 +6,6 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Unity.Editor;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using System.IO;
 using UnityEngine.Analytics.Experimental;
 using System;
