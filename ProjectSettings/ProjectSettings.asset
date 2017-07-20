@@ -85,7 +85,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: com.unity3d.analytics.standardevents.demo
+  bundleIdentifier: com.unity3d.analytics.teshelper
   bundleVersion: 0.0.0
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
