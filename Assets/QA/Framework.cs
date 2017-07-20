@@ -1017,6 +1017,7 @@ public class Framework : MonoBehaviour
 		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/UnityVersion/"] = Application.unityVersion;
 		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/FailReason/"] = testCase.getFailReason ();
 		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/TestrailLink/"] = testCase.getCaseLink ();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + branchInfo + "/" + Application.unityVersion.Replace ('.', ' ') + "/" + SystemInfo.operatingSystem.Replace ('.', ' ') + "/" + testCase.getDescitpion () + "/operatingSystem/"] = SystemInfo.operatingSystem;
 		reference.UpdateChildrenAsync(childUpdates);
 	}
 
