@@ -983,7 +983,7 @@ public class Framework : MonoBehaviour
 		float percentage = (float)progress / (float)(maxTest - 1);
 		decimal d = decimal.Round (decimal.Parse ((percentage * 100).ToString()), 2);
 
-		GameObject.Find("Text").GetComponent<Text>().text = "Please wait, running " + (d)  + "%  ..." ;
+		GameObject.Find("Canvas").transform.Find("Text").GetComponent<Text>().text = "Please wait, running " + (d)  + "%  ..." ;
 		GameObject.Find ("Slider").GetComponent<Slider> ().value = (float) d / 100;
 	}
 
@@ -1007,16 +1007,16 @@ public class Framework : MonoBehaviour
 		UnityEngine.Analytics.Analytics.FlushEvents ();
 		#endif
 
-		GameObject.Find("Text").GetComponent<Text> ().text = "Finished! " + (passed) + " / " + (resultTable.Count)  + " Passed!";
+		GameObject.Find("Canvas").transform.Find("Text").GetComponent<Text> ().text = "Finished! " + (passed) + " / " + (resultTable.Count)  + " Passed!";
 	}
 
 	private void pushResultToServer(TestCase testCase) {
 		string key = reference.Child("QAReport").Push().Key;
 		Dictionary<string, object> childUpdates = new Dictionary<string, object>();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/Result/"] = testCase.getResult () == true ? "Pass" : "Fail";
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/UnityVersion/"] = Application.unityVersion;
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/FailReason/"] = testCase.getFailReason ();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/TestrailLink/"] = testCase.getCaseLink ();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/Result/"] = testCase.getResult () == true ? "Pass" : "Fail";
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/UnityVersion/"] = Application.unityVersion;
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/FailReason/"] = testCase.getFailReason ();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/TestrailLink/"] = testCase.getCaseLink ();
 		reference.UpdateChildrenAsync(childUpdates);
 	}
 
