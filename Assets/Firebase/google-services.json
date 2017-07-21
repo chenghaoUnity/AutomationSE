@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "416785251000",
+    "firebase_url": "https://standard-event.firebaseio.com",
+    "project_id": "standard-event",
+    "storage_bucket": "standard-event.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416785251000:android:f3d5128ccdb06f42",
+        "android_client_info": {
+          "package_name": "com.unity3d.analytics.teshelper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "416785251000-u6c9i6h2o6hhakohgffjmn2vbd1l476f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBsHYlt8rSufklulCNy9o-xVL5nn9XvMs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
