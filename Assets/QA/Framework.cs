@@ -1013,11 +1013,11 @@ public class Framework : MonoBehaviour
 	private void pushResultToServer(TestCase testCase) {
 		string key = reference.Child("QAReport").Push().Key;
 		Dictionary<string, object> childUpdates = new Dictionary<string, object>();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/Result/"] = testCase.getResult () == true ? "Pass" : "Fail";
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/UnityVersion/"] = Application.unityVersion;
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/FailReason/"] = testCase.getFailReason ();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace('.', ' ') + "/" + testCase.getDescitpion () + "/TestrailLink/"] = testCase.getCaseLink ();
-		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + branchInfo + "/" + Application.unityVersion.Replace ('.', ' ') + "/" + SystemInfo.operatingSystem.Replace ('.', ' ') + "/" + testCase.getDescitpion () + "/operatingSystem/"] = SystemInfo.operatingSystem;
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy")  + "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace(".", " ").Replace("/", " ") + "/" + testCase.getDescitpion () + "/Result/"] = testCase.getResult () == true ? "Pass" : "Fail";
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace(".", " ").Replace("/", " ") + "/" + testCase.getDescitpion () + "/UnityVersion/"] = Application.unityVersion;
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace(".", " ").Replace("/", " ") + "/" + testCase.getDescitpion () + "/FailReason/"] = testCase.getFailReason ();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") +  "/" + branchInfo + "/" + Application.unityVersion.Replace('.', ' ') + "/" + SystemInfo.operatingSystem.Replace(".", " ").Replace("/", " ") + "/" + testCase.getDescitpion () + "/TestrailLink/"] = testCase.getCaseLink ();
+		childUpdates ["/QAReport/" + System.DateTime.Now.ToString ("MMM d, yyyy") + "/" + branchInfo + "/" + Application.unityVersion.Replace ('.', ' ') + "/" + SystemInfo.operatingSystem.Replace(".", " ").Replace("/", " ") + "/" + testCase.getDescitpion () + "/operatingSystem/"] = SystemInfo.operatingSystem;
 		reference.UpdateChildrenAsync(childUpdates);
 	}
 
