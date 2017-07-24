@@ -42,7 +42,7 @@ public class FirebaseAuthDeps : AssetPostprocessor
 
         Google.VersionHandler.InvokeInstanceMethod(svcSupport, "DependOn", new object[] { "com.google.firebase", "firebase-auth", "10+" }, namedArgs: new Dictionary<string, object>() { { "packageIds", new string[] { "extra-google-m2repository", "extra-android-m2repository" } }, { "repositories", null } });
         Google.VersionHandler.InvokeInstanceMethod(svcSupport, "DependOn", new object[] { "com.google.firebase", "firebase-auth-unity", "1.1.1" }, namedArgs: new Dictionary<string, object>() { { "packageIds", null }, { "repositories", new string[] { "Assets/Firebase/m2repository" } } });
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_CLOUD_BUILD
         Type iosResolver = Google.VersionHandler.FindClass(
             "Google.IOSResolver", "Google.IOSResolver");
         if (iosResolver == null) {

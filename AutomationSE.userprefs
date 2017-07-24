@@ -1,8 +1,10 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QA/Framework.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Editor/XcodeProjectModifer.cs">
     <Files>
-      <File FileName="Assets/QA/Framework.cs" Line="1020" Column="255" />
+      <File FileName="Assets/Firebase/Editor/AppDeps.cs" Line="46" Column="1" />
+      <File FileName="Assets/Firebase/Editor/AuthDeps.cs" Line="51" Column="102" />
+      <File FileName="Assets/Editor/XcodeProjectModifer.cs" Line="13" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
