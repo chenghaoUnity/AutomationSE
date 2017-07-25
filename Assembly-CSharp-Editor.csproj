@@ -45,6 +45,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Editor\XcodeProjectMofider.cs" />
      <Compile Include="Assets\Firebase\Editor\AppDeps.cs" />
      <Compile Include="Assets\Firebase\Editor\AuthDeps.cs" />
      <Compile Include="Assets\Services\Analytics\Tracker\Editor\AnalyticsEventTrackerEditor.cs" />
