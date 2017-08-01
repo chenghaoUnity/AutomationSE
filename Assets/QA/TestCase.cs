@@ -1,44 +1,51 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestCase {
-
+public class TestCase 
+{
 	private string descitpion;
 	private bool result;
 	private string failReason;
 	private System.DateTime date;
 	private string caseLink;
 
-	public TestCase() {
+	public TestCase() 
+	{
+
 	}
 
-	public TestCase(string descitpion, bool result, string failReason, System.DateTime date, string caseLink) {
+	public TestCase(string descitpion, bool result, string failReason, System.DateTime date, string caseLink) 
+	{
 		this.failReason = failReason;
 		this.result = result;
 		this.descitpion = descitpion;
 		this.date = date;
-		this.caseLink = caseLink;
+		this.caseLink = "http://qatestrail.hq.unity3d.com/index.php?/cases/view/" + caseLink;
 	}
 
-	public string getFailReason() {
+	public string getFailReason() 
+	{
 		return failReason;
 	}
 
-	public bool getResult() {
+	public bool getResult() 
+	{
 		return result;
 	}
 
-	public string getDescitpion() {
+	public string getDescitpion() 
+	{
 		return descitpion;
 	}
 
-	public System.DateTime getDate() {
+	public System.DateTime getDate() 
+	{
 		return date;
 	}
 
-	public string getCaseLink() {
+	public string getCaseLink() 
+	{
 		return caseLink;
 	}
 }
