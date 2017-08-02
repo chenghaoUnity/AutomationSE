@@ -22,6 +22,18 @@ public class JsonNetwork : MonoBehaviour
 		reference = FirebaseDatabase.DefaultInstance.RootReference;
 	}
 
+	public static JsonNetwork GetInstance()
+	{
+		return GameObject.FindObjectOfType<JsonNetwork>();
+	}
+
+	public void RunServerCommand(string methodName, Action<string> callback)
+	{
+		StartCoroutine(GetText(methodName, result => {
+			callback(result);
+		}));
+	}
+
 	IEnumerator GetText(string methodName, Action<string> callback) 
 	{	
 		WWW www = new WWW("https://obscure-shelf-46410.herokuapp.com/events/" + methodName);

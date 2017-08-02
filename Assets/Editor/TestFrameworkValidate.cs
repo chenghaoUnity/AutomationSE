@@ -24,6 +24,11 @@ public class TestFrameworkValidate
 					throw new Exception(string.Format("Cannot have ./\\ in the title (Method :{0})", mInfo.Name));
 				}
 
+				if (attr.compareType == Assert.EventPayload)
+				{
+					continue;
+				}
+
 				if (attr.expectedResult[0].GetType() == typeof(string))
 				{
 					if (attr.expectedResult.Count == 1)

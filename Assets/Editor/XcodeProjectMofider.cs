@@ -8,7 +8,6 @@ using UnityEditor.iOS.Xcode;
 
 public static class XcodeProjectModifer 
 {
-	
 	[PostProcessBuild]
 	public static void OnPostProcessBuild(BuildTarget buildTarget, string path) 
 	{
