@@ -225,7 +225,7 @@ public class TestFramework : MonoBehaviour
 					}
 				}
 				
-				string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", attr.expectedResult, Result, attr.compareType);
+				string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", JsonMapper.ToJson(attr.expectedResult), Result, attr.compareType);
 				TestResultTable.Add(IfPass);
 				TestCase testResult = new TestCase(attr.title, IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
 				JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);
@@ -278,7 +278,7 @@ public class TestFramework : MonoBehaviour
 
 				bool IfPass = VerifyServerPayload(serverResult, attr.expectedResult);
 
-				string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", attr.expectedResult, serverResult, attr.compareType);
+				string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", JsonMapper.ToJson(attr.expectedResult), serverResult, attr.compareType);
 				TestResultTable.Add(IfPass);
 				TestCase testResult = new TestCase(string.Format("Verify payload on server for {0}|{1}", attr.title, Payloads [attr.title]), IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
 				JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);
