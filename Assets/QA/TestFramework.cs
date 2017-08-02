@@ -135,9 +135,6 @@ public class TestFramework : MonoBehaviour
 		// Create a result table.
 		List<bool> TestResultTable = new List<bool> ();
 
-		// Remove all history from the server
-		JsonNetwork.GetInstance ().RunServerCommand ("reset", isDone => {Debug.Log("Server Cleaned Up");});
-
 		// Create Dictionary for storing the payload info
 		Dictionary<string, int> Payloads = new Dictionary<string, int> ();
 
@@ -169,11 +166,10 @@ public class TestFramework : MonoBehaviour
 				// If the type if eventPayload, save it later
 				if (attr.compareType == Assert.EventPayload)
 				{
-					if (Application.isEditor)
-					{
-						EventPayloadList.Add (mInfo);
-						continue;
-					}
+					//#if UNITY_5_5_OR_NEWER
+					EventPayloadList.Add (mInfo);
+					//#endif
+					continue;
 				}
 				else
 				{
@@ -267,9 +263,17 @@ public class TestFramework : MonoBehaviour
 				{
 					yield return new WaitForSeconds (10f);
 
+					bool callbackCompleted = false;
+
 					JsonNetwork.GetInstance ().RunServerCommand (string.Format ("{0}/{1}", attr.title, Payloads [attr.title]), callback => {
 						serverResult = callback;
+						callbackCompleted = true;
 					});
+
+					while (!callbackCompleted)
+					{
+						yield return new WaitForSeconds (1f);
+					}
 				}
 
 				bool IfPass = VerifyServerPayload(serverResult, attr.expectedResult);
@@ -280,6 +284,9 @@ public class TestFramework : MonoBehaviour
 				JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);
 			}
 		}
+
+		// Remove all history from the server
+		JsonNetwork.GetInstance ().RunServerCommand ("reset", isDone =>{});
 			
 		// Shut down in 5 seconds after test run.
 		for (int i = 5; i > 0; i--) 
