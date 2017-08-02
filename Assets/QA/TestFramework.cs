@@ -261,7 +261,7 @@ public class TestFramework : MonoBehaviour
 
 				while (serverResult == "none")
 				{
-					yield return new WaitForSeconds (10f);
+					yield return new WaitForSeconds (2f);
 
 					bool callbackCompleted = false;
 
