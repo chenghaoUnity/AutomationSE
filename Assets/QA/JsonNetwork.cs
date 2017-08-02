@@ -34,11 +34,40 @@ public class JsonNetwork : MonoBehaviour
 		}));
 	}
 
-	IEnumerator GetText(string methodName, Action<string> callback) 
+	public void PostServerCommand(string methodName, string Post, Action<string> callback)
+	{
+		StartCoroutine(PostText(methodName, Post, result => {
+			callback(result);
+		}));
+	}
+
+	private IEnumerator GetText(string methodName, Action<string> callback) 
 	{	
 		WWW www = new WWW("https://obscure-shelf-46410.herokuapp.com/events/" + methodName);
 		yield return www;
 
+		if (www.error == null) 
+		{
+			if (www.text == null) 
+			{
+				callback (null);
+			} 
+			else 
+			{
+				callback (www.text);
+			}
+		} 
+		else 
+		{
+			callback(www.error);
+		}
+	}
+
+	private IEnumerator PostText(string methodName, string POST, Action<string> callback) 
+	{	
+		WWW www = new WWW("https://obscure-shelf-46410.herokuapp.com/events/" + methodName, System.Text.Encoding.Default.GetBytes(POST));
+		yield return www;
+		
 		if (www.error == null) 
 		{
 			if (www.text == null) 

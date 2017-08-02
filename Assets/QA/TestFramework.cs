@@ -141,6 +141,20 @@ public class TestFramework : MonoBehaviour
 		// Create List for storing the Assert.EventPayload
 		List<MethodInfo> EventPayloadList = new List<MethodInfo>();
 
+		// Request server, wait if server is busy
+		bool isServerReady = false;
+		PushScreen("Requesting access to the server");
+		while (!isServerReady)
+		{
+			yield return new WaitForSeconds (1f);
+			PushScreen("Server is busy, waiting");
+
+			JsonNetwork.GetInstance ().PostServerCommand ("request", System.Guid.NewGuid().ToString(), callback => {
+				if (callback == "ok")
+					isServerReady = true;
+			});
+		}
+
 		// Reflection to get all methods.
 		foreach (MethodInfo mInfo in type.GetMethods()) 
 		{
