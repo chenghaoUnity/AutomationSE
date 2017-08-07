@@ -15,7 +15,7 @@ public enum Assert
 	EventPayload
 }
 
-[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public class CDTest : Attribute   
 {
 	public Assert compareType;
@@ -139,7 +139,7 @@ public class TestFramework : MonoBehaviour
 		Dictionary<string, int> Payloads = new Dictionary<string, int> ();
 
 		// Create List for storing the Assert.EventPayload
-		List<MethodInfo> EventPayloadList = new List<MethodInfo>();
+		List<CDTest> EventPayloadList = new List<CDTest>();
 
 		// Request server, wait if server is busy
 		bool isServerReady = false;
@@ -161,88 +161,91 @@ public class TestFramework : MonoBehaviour
 			yield return new WaitForSeconds (0.1f);
 			
 			// Get custom attribute from each method.
-			CDTest attr = mInfo.GetCustomAttribute<CDTest>();
-			
-			if (attr != null)
+			CDTest[] attrs = mInfo.GetCustomAttributes(typeof(CDTest), false) as CDTest[];
+
+			foreach (CDTest attr in attrs)
 			{
-				bool IfPass = false;
-
-				// Showing progress on the screen.
-				PushScreen(string.Format("Running Test {0} '{1}'", TestResultTable.Count + 1, attr.title));
-				// Trigger the method.
-				object Result = mInfo.Invoke(testSuite, null);
-
-				// Force to send the events
-				#if UNITY_5_5_OR_NEWER
-				UnityEngine.Analytics.Analytics.FlushEvents ();
-				#endif
-
-				// If the type if eventPayload, save it later
-				if (attr.compareType == Assert.EventPayload)
+				if (attr != null)
 				{
-					//#if UNITY_5_5_OR_NEWER
-					EventPayloadList.Add (mInfo);
-					//#endif
-					continue;
-				}
-				else
-				{
-					if (attr.expectedResult.Count == 1)
+					bool IfPass = false;
+
+					// Showing progress on the screen.
+					PushScreen(string.Format("Running Test {0} '{1}'", TestResultTable.Count + 1, attr.title));
+					// Trigger the method.
+					object Result = mInfo.Invoke(testSuite, null);
+
+					// Force to send the events
+					#if UNITY_5_5_OR_NEWER
+					UnityEngine.Analytics.Analytics.FlushEvents ();
+					#endif
+
+					// If the type if eventPayload, save it later
+					if (attr.compareType == Assert.EventPayload)
 					{
-						if (attr.compareType == Assert.AreEquals)
-						{
-							IfPass = Result.Equals(attr.expectedResult[0]);
-						}
-						else if (attr.compareType == Assert.AreNotEquals)
-						{
-							IfPass = !Result.Equals(attr.expectedResult[0]);
-						}
-						else if (attr.compareType == Assert.Less)
-						{
-							IfPass = (float) Result < (float) attr.expectedResult[0];
-						}
-						else if (attr.compareType == Assert.Greater)
-						{
-							IfPass = (float) Result > (float) attr.expectedResult[0];
-						}
+						//#if UNITY_5_5_OR_NEWER
+						EventPayloadList.Add (attr);
+						//#endif
+						continue;
 					}
 					else
 					{
-						if (((Array)Result).Length != attr.expectedResult.Count)
-						{
-							throw new Exception(string.Format("Return length and expected value length are not matched (Method :{0})", mInfo.Name));
-						}
-						
-						for (int i = 0; i < ((Array)Result).Length; i++)
+						if (attr.expectedResult.Count == 1)
 						{
 							if (attr.compareType == Assert.AreEquals)
 							{
-								IfPass = ((Array)Result).GetValue(i).Equals(attr.expectedResult[i]);
-								if (!IfPass) break;
+								IfPass = Result.Equals(attr.expectedResult[0]);
 							}
 							else if (attr.compareType == Assert.AreNotEquals)
 							{
-								IfPass = !((Array)Result).GetValue(i).Equals(attr.expectedResult[i]);
-								if (!IfPass) break;
+								IfPass = !Result.Equals(attr.expectedResult[0]);
 							}
 							else if (attr.compareType == Assert.Less)
 							{
-								IfPass = (float)(((Array)Result).GetValue(i)) < (float) attr.expectedResult[i];
-								if (!IfPass) break;
+								IfPass = (float) Result < (float) attr.expectedResult[0];
 							}
 							else if (attr.compareType == Assert.Greater)
 							{
-								IfPass = (float)(((Array)Result).GetValue(i)) > (float) attr.expectedResult[i];
-								if (!IfPass) break;
+								IfPass = (float) Result > (float) attr.expectedResult[0];
+							}
+						}
+						else
+						{
+							if (((Array)Result).Length != attr.expectedResult.Count)
+							{
+								throw new Exception(string.Format("Return length and expected value length are not matched (Method :{0})", mInfo.Name));
+							}
+							
+							for (int i = 0; i < ((Array)Result).Length; i++)
+							{
+								if (attr.compareType == Assert.AreEquals)
+								{
+									IfPass = ((Array)Result).GetValue(i).Equals(attr.expectedResult[i]);
+									if (!IfPass) break;
+								}
+								else if (attr.compareType == Assert.AreNotEquals)
+								{
+									IfPass = !((Array)Result).GetValue(i).Equals(attr.expectedResult[i]);
+									if (!IfPass) break;
+								}
+								else if (attr.compareType == Assert.Less)
+								{
+									IfPass = (float)(((Array)Result).GetValue(i)) < (float) attr.expectedResult[i];
+									if (!IfPass) break;
+								}
+								else if (attr.compareType == Assert.Greater)
+								{
+									IfPass = (float)(((Array)Result).GetValue(i)) > (float) attr.expectedResult[i];
+									if (!IfPass) break;
+								}
 							}
 						}
 					}
+					
+					string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", JsonMapper.ToJson(attr.expectedResult), Result, attr.compareType);
+					TestResultTable.Add(IfPass);
+					TestCase testResult = new TestCase(attr.title, IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
+					JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);
 				}
-				
-				string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", JsonMapper.ToJson(attr.expectedResult), Result, attr.compareType);
-				TestResultTable.Add(IfPass);
-				TestCase testResult = new TestCase(attr.title, IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
-				JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);
 			}
 		}
 
@@ -250,12 +253,9 @@ public class TestFramework : MonoBehaviour
 		if (EventPayloadList.Count != 0) 
 		{
 			// Run through all Assert.EventPayload methods
-			foreach (MethodInfo mInfo in EventPayloadList)
+			foreach (CDTest attr in EventPayloadList)
 			{
 				yield return new WaitForSeconds (0.1f);
-
-				// Get custom attribute from each method.
-				CDTest attr = mInfo.GetCustomAttribute<CDTest> ();
 
 				// Add count to the Dictionary
 				if (!Payloads.ContainsKey(attr.title))
@@ -268,7 +268,7 @@ public class TestFramework : MonoBehaviour
 				}
 
 				// Show progress on the screen.
-				PushScreen(string.Format("Running Test {0} '{1}'", TestResultTable.Count + 1, string.Format("Verify payload on server for {0}|{1}", attr.title, Payloads [attr.title])));
+				PushScreen(string.Format("Running Test {0} '{1}'", TestResultTable.Count + 1, string.Format("|EventPayload| Verify {0}|{1}", attr.title, Payloads [attr.title])));
 
 				// Check if the server is ready for this event
 				string serverResult = "none";
@@ -294,7 +294,7 @@ public class TestFramework : MonoBehaviour
 
 				string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", JsonMapper.ToJson(attr.expectedResult), serverResult, attr.compareType);
 				TestResultTable.Add(IfPass);
-				TestCase testResult = new TestCase(string.Format("Verify payload on server for {0}|{1}", attr.title, Payloads [attr.title]), IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
+				TestCase testResult = new TestCase(string.Format("|EventPayload| Verify {0}|{1}", attr.title, Payloads [attr.title]), IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
 				JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);
 			}
 		}
