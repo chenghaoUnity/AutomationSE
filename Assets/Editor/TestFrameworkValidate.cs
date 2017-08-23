@@ -26,24 +26,24 @@ public class TestFrameworkValidate
 
 				if (attr.compareType == Assert.EventPayload)
 				{
+					if (attr.expectedResult.Count % 2 != 0)
+					{
+						throw new Exception(string.Format("Key-Value expected result is not set up correctly, missing key/value (Method :{0})", mInfo.Name));
+					}
+
 					continue;
+				}
+
+				if (mInfo.ReturnType != typeof(string) && mInfo.ReturnType != typeof(float) && mInfo.ReturnType != typeof(bool) && mInfo.ReturnType != typeof(int))
+				{
+					throw new Exception(string.Format("Return type should be one of these: string/ float/ bool/ int (Method :{0})", mInfo.Name));
 				}
 
 				if (attr.expectedResult[0].GetType() == typeof(string))
 				{
-					if (attr.expectedResult.Count == 1)
+					if (mInfo.ReturnType != typeof(string))
 					{
-						if (mInfo.ReturnType != typeof(string))
-						{
-							throw new Exception(string.Format("Return type and expected value type are not matched (Method :{0})", mInfo.Name));
-						}
-					}
-					else
-					{
-						if (mInfo.ReturnType != typeof(string[]))
-						{
-							throw new Exception(string.Format("Return length and expected value length are not matched (Method :{0})", mInfo.Name));
-						}
+						throw new Exception(string.Format("Return type and expected value type are not matched (Method :{0})", mInfo.Name));
 					}
 
 					if (attr.compareType == Assert.Greater || attr.compareType == Assert.Less)
@@ -54,37 +54,17 @@ public class TestFrameworkValidate
 
 				if (attr.expectedResult[0].GetType() == typeof(int))
 				{
-					if (attr.expectedResult.Count == 1)
+					if (mInfo.ReturnType != typeof(int))
 					{
-						if (mInfo.ReturnType != typeof(int))
-						{
-							throw new Exception(string.Format("Return type and expected value type are not matched (Method :{0})", mInfo.Name));
-						}
-					}
-					else
-					{
-						if (mInfo.ReturnType != typeof(int[]))
-						{
-							throw new Exception(string.Format("Return length and expected value length are not matched (Method :{0})", mInfo.Name));
-						}
+						throw new Exception(string.Format("Return type and expected value type are not matched (Method :{0})", mInfo.Name));
 					}
 				}
 
 				if (attr.expectedResult[0].GetType() == typeof(bool))
 				{
-					if (attr.expectedResult.Count == 1)
+					if (mInfo.ReturnType != typeof(bool))
 					{
-						if (mInfo.ReturnType != typeof(bool))
-						{
-							throw new Exception(string.Format("Return type and expected value type are not matched (Method :{0})", mInfo.Name));
-						}
-					}
-					else
-					{
-						if (mInfo.ReturnType != typeof(bool[]))
-						{
-							throw new Exception(string.Format("Return length and expected value length are not matched (Method :{0})", mInfo.Name));
-						}
+						throw new Exception(string.Format("Return type and expected value type are not matched (Method :{0})", mInfo.Name));
 					}
 
 					if (attr.compareType == Assert.Greater || attr.compareType == Assert.Less)
@@ -95,19 +75,9 @@ public class TestFrameworkValidate
 
 				if (attr.expectedResult[0].GetType() == typeof(float))
 				{
-					if (attr.expectedResult.Count == 1)
+					if (mInfo.ReturnType != typeof(float))
 					{
-						if (mInfo.ReturnType != typeof(float))
-						{
-							throw new Exception(string.Format("Return type and expected value type are not matched (Method :{0})", mInfo.Name));
-						}
-					}
-					else
-					{
-						if (mInfo.ReturnType != typeof(float[]))
-						{
-							throw new Exception(string.Format("Return length and expected value length are not matched (Method :{0})", mInfo.Name));
-						}
+						throw new Exception(string.Format("Return type and expected value type are not matched (Method :{0})", mInfo.Name));
 					}
 				}
 			}

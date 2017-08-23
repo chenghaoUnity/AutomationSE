@@ -15,6 +15,17 @@ public enum Assert
 	EventPayload
 }
 
+public class KeyValue
+{
+	public string Key;
+	public string Value;
+	public KeyValue (string Key, string Value)
+	{
+		this.Key = Key;
+		this.Value = Value;
+	}
+}
+
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public class CDTest : Attribute   
 {
@@ -189,58 +200,33 @@ public class TestFramework : MonoBehaviour
 					}
 					else
 					{
-						if (attr.expectedResult.Count == 1)
+						for (int i = 0; i < (attr.expectedResult).Count; i++)
 						{
 							if (attr.compareType == Assert.AreEquals)
 							{
-								IfPass = Result.Equals(attr.expectedResult[0]);
+								IfPass = Result.Equals(attr.expectedResult[i]);
+								if (IfPass) break;
 							}
 							else if (attr.compareType == Assert.AreNotEquals)
 							{
-								IfPass = !Result.Equals(attr.expectedResult[0]);
+								IfPass = !Result.Equals(attr.expectedResult[i]);
+								if (IfPass) continue;
 							}
 							else if (attr.compareType == Assert.Less)
 							{
-								IfPass = (float) Result < (float) attr.expectedResult[0];
+								IfPass = (float)(Result) < (float) attr.expectedResult[i];
+								if (!IfPass) break;
 							}
 							else if (attr.compareType == Assert.Greater)
 							{
-								IfPass = (float) Result > (float) attr.expectedResult[0];
-							}
-						}
-						else
-						{
-							if (((Array)Result).Length != attr.expectedResult.Count)
-							{
-								throw new Exception(string.Format("Return length and expected value length are not matched (Method :{0})", mInfo.Name));
-							}
-							
-							for (int i = 0; i < ((Array)Result).Length; i++)
-							{
-								if (attr.compareType == Assert.AreEquals)
-								{
-									IfPass = ((Array)Result).GetValue(i).Equals(attr.expectedResult[i]);
-									if (!IfPass) break;
-								}
-								else if (attr.compareType == Assert.AreNotEquals)
-								{
-									IfPass = !((Array)Result).GetValue(i).Equals(attr.expectedResult[i]);
-									if (!IfPass) break;
-								}
-								else if (attr.compareType == Assert.Less)
-								{
-									IfPass = (float)(((Array)Result).GetValue(i)) < (float) attr.expectedResult[i];
-									if (!IfPass) break;
-								}
-								else if (attr.compareType == Assert.Greater)
-								{
-									IfPass = (float)(((Array)Result).GetValue(i)) > (float) attr.expectedResult[i];
-									if (!IfPass) break;
-								}
+								IfPass = (float)(Result) > (float) attr.expectedResult[i];
+								if (!IfPass) break;
 							}
 						}
 					}
-					
+
+					Debug.Log(attr.title + ":" + IfPass);
+
 					string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", JsonMapper.ToJson(attr.expectedResult), Result, attr.compareType);
 					TestResultTable.Add(IfPass);
 					TestCase testResult = new TestCase(attr.title, IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
@@ -347,21 +333,21 @@ public class TestFramework : MonoBehaviour
 
 		JsonData Json = JsonMapper.ToObject (JsonString);
 
-		for (int i = 0; i < Json.Count; i++) 
+		for (int i = 0; i < expectedResult.Count; i++)
 		{
-			if (!expectedResult.Contains (Json [i].ToString ())) 
+			string key = expectedResult[i].ToString();
+
+			if (!Json.Keys.Contains(key))
 			{
 				return false;
-			} 
-			else 
-			{
-				expectedResult.Remove (Json [i].ToString ());
 			}
-		}
 
-		if (expectedResult.Count != 0) 
-		{
-			return false;
+			if (!Json[key].ToString().Equals(expectedResult[i + 1]))
+			{
+				return false;
+			}
+
+			i++;
 		}
 
 		return true;
