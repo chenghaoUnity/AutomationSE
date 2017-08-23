@@ -185,10 +185,10 @@ public class TestFramework : MonoBehaviour
 					// Trigger the method.
 					object Result = mInfo.Invoke(testSuite, null);
 
-					// Force to send the events
-					#if UNITY_5_5_OR_NEWER
+// Force to send the events
+#if UNITY_5_5_OR_NEWER
 					UnityEngine.Analytics.Analytics.FlushEvents ();
-					#endif
+#endif
 
 					// If the type if eventPayload, save it later
 					if (attr.compareType == Assert.EventPayload)
@@ -238,6 +238,8 @@ public class TestFramework : MonoBehaviour
 		// If there are test regarding Payload verify
 		if (EventPayloadList.Count != 0) 
 		{
+// Only Unity 5.5 or newer can have stable test result
+#if UNITY_5_5_OR_NEWER
 			// Run through all Assert.EventPayload methods
 			foreach (CDTest attr in EventPayloadList)
 			{
@@ -283,6 +285,7 @@ public class TestFramework : MonoBehaviour
 				TestCase testResult = new TestCase(string.Format("|EventPayload| Verify {0}|{1}", attr.title, Payloads [attr.title]), IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
 				JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);
 			}
+#endif
 		}
 
 		// Remove all history from the server
