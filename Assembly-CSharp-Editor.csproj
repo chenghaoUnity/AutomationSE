@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Editor\TestFrameworkValidate.cs" />
-     <Compile Include="Assets\Editor\XcodeProjectMofider.cs" />
      <Compile Include="Assets\Firebase\Editor\AppDeps.cs" />
      <Compile Include="Assets\Firebase\Editor\AuthDeps.cs" />
      <Compile Include="Assets\Services\Analytics\Tracker\Editor\AnalyticsEventTrackerEditor.cs" />
@@ -73,9 +72,6 @@
      <None Include="Assets\Plugins\Android\firebase-common-10.0.1\proguard.txt" />
      <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-app-unity\maven-metadata.xml" />
      <None Include="Assets\Plugins\Android\firebase-common-10.0.1\AndroidManifest.xml" />
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>/Applications/Unity 5.2.5/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>/Applications/Unity 5.2.5/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>

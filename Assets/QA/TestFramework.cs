@@ -154,16 +154,29 @@ public class TestFramework : MonoBehaviour
 
 		// Request server, wait if server is busy
 		bool isServerReady = false;
+		string ClientID = System.Guid.NewGuid ().ToString ();
 		PushScreen("Requesting access to the server");
-		while (!isServerReady)
-		{
-			yield return new WaitForSeconds (1f);
-			PushScreen("Server is busy, waiting");
 
-			JsonNetwork.GetInstance ().PostServerCommand ("request", System.Guid.NewGuid().ToString(), callback => {
-				if (callback == "ok")
-					isServerReady = true;
+		string serverResult = "deny";
+		while (serverResult == "deny")
+		{
+			bool callbackCompleted = false;
+			
+			JsonNetwork.GetInstance ().PostServerCommand ("request", ClientID, callback => {
+				serverResult = callback;
+				callbackCompleted = true;
 			});
+			
+			while (!callbackCompleted)
+			{
+				yield return new WaitForSeconds (0.1f);
+			}
+
+			if (serverResult == "deny")
+			{
+				yield return new WaitForSeconds (3f);
+				PushScreen("Server is busy, waiting");
+			}
 		}
 
 		// Reflection to get all methods.
@@ -184,11 +197,6 @@ public class TestFramework : MonoBehaviour
 					PushScreen(string.Format("Running Test {0} '{1}'", TestResultTable.Count + 1, attr.title));
 					// Trigger the method.
 					object Result = mInfo.Invoke(testSuite, null);
-
-// Force to send the events
-#if UNITY_5_5_OR_NEWER
-					UnityEngine.Analytics.Analytics.FlushEvents ();
-#endif
 
 					// If the type if eventPayload, save it later
 					if (attr.compareType == Assert.EventPayload)
@@ -238,8 +246,10 @@ public class TestFramework : MonoBehaviour
 		// If there are test regarding Payload verify
 		if (EventPayloadList.Count != 0) 
 		{
-// Only Unity 5.5 or newer can have stable test result
-#if UNITY_5_5_OR_NEWER
+			// Force to send the events
+			#if UNITY_5_5_OR_NEWER
+			UnityEngine.Analytics.Analytics.FlushEvents ();
+
 			// Run through all Assert.EventPayload methods
 			foreach (CDTest attr in EventPayloadList)
 			{
@@ -259,12 +269,10 @@ public class TestFramework : MonoBehaviour
 				PushScreen(string.Format("Running Test {0} '{1}'", TestResultTable.Count + 1, string.Format("|EventPayload| Verify {0}|{1}", attr.title, Payloads [attr.title])));
 
 				// Check if the server is ready for this event
-				string serverResult = "none";
+				serverResult = "none";
 
 				while (serverResult == "none")
 				{
-					yield return new WaitForSeconds (2f);
-
 					bool callbackCompleted = false;
 
 					JsonNetwork.GetInstance ().RunServerCommand (string.Format ("{0}/{1}", attr.title, Payloads [attr.title]), callback => {
@@ -274,7 +282,12 @@ public class TestFramework : MonoBehaviour
 
 					while (!callbackCompleted)
 					{
-						yield return new WaitForSeconds (1f);
+						yield return new WaitForSeconds (0.1f);
+					}
+
+					if (serverResult == "none")
+					{
+						yield return new WaitForSeconds (2f);
 					}
 				}
 
@@ -285,7 +298,8 @@ public class TestFramework : MonoBehaviour
 				TestCase testResult = new TestCase(string.Format("|EventPayload| Verify {0}|{1}", attr.title, Payloads [attr.title]), IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
 				JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);
 			}
-#endif
+
+			#endif
 		}
 
 		// Remove all history from the server
