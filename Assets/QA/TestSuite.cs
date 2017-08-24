@@ -120,20 +120,20 @@ public class TestSuite
 	[CDTest(Assert.EventPayload, "iap_transaction", "20845", "transaction_context", "transaction_context_server", "price", "0.1", "item_id", "item_id_server")]
 	public string iap_transaction01()
 	{
-		var status = AnalyticsEvent.IAPTransaction("transactionContext_server", 0.1f, "item_id_server");
+		var status = AnalyticsEvent.IAPTransaction("transaction_context_server", 0.1f, "item_id_server");
 		return status.ToString();
 	}
 
 	[CDTest(Assert.AreEquals, "Verify iap_transaction Event Status (Format 2)", "20845", "Ok", "TooManyRequests")]
-	[CDTest(Assert.EventPayload, "iap_transaction", "20845", "transaction_context", "transactionContext_server", "price", "0.1", "item_id", "item_id_server", "item_type", "item_type_server", "level", "level_server", "transaction_id", "transaction_id_server")]
+	[CDTest(Assert.EventPayload, "iap_transaction", "20845", "transaction_context", "transaction_context_server", "price", "0.1", "item_id", "item_id_server", "item_type", "item_type_server", "level", "level_server", "transaction_id", "transaction_id_server")]
 	public string iap_transaction02()
 	{
-		var status = AnalyticsEvent.IAPTransaction("transactionContext_server", 0.1f, "item_id_server", "item_type_server", "level_server", "transaction_id_server");
+		var status = AnalyticsEvent.IAPTransaction("transaction_context_server", 0.1f, "item_id_server", "item_type_server", "level_server", "transaction_id_server");
 		return status.ToString();
 	}
 
 	[CDTest(Assert.AreEquals, "Verify item_acquired Event Status (Format 1)", "20846", "Ok", "TooManyRequests")]
-	[CDTest(Assert.EventPayload, "item_acquired", "20846", "currency_type", "soft", "transaction_context", "transactionContext_server", "amount", "0.1", "item_id", "item_id_server")]
+	[CDTest(Assert.EventPayload, "item_acquired", "20846", "currency_type", "soft", "transaction_context", "transaction_context_server", "amount", "0.1", "item_id", "item_id_server")]
 	public string item_acquired01()
 	{
 		var status = AnalyticsEvent.ItemAcquired (AcquisitionType.Soft, "transaction_context_server", 0.1f, "item_id_server");
@@ -157,7 +157,7 @@ public class TestSuite
 	}
 
 	[CDTest(Assert.AreEquals, "Verify item_spent Event Status (Format 1)", "20847", "Ok", "TooManyRequests")]
-	[CDTest(Assert.EventPayload, "item_spent", "20847", "currency_type", "soft", "transaction_context", "transactionContext_server", "amount", "0.1", "item_id", "item_id_server")]
+	[CDTest(Assert.EventPayload, "item_spent", "20847", "currency_type", "soft", "transaction_context", "transaction_context_server", "amount", "0.1", "item_id", "item_id_server")]
 	public string item_spent01()
 	{
 		var status = AnalyticsEvent.ItemSpent (AcquisitionType.Soft, "transaction_context_server", 0.1f, "item_id_server");
@@ -165,7 +165,7 @@ public class TestSuite
 	}
 
 	[CDTest(Assert.AreEquals, "Verify item_spent Event Status (Format 2)", "20847", "Ok", "TooManyRequests")]
-	[CDTest(Assert.EventPayload, "item_spent", "20847", "currency_type", "soft", "transaction_context", "transactionContext_server", "amount", "0.1", "item_id", "item_id_server", "item_type", "item_type_server", "level", "level_server", "transaction_id", "transaction_id_server")]
+	[CDTest(Assert.EventPayload, "item_spent", "20847", "currency_type", "soft", "transaction_context", "transaction_context_server", "amount", "0.1", "item_id", "item_id_server", "item_type", "item_type_server", "level", "level_server", "transaction_id", "transaction_id_server")]
 	public string item_spent02()
 	{
 		var status = AnalyticsEvent.ItemSpent (AcquisitionType.Soft, "transaction_context_server", 0.1f, "item_id_server", "item_type_server", "level_server", "transaction_id_server");
