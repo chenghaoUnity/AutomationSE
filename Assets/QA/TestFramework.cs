@@ -11,19 +11,11 @@ public enum Assert
 	AreEquals,
 	AreNotEquals,
 	Less,
+	LessOREquals,
 	Greater,
+	GreaterOrEquals,
+	DoThrowException,
 	EventPayload
-}
-
-public class KeyValue
-{
-	public string Key;
-	public string Value;
-	public KeyValue (string Key, string Value)
-	{
-		this.Key = Key;
-		this.Value = Value;
-	}
 }
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
@@ -121,6 +113,28 @@ public class CDTest : Attribute
 			this.expectedResult.Add(value);
 		}
 	}
+
+	/// <summary>
+	/// CDTest custom attribute. 
+	/// </summary>
+	/// <remarks>
+	/// Any questions please slack @Chenghao
+	/// </remarks>
+	/// <param name="CompareType">The method of comparing expected value with true value.</param>
+	/// <param name="Title">The title of the test.</param>
+	/// <param name="Testrail_CaseNumber">The case number in the http://qatestrail.hq.unity3d.com/</param>
+	/// <param name="Expected_Result">Expected return value(s), which are used for comparing with the true return value(s).</param>
+	public CDTest(Assert compareType, string title, string testrail_CaseNumber, params Type[] Result)  
+	{
+		this.compareType = Assert.DoThrowException;
+		this.title = title;
+		this.testrail_CaseNumber = testrail_CaseNumber;
+		
+		foreach (Type value in Result) 
+		{
+			this.expectedResult.Add(value);
+		}
+	}
 }
 
 public class TestFramework : MonoBehaviour
@@ -192,48 +206,83 @@ public class TestFramework : MonoBehaviour
 				if (attr != null)
 				{
 					bool IfPass = false;
+					bool HasException = false;
+					object Result;
 
 					// Showing progress on the screen.
 					PushScreen(string.Format("Running Test {0} '{1}'", TestResultTable.Count + 1, attr.title));
-					// Trigger the method.
-					object Result = mInfo.Invoke(testSuite, null);
 
-					// If the type if eventPayload, save it later
-					if (attr.compareType == Assert.EventPayload)
+					try
 					{
-						//#if UNITY_5_5_OR_NEWER
-						EventPayloadList.Add (attr);
-						//#endif
-						continue;
+						Result = mInfo.Invoke(testSuite, null);
 					}
-					else
+					catch (Exception e)
 					{
-						for (int i = 0; i < (attr.expectedResult).Count; i++)
+						HasException = true;
+						Result = e;
+
+						if (attr.compareType == Assert.DoThrowException)
 						{
-							if (attr.compareType == Assert.AreEquals)
+							for (int i = 0; i < (attr.expectedResult).Count; i++)
 							{
-								IfPass = Result.Equals(attr.expectedResult[i]);
+								IfPass = e.InnerException.GetType().Equals(attr.expectedResult[i]);
 								if (IfPass) break;
-							}
-							else if (attr.compareType == Assert.AreNotEquals)
-							{
-								IfPass = !Result.Equals(attr.expectedResult[i]);
-								if (IfPass) continue;
-							}
-							else if (attr.compareType == Assert.Less)
-							{
-								IfPass = (float)(Result) < (float) attr.expectedResult[i];
-								if (!IfPass) break;
-							}
-							else if (attr.compareType == Assert.Greater)
-							{
-								IfPass = (float)(Result) > (float) attr.expectedResult[i];
-								if (!IfPass) break;
 							}
 						}
 					}
 
-					string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", JsonMapper.ToJson(attr.expectedResult), Result, attr.compareType);
+					if (!HasException)
+					{
+						// If the type if eventPayload, save it later
+						if (attr.compareType == Assert.EventPayload)
+						{
+							//#if UNITY_5_5_OR_NEWER
+							EventPayloadList.Add (attr);
+							//#endif
+							continue;
+						}
+						else
+						{
+							for (int i = 0; i < (attr.expectedResult).Count; i++)
+							{
+								if (attr.compareType == Assert.AreEquals)
+								{
+									IfPass = Result.Equals(attr.expectedResult[i]);
+									if (IfPass) break;
+								}
+								else if (attr.compareType == Assert.AreNotEquals)
+								{
+									IfPass = !Result.Equals(attr.expectedResult[i]);
+									if (!IfPass) break;
+								}
+								else if (attr.compareType == Assert.Less)
+								{
+									IfPass = (float)(Result) < (float) attr.expectedResult[i];
+									if (!IfPass) break;
+								}
+								else if (attr.compareType == Assert.LessOREquals)
+								{
+									IfPass = (float)(Result) <= (float) attr.expectedResult[i];
+									if (!IfPass) break;
+								}
+								else if (attr.compareType == Assert.Greater)
+								{
+									IfPass = (float)(Result) > (float) attr.expectedResult[i];
+									if (!IfPass) break;
+								}
+								else if (attr.compareType == Assert.GreaterOrEquals)
+								{
+									IfPass = (float)(Result) >= (float) attr.expectedResult[i];
+									if (!IfPass) break;
+								}
+							}
+						}
+					}
+
+					Debug.Log(attr.title + ":" + IfPass);
+
+					string ExpectedResult =  attr.compareType == Assert.DoThrowException ? attr.expectedResult.ToString() : JsonMapper.ToJson(attr.expectedResult);
+					string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ExpectedResult, Result, attr.compareType);
 					TestResultTable.Add(IfPass);
 					TestCase testResult = new TestCase(attr.title, IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
 					JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);

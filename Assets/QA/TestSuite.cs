@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Analytics.Experimental;
@@ -10,6 +11,12 @@ public class TestSuite
 	public string VersionNumber()
 	{
 		return AnalyticsEvent.sdkVersion;
+	}
+
+	[CDTest(Assert.DoThrowException, "Throw Exception Test", "20660", typeof(NullReferenceException))]
+	public void testException()
+	{
+		throw new NullReferenceException();
 	}
 
 	[CDTest(Assert.AreEquals, "Verify first_interaction Event Status (Format 1)", "20661", "Ok", "TooManyRequests")]

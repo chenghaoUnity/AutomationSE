@@ -34,7 +34,7 @@ public class TestFrameworkValidate
 					continue;
 				}
 
-				if (mInfo.ReturnType != typeof(string) && mInfo.ReturnType != typeof(float) && mInfo.ReturnType != typeof(bool) && mInfo.ReturnType != typeof(int))
+				if (mInfo.ReturnType != typeof(string) && mInfo.ReturnType != typeof(float) && mInfo.ReturnType != typeof(bool) && mInfo.ReturnType != typeof(int) && attr.compareType != Assert.DoThrowException)
 				{
 					throw new Exception(string.Format("Return type should be one of these: string/ float/ bool/ int (Method :{0})", mInfo.Name));
 				}
