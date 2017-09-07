@@ -15,7 +15,18 @@ public enum Assert
 	Greater,
 	GreaterOrEquals,
 	DoThrowException,
+	DoNotThrowException,
 	EventPayload
+}
+
+public enum UnityVersion
+{
+	Defalut,
+	Unity52_above,
+	Unity53_above,
+	Unity54_above,
+	Unity55_above,
+	Unity56_above,
 }
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
@@ -25,6 +36,7 @@ public class CDTest : Attribute
 	public string title;
 	public List<object> expectedResult = new List<object> ();
 	public string testrail_CaseNumber;
+	public UnityVersion unityVersion = UnityVersion.Defalut;
 
 	/// <summary>
 	/// CDTest custom attribute. 
@@ -135,6 +147,18 @@ public class CDTest : Attribute
 			this.expectedResult.Add(value);
 		}
 	}
+
+	/// <summary>
+	/// CDTest custom attribute. Requriment for min version.
+	/// </summary>
+	/// <remarks>
+	/// Any questions please slack @Chenghao
+	/// </remarks>
+	/// <param name="UnityVersion">The min unity version you wanna it works on.</param>
+	public CDTest(UnityVersion version)  
+	{
+		this.unityVersion = version;
+	}
 }
 
 public class TestFramework : MonoBehaviour
@@ -205,6 +229,20 @@ public class TestFramework : MonoBehaviour
 			{
 				if (attr != null)
 				{
+					// Check if user enter the min version of unity, 
+					// and see if the cur unity meets it, if not, skip this method
+					if (attr.unityVersion != UnityVersion.Defalut
+					    && !isCurrentUnityVersionSupported (attr.unityVersion)) {
+						break;
+					} 
+
+					// Check if it's only unityVersion, if so, continue
+					if (attr.unityVersion != UnityVersion.Defalut) 
+					{
+						continue;
+					}
+
+					// Define all the varibles
 					bool IfPass = false;
 					bool HasException = false;
 					object Result;
@@ -223,23 +261,44 @@ public class TestFramework : MonoBehaviour
 
 						if (attr.compareType == Assert.DoThrowException)
 						{
+							IfPass = true;
+
 							for (int i = 0; i < (attr.expectedResult).Count; i++)
 							{
 								IfPass = e.InnerException.GetType().Equals(attr.expectedResult[i]);
 								if (IfPass) break;
 							}
 						}
+
+						if (attr.compareType == Assert.DoNotThrowException)
+						{
+							IfPass = false;
+
+							for (int i = 0; i < (attr.expectedResult).Count; i++)
+							{
+								IfPass = !e.InnerException.GetType().Equals(attr.expectedResult[i]);
+								if (!IfPass) break;
+							}
+						}
 					}
 
 					if (!HasException)
 					{
-						// If the type if eventPayload, save it later
-						if (attr.compareType == Assert.EventPayload)
+						if (attr.compareType == Assert.DoNotThrowException) 
 						{
-							//#if UNITY_5_5_OR_NEWER
+							Debug.Log ("I am here!!!");
+						}
+
+						// If the type if eventPayload, save it later
+						if (attr.compareType == Assert.EventPayload) 
+						{
 							EventPayloadList.Add (attr);
-							//#endif
 							continue;
+						}
+						else if (attr.compareType == Assert.DoNotThrowException)
+						{
+							Debug.Log ("I assigned it!");
+							IfPass = true;
 						}
 						else
 						{
@@ -279,10 +338,9 @@ public class TestFramework : MonoBehaviour
 						}
 					}
 
-					Debug.Log(attr.title + ":" + IfPass);
+					// Debug.Log(string.Format("{0}, status is [{1}] with exception {2}", attr.title, IfPass, HasException));
 
-					string ExpectedResult =  attr.compareType == Assert.DoThrowException ? attr.expectedResult.ToString() : JsonMapper.ToJson(attr.expectedResult);
-					string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ExpectedResult, Result, attr.compareType);
+					string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ConvertToString(attr.expectedResult), Result, attr.compareType);
 					TestResultTable.Add(IfPass);
 					TestCase testResult = new TestCase(attr.title, IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
 					JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);
@@ -361,6 +419,79 @@ public class TestFramework : MonoBehaviour
 		
 		if (!GameObject.Find("TurnOff").GetComponent<Toggle>().isOn)
 			Application.Quit ();
+	}
+
+	/// <summary>
+	/// Convert List to String
+	/// </summary>
+	private string ConvertToString(List<object> Result)
+	{
+		string converted = null;
+
+		foreach (object o in Result) 
+		{
+			converted += o.ToString () + ",";
+		}
+
+		return converted;
+	}
+
+	/// <summary>
+	/// Check if the current system is supported
+	/// </summary>
+	private bool isCurrentUnityVersionSupported (UnityVersion version)
+	{
+		if (version == UnityVersion.Defalut) 
+		{
+			return true;
+		}
+
+		if (version == UnityVersion.Unity52_above) 
+		{
+			#if UNITY_5_2_OR_NEWER
+			return true;
+			#else
+			return false;
+			#endif
+		}
+
+		if (version == UnityVersion.Unity53_above) 
+		{
+			#if UNITY_5_3_OR_NEWER
+			return true;
+			#else
+			return false;
+			#endif
+		}
+
+		if (version == UnityVersion.Unity54_above) 
+		{
+			#if UNITY_5_4_OR_NEWER
+			return true;
+			#else
+			return false;
+			#endif
+		}
+
+		if (version == UnityVersion.Unity55_above) 
+		{
+			#if UNITY_5_5_OR_NEWER
+			return true;
+			#else
+			return false;
+			#endif
+		}
+
+		if (version == UnityVersion.Unity56_above) 
+		{
+			#if UNITY_5_6_OR_NEWER
+			return true;
+			#else
+			return false;
+			#endif
+		}
+
+		return false;
 	}
 
 	/// <summary>

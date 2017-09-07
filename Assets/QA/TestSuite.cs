@@ -4,22 +4,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Analytics.Experimental;
 using UnityEngine.Analytics;
+using System.Reflection;
 
 public class TestSuite
 {
-	[CDTest(Assert.AreEquals, "Verify SDK Version Number", "20660", "0.3.0")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify SDK Version Number", "20660", "0.3.0")]
 	public string VersionNumber()
 	{
 		return AnalyticsEvent.sdkVersion;
 	}
 
-	[CDTest(Assert.DoThrowException, "Throw Exception Test", "20660", typeof(NullReferenceException))]
-	public void testException()
-	{
-		throw new NullReferenceException();
-	}
-
-	[CDTest(Assert.AreEquals, "Verify first_interaction Event Status (Format 1)", "20661", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify first_interaction Event Status (Format 1)", "20661", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "first_interaction", "20661", new string[]{})]
 	public string first_interaction01()
 	{
@@ -27,7 +22,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify first_interaction Event Status (Format 2)", "20661", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify first_interaction Event Status (Format 2)", "20661", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "first_interaction", "20661", "action_id", "action_id_server")]
 	public string first_interaction02()
 	{
@@ -35,7 +30,7 @@ public class TestSuite
 		return status.ToString();
 	}
 	
-	[CDTest(Assert.AreEquals, "Verify tutorial_start Event Status (Format 1)", "20662", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify tutorial_start Event Status (Format 1)", "20662", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "tutorial_start", "20662", new string[]{})]
 	public string tutorial_start01()
 	{
@@ -43,7 +38,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify tutorial_start Event Status (Format 2)", "20662", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify tutorial_start Event Status (Format 2)", "20662", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "tutorial_start", "20662", "tutorial_id", "tutorial_id_server")]
 	public string tutorial_start02()
 	{
@@ -51,7 +46,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify tutorial_step Event Status (Format 1)", "20663", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify tutorial_step Event Status (Format 1)", "20663", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "tutorial_step", "20663", "step_index", "0")]
 	public string tutorial_step01()
 	{
@@ -59,7 +54,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify tutorial_step Event Status (Format 2)", "20663", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify tutorial_step Event Status (Format 2)", "20663", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "tutorial_step", "20663", "step_index", "0", "tutorial_id", "tutorial_id_server")]
 	public string tutorial_step02()
 	{
@@ -67,7 +62,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify tutorial_complete Event Status (Format 1)", "20840", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify tutorial_complete Event Status (Format 1)", "20840", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "tutorial_complete", "20840", new string[]{})]
 	public string tutorial_complete01()
 	{
@@ -75,7 +70,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify tutorial_complete Event Status (Format 2)", "20840", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify tutorial_complete Event Status (Format 2)", "20840", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "tutorial_complete", "20840", "tutorial_id", "tutorial_id_server")]
 	public string tutorial_complete02()
 	{
@@ -83,7 +78,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify tutorial_skip Event Status (Format 1)", "20841", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify tutorial_skip Event Status (Format 1)", "20841", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "tutorial_skip", "20841", new string[]{})]
 	public string tutorial_skip01()
 	{
@@ -91,7 +86,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify tutorial_skip Event Status (Format 2)", "20841", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify tutorial_skip Event Status (Format 2)", "20841", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "tutorial_skip", "20841", "tutorial_id", "tutorial_id_server")]
 	public string tutorial_skip02()
 	{
@@ -99,7 +94,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify store_opened Event Status", "20842", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify store_opened Event Status", "20842", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "store_opened", "20842", "type", "soft")]
 	public string store_opened()
 	{
@@ -107,7 +102,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify store_item_click Event Status (Format 1)", "20843", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify store_item_click Event Status (Format 1)", "20843", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "store_item_click", "20843", "type", "soft", "item_id", "item_id_server")]
 	public string store_item_click01()
 	{
@@ -115,7 +110,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify store_item_click Event Status (Format 2)", "20843", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify store_item_click Event Status (Format 2)", "20843", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "store_item_click", "20843", "type", "soft", "item_id", "item_id_server", "item_name", "item_name_server")]
 	public string store_item_click02()
 	{
@@ -123,7 +118,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify iap_transaction Event Status (Format 1)", "20845", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify iap_transaction Event Status (Format 1)", "20845", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "iap_transaction", "20845", "transaction_context", "transaction_context_server", "price", "0.1", "item_id", "item_id_server")]
 	public string iap_transaction01()
 	{
@@ -131,7 +126,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify iap_transaction Event Status (Format 2)", "20845", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify iap_transaction Event Status (Format 2)", "20845", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "iap_transaction", "20845", "transaction_context", "transaction_context_server", "price", "0.1", "item_id", "item_id_server", "item_type", "item_type_server", "level", "level_server", "transaction_id", "transaction_id_server")]
 	public string iap_transaction02()
 	{
@@ -139,7 +134,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify item_acquired Event Status (Format 1)", "20846", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify item_acquired Event Status (Format 1)", "20846", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "item_acquired", "20846", "currency_type", "soft", "transaction_context", "transaction_context_server", "amount", "0.1", "item_id", "item_id_server")]
 	public string item_acquired01()
 	{
@@ -147,7 +142,7 @@ public class TestSuite
 		return status.ToString();
 	}
 	
-	[CDTest(Assert.AreEquals, "Verify item_acquired Event Status (Format 2)", "20846", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify item_acquired Event Status (Format 2)", "20846", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "item_acquired", "20846", "currency_type", "soft", "transaction_context", "transaction_context_server", "amount", "0.1", "item_id", "item_id_server", "item_type", "item_type_server", "level", "level_server", "transaction_id", "transaction_id_server")]
 	public string item_acquired02()
 	{
@@ -155,7 +150,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify item_acquired Event Status (Format 3)", "20846", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify item_acquired Event Status (Format 3)", "20846", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "item_acquired", "20846", "currency_type", "soft", "transaction_context", "transaction_context_server", "amount", "0.1", "item_id", "item_id_server", "balance", "0.2", "item_type", "item_type_server", "level", "level_server", "transaction_id", "transaction_id_server")]
 	public string item_acquired03()
 	{
@@ -163,7 +158,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify item_spent Event Status (Format 1)", "20847", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify item_spent Event Status (Format 1)", "20847", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "item_spent", "20847", "currency_type", "soft", "transaction_context", "transaction_context_server", "amount", "0.1", "item_id", "item_id_server")]
 	public string item_spent01()
 	{
@@ -171,7 +166,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify item_spent Event Status (Format 2)", "20847", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify item_spent Event Status (Format 2)", "20847", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "item_spent", "20847", "currency_type", "soft", "transaction_context", "transaction_context_server", "amount", "0.1", "item_id", "item_id_server", "item_type", "item_type_server", "level", "level_server", "transaction_id", "transaction_id_server")]
 	public string item_spent02()
 	{
@@ -179,7 +174,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify item_spent Event Status (Format 3)", "20847", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify item_spent Event Status (Format 3)", "20847", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "item_spent", "20847", "currency_type", "soft", "transaction_context", "transaction_context_server", "amount", "0.1", "item_id", "item_id_server", "balance", "0.2", "item_type", "item_type_server", "level", "level_server", "transaction_id", "transaction_id_server")]
 	public string item_spent03()
 	{
@@ -187,7 +182,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify ad_offer Event Status (Format 1)", "20849", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify ad_offer Event Status (Format 1)", "20849", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "ad_offer", "20849", "rewarded", "True")]
 	public string ad_offer01()
 	{
@@ -195,7 +190,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify ad_offer Event Status (Format 2)", "20849", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify ad_offer Event Status (Format 2)", "20849", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "ad_offer", "20849", "rewarded", "True", "network", "unityads", "placement_id", "placement_id_server")]
 	public string ad_offer02()
 	{
@@ -203,7 +198,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify ad_start Event Status (Format 1)", "20850", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify ad_start Event Status (Format 1)", "20850", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "ad_start", "20850", "rewarded", "True")]
 	public string ad_start01()
 	{
@@ -211,7 +206,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify ad_start Event Status (Format 2)", "20850", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify ad_start Event Status (Format 2)", "20850", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "ad_start", "20850", "rewarded", "True", "network", "unityads", "placement_id", "placement_id_server")]
 	public string ad_start02()
 	{
@@ -219,7 +214,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify ad_complete Event Status (Format 1)", "20851", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify ad_complete Event Status (Format 1)", "20851", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "ad_complete", "20851", "rewarded", "True")]
 	public string ad_complete01()
 	{
@@ -227,7 +222,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify ad_complete Event Status (Format 2)", "20851", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify ad_complete Event Status (Format 2)", "20851", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "ad_complete", "20851", "rewarded", "True", "network", "unityads", "placement_id", "placement_id_server")]
 	public string ad_complete02()
 	{
@@ -235,7 +230,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify ad_skip Event Status (Format 1)", "20852", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify ad_skip Event Status (Format 1)", "20852", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "ad_skip", "20852", "rewarded", "True")]
 	public string ad_skip01()
 	{
@@ -243,7 +238,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify ad_skip Event Status (Format 2)", "20852", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify ad_skip Event Status (Format 2)", "20852", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "ad_skip", "20852", "rewarded", "True", "network", "unityads", "placement_id", "placement_id_server")]
 	public string ad_skip02()
 	{
@@ -251,7 +246,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify post_ad_action Event Status (Format 1)", "20853", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify post_ad_action Event Status (Format 1)", "20853", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "post_ad_action", "20853", "rewarded", "True")]
 	public string post_ad_action01()
 	{
@@ -259,7 +254,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify post_ad_action Event Status (Format 2)", "20853", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify post_ad_action Event Status (Format 2)", "20853", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "post_ad_action", "20853", "rewarded", "True", "network", "unityads", "placement_id", "placement_id_server")]
 	public string post_ad_action02()
 	{
@@ -267,7 +262,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName Achievements)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName Achievements)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "achievements")]
 	public string screen_visit01()
 	{
@@ -275,7 +270,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName Credits)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName Credits)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "credits")]
 	public string screen_visit02()
 	{
@@ -283,7 +278,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName CrossPromo)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName CrossPromo)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "cross_promo")]
 	public string screen_visit03()
 	{
@@ -291,7 +286,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName FeaturePromo)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName FeaturePromo)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "feature_promo")]
 	public string screen_visit04()
 	{
@@ -299,7 +294,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName Hint)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName Hint)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "hint")]
 	public string screen_visit05()
 	{
@@ -307,7 +302,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName IAPPromo)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName IAPPromo)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "iap_promo")]
 	public string screen_visit06()
 	{
@@ -315,7 +310,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName Inventory)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName Inventory)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "inventory")]
 	public string screen_visit07()
 	{
@@ -323,7 +318,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName Leaderboard)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName Leaderboard)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "leaderboard")]
 	public string screen_visit08()
 	{
@@ -331,7 +326,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName Lobby)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName Lobby)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "lobby")]
 	public string screen_visit09()
 	{
@@ -339,7 +334,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName Lose)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName Lose)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "lose")]
 	public string screen_visit10()
 	{
@@ -347,7 +342,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName MainMenu)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName MainMenu)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "main_menu")]
 	public string screen_visit11()
 	{
@@ -355,7 +350,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName Map)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName Map)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "map")]
 	public string screen_visit12()
 	{
@@ -363,7 +358,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName None)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName None)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "none")]
 	public string screen_visit13()
 	{
@@ -371,7 +366,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName Pause)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName Pause)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "pause")]
 	public string screen_visit14()
 	{
@@ -379,7 +374,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName Settings)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName Settings)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "settings")]
 	public string screen_visit15()
 	{
@@ -387,7 +382,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName Title)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName Title)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "title")]
 	public string screen_visit16()
 	{
@@ -395,7 +390,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify screen_visit Event Status (ScreenName Win)", "20854", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify screen_visit Event Status (ScreenName Win)", "20854", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "screen_visit", "20854", "screen_name", "win")]
 	public string screen_visit17()
 	{
@@ -403,7 +398,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify cutscene_start Event Status", "20855", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify cutscene_start Event Status", "20855", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "cutscene_start", "20855", "scene_name", "scene_name_server")]
 	public string cutscene_start()
 	{
@@ -411,7 +406,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify cutscene_skip Event Status", "20855", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify cutscene_skip Event Status", "20855", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "cutscene_skip", "20855", "scene_name", "scene_name_server")]
 	public string cutscene_skip()
 	{
@@ -419,7 +414,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify game_start Event Status", "20856", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify game_start Event Status", "20856", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "game_start", "20856", new string[]{})]
 	public string game_start()
 	{
@@ -427,7 +422,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify game_over Event Status (Format 1)", "20857", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify game_over Event Status (Format 1)", "20857", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "game_over", "20857", new string[]{})]
 	public string game_over01()
 	{
@@ -435,7 +430,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify game_over Event Status (Format 2)", "20857", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify game_over Event Status (Format 2)", "20857", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "game_over", "20857", "level_index", "0")]
 	public string game_over02()
 	{
@@ -443,7 +438,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify game_over Event Status (Format 3)", "20857", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify game_over Event Status (Format 3)", "20857", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "game_over", "20857", "level_name", "level_name_server")]
 	public string game_over03()
 	{
@@ -451,7 +446,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify game_over Event Status (Format 4)", "20857", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify game_over Event Status (Format 4)", "20857", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "game_over", "20857", "level_index", "0", "level_name", "level_name_server")]
 	public string game_over04()
 	{
@@ -459,7 +454,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_start Event Status (Format 1)", "20858", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_start Event Status (Format 1)", "20858", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_start", "20858", "level_index", "0")]
 	public string level_start01()
 	{
@@ -467,7 +462,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_start Event Status (Format 2)", "20858", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_start Event Status (Format 2)", "20858", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_start", "20858", "level_name", "level_name_server")]
 	public string level_start02()
 	{
@@ -475,7 +470,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_start Event Status (Format 3)", "20858", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_start Event Status (Format 3)", "20858", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_start", "20858", "level_index", "0", "level_name", "level_name_server")]
 	public string level_start03()
 	{
@@ -483,7 +478,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_complete Event Status (Format 1)", "20859", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_complete Event Status (Format 1)", "20859", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_complete", "20859", "level_index", "0")]
 	public string level_complete01()
 	{
@@ -491,7 +486,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_complete Event Status (Format 2)", "20859", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_complete Event Status (Format 2)", "20859", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_complete", "20859", "level_name", "level_name_server")]
 	public string level_complete02()
 	{
@@ -499,7 +494,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_complete Event Status (Format 3)", "20859", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_complete Event Status (Format 3)", "20859", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_complete", "20859", "level_index", "0", "level_name", "level_name_server")]
 	public string level_complete03()
 	{
@@ -507,7 +502,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_fail Event Status (Format 1)", "20860", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_fail Event Status (Format 1)", "20860", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_fail", "20860", "level_index", "0")]
 	public string level_fail01()
 	{
@@ -515,7 +510,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_fail Event Status (Format 2)", "20860", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_fail Event Status (Format 2)", "20860", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_fail", "20860", "level_name", "level_name_server")]
 	public string level_fail02()
 	{
@@ -523,7 +518,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_fail Event Status (Format 3)", "20860", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_fail Event Status (Format 3)", "20860", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_fail", "20860", "level_index", "0", "level_name", "level_name_server")]
 	public string level_fail03()
 	{
@@ -531,7 +526,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_quit Event Status (Format 1)", "20861", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_quit Event Status (Format 1)", "20861", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_quit", "20861", "level_index", "0")]
 	public string level_quit01()
 	{
@@ -539,7 +534,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_quit Event Status (Format 2)", "20861", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_quit Event Status (Format 2)", "20861", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_quit", "20861", "level_name", "level_name_server")]
 	public string level_quit02()
 	{
@@ -547,7 +542,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_quit Event Status (Format 3)", "20861", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_quit Event Status (Format 3)", "20861", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_quit", "20861", "level_index", "0", "level_name", "level_name_server")]
 	public string level_quit03()
 	{
@@ -555,7 +550,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_skip Event Status (Format 1)", "20862", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_skip Event Status (Format 1)", "20862", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_skip", "20862", "level_index", "0")]
 	public string level_skip01()
 	{
@@ -563,7 +558,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_skip Event Status (Format 2)", "20862", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_skip Event Status (Format 2)", "20862", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_skip", "20862", "level_name", "level_name_server")]
 	public string level_skip02()
 	{
@@ -571,7 +566,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_skip Event Status (Format 3)", "20862", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_skip Event Status (Format 3)", "20862", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_skip", "20862", "level_index", "0", "level_name", "level_name_server")]
 	public string level_skip03()
 	{
@@ -579,7 +574,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_up Event Status (Format 1)", "20863", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_up Event Status (Format 1)", "20863", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_up", "20863", "new_level_name", "new_level_name_server")]
 	public string level_up01()
 	{
@@ -587,7 +582,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify level_up Event Status (Format 2)", "20863", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify level_up Event Status (Format 2)", "20863", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "level_up", "20863", "new_level_index", "1", "new_level_name", "new_level_name_server")]
 	public string level_up02()
 	{
@@ -595,7 +590,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify push_notification_enable Event Status", "20864", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify push_notification_enable Event Status", "20864", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "push_notification_enable", "20864", new string[]{})]
 	public string push_notification_enable()
 	{
@@ -603,7 +598,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify push_notification_click Event Status", "20865", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify push_notification_click Event Status", "20865", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "push_notification_click", "20865", "message_id", "message_id_server")]
 	public string push_notification_click()
 	{
@@ -611,7 +606,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify chat_msg_sent Event Status", "20866", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify chat_msg_sent Event Status", "20866", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "chat_msg_sent", "20866", new string[]{})]
 	public string chat_msg_sent()
 	{
@@ -619,7 +614,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify achievement_unlocked Event Status", "20867", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify achievement_unlocked Event Status", "20867", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "achievement_unlocked", "20867", "achievement_id", "achievement_id_server")]
 	public string achievement_unlocked()
 	{
@@ -627,7 +622,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify achievement_step Event Status", "20868", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify achievement_step Event Status", "20868", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "achievement_step", "20868", "step_index", "0", "achievement_id", "achievement_id_server")]
 	public string achievement_step()
 	{
@@ -635,7 +630,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify user_signup Event Status (AuthorizationNetwork Facebook)", "20869", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify user_signup Event Status (AuthorizationNetwork Facebook)", "20869", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "user_signup", "20869", "authorization_network", "facebook")]
 	public string user_signup01()
 	{
@@ -643,7 +638,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify user_signup Event Status (AuthorizationNetwork GameCenter)", "20869", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify user_signup Event Status (AuthorizationNetwork GameCenter)", "20869", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "user_signup", "20869", "authorization_network", "gamecenter")]
 	public string user_signup02()
 	{
@@ -651,7 +646,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify user_signup Event Status (AuthorizationNetwork Google)", "20869", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify user_signup Event Status (AuthorizationNetwork Google)", "20869", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "user_signup", "20869", "authorization_network", "google")]
 	public string user_signup03()
 	{
@@ -659,7 +654,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify user_signup Event Status (AuthorizationNetwork Internal)", "20869", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify user_signup Event Status (AuthorizationNetwork Internal)", "20869", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "user_signup", "20869", "authorization_network", "internal")]
 	public string user_signup04()
 	{
@@ -667,7 +662,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify user_signup Event Status (AuthorizationNetwork None)", "20869", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify user_signup Event Status (AuthorizationNetwork None)", "20869", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "user_signup", "20869", "authorization_network", "none")]
 	public string user_signup05()
 	{
@@ -675,7 +670,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify user_signup Event Status (AuthorizationNetwork Twitter)", "20869", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify user_signup Event Status (AuthorizationNetwork Twitter)", "20869", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "user_signup", "20869", "authorization_network", "twitter")]
 	public string user_signup06()
 	{
@@ -683,7 +678,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share Event Status (ShareType Achievement)", "20870", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share Event Status (ShareType Achievement)", "20870", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share", "20870", "share_type", "achievement", "social_network", "none")]
 	public string social_share01()
 	{
@@ -691,7 +686,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share Event Status (ShareType Image)", "20870", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share Event Status (ShareType Image)", "20870", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share", "20870", "share_type", "image", "social_network", "none")]
 	public string social_share02()
 	{
@@ -699,7 +694,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share Event Status (ShareType Invite)", "20870", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share Event Status (ShareType Invite)", "20870", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share", "20870", "share_type", "invite", "social_network", "none")]
 	public string social_share03()
 	{
@@ -707,7 +702,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share Event Status (ShareType None)", "20870", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share Event Status (ShareType None)", "20870", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share", "20870", "share_type", "none", "social_network", "none")]
 	public string social_share04()
 	{
@@ -715,7 +710,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share Event Status (ShareType TextOnly)", "20870", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share Event Status (ShareType TextOnly)", "20870", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share", "20870", "share_type",  "text_only", "social_network", "none")]
 	public string social_share05()
 	{
@@ -723,7 +718,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share Event Status (ShareType Video)", "20870", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share Event Status (ShareType Video)", "20870", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share", "20870", "share_type", "video", "social_network", "none")]
 	public string social_share06()
 	{
@@ -731,7 +726,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share_accept Event Status (SocialNetwork Facebook)", "20871", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork Facebook)", "20871", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share_accept", "20871", "share_type", "invite", "social_network", "facebook")]
 	public string social_share_accept01()
 	{
@@ -739,7 +734,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share_accept Event Status (SocialNetwork GooglePlus)", "20871", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork GooglePlus)", "20871", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share_accept", "20871", "share_type", "invite", "social_network", "googleplus")]
 	public string social_share_accept02()
 	{
@@ -747,7 +742,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share_accept Event Status (SocialNetwork Instagram)", "20871", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork Instagram)", "20871", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share_accept", "20871", "share_type", "invite", "social_network", "instagram")]
 	public string social_share_accept03()
 	{
@@ -755,7 +750,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share_accept Event Status (SocialNetwork None)", "20871", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork None)", "20871", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share_accept", "20871", "share_type", "invite", "social_network", "none")]
 	public string social_share_accept04()
 	{
@@ -763,7 +758,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share_accept Event Status (SocialNetwork OK_ru)", "20871", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork OK_ru)", "20871", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share_accept", "20871", "share_type", "invite", "social_network", "ok_ru")]
 	public string social_share_accept05()
 	{
@@ -771,7 +766,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share_accept Event Status (SocialNetwork Pinterest)", "20871", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork Pinterest)", "20871", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share_accept", "20871", "share_type", "invite", "social_network",  "pinterest")]
 	public string social_share_accept06()
 	{
@@ -779,7 +774,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share_accept Event Status (SocialNetwork QQ)", "20871", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork QQ)", "20871", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share_accept", "20871", "share_type", "invite", "social_network", "qq")]
 	public string social_share_accept07()
 	{
@@ -787,7 +782,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share_accept Event Status (SocialNetwork Twitter)", "20871", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork Twitter)", "20871", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share_accept", "20871", "share_type", "invite", "social_network", "twitter")]
 	public string social_share_accept08()
 	{
@@ -795,7 +790,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share_accept Event Status (SocialNetwork VK)", "20871", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork VK)", "20871", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share_accept", "20871", "share_type", "invite", "social_network",  "vk")]
 	public string social_share_accept09()
 	{
@@ -803,7 +798,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share_accept Event Status (SocialNetwork WeChat)", "20871", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork WeChat)", "20871", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share_accept", "20871", "share_type", "invite", "social_network", "wechat")]
 	public string social_share_accept10()
 	{
@@ -811,7 +806,7 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share_accept Event Status (SocialNetwork Weibo)", "20871", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork Weibo)", "20871", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share_accept", "20871", "share_type", "invite", "social_network", "weibo")]
 	public string social_share_accept11()
 	{
@@ -819,11 +814,116 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, "Verify social_share_accept Event Status (SocialNetwork Zhihu)", "20871", "Ok", "TooManyRequests")]
+	[CDTest(Assert.AreEquals, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork Zhihu)", "20871", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, "social_share_accept", "20871", "share_type", "invite", "social_network", "zhihu")]
 	public string social_share_accept12()
 	{
 		var status = AnalyticsEvent.SocialShareAccept (ShareType.Invite, SocialNetwork.Zhihu);
 		return status.ToString();
+	}
+		
+	[CDTest(Assert.AreEquals, "|ABPlugin| Should Place User In Bucket If No Bucket Assigned", "20660", "default", "_a", "_b")]
+	[CDTest(UnityVersion.Unity56_above)]
+	public string ShouldPlaceUserInBucketIfNoBucketAssigned()
+	{
+		PlayerPrefs.DeleteKey("unity_analytics_ab_test_bucket");
+		ABTestingWrapper.GetInt("FakeKey", 4);
+		return PlayerPrefs.GetString ("unity_analytics_ab_test_bucket", "Not_Found");
+	}
+
+	[CDTest(Assert.AreEquals, "|ABPlugin| Should Retrieve Correct Bucket Key For User_A", "20660", true)]
+	[CDTest(UnityVersion.Unity56_above)]
+	public bool ShouldRetrieveCorrectBucketKeyForUser_A()
+	{
+		Type type = typeof(ABTestingWrapper);
+		FieldInfo bucket = type.GetField("PlayerBucket", BindingFlags.NonPublic | BindingFlags.Static);
+		bucket.SetValue(null, "_a");
+
+		return RemoteSettings.GetString("player_clan_a") == ABTestingWrapper.GetString("player_clan", "Not_Found");
+	}
+		
+	[CDTest(Assert.AreEquals, "|ABPlugin| Should Retrieve Correct Bucket Key For User_B", "20660", true)]
+	[CDTest(UnityVersion.Unity56_above)]
+	public bool ShouldRetrieveCorrectBucketKeyForUser_B()
+	{
+		Type type = typeof(ABTestingWrapper);
+		FieldInfo bucket = type.GetField("PlayerBucket", BindingFlags.NonPublic | BindingFlags.Static);
+		bucket.SetValue(null, "_b");
+
+		return RemoteSettings.GetString("player_clan_b") == ABTestingWrapper.GetString("player_clan", "Not_Found");
+	}
+		
+	[CDTest(Assert.AreEquals, "|ABPlugin| Should Retrieve Correct Bucket Key For User_Default", "20660", true)]
+	[CDTest(UnityVersion.Unity56_above)]
+	public bool ShouldRetrieveCorrectBucketKeyForUser_Default()
+	{
+		Type type = typeof(ABTestingWrapper);
+		FieldInfo bucket = type.GetField("PlayerBucket", BindingFlags.NonPublic | BindingFlags.Static);
+		bucket.SetValue(null, "default");
+
+		return RemoteSettings.GetString("player_clan") == ABTestingWrapper.GetString("player_clan", "Not_Found");
+	}
+		
+	[CDTest(Assert.DoThrowException, "|ABPlugin| Should Throw Exception With Invalid Percentages", "20660", typeof(InvalidOperationException))]
+	[CDTest(UnityVersion.Unity56_above)]
+	public void ShouldThrowExceptionWithInvalidPercentages()
+	{
+		Type type = typeof(ABTestingWrapper);
+		FieldInfo bucket = type.GetField("PlayerBucket", BindingFlags.NonPublic | BindingFlags.Static);
+		bucket.SetValue(null, "");
+		FieldInfo percentA = type.GetField("percentage_a", BindingFlags.NonPublic | BindingFlags.Static);
+		percentA.SetValue(null, 78);
+		FieldInfo percentB = type.GetField("percentage_b", BindingFlags.NonPublic | BindingFlags.Static);
+		percentB.SetValue(null, 4453);
+
+		ABTestingWrapper.GetString ("player_clan", "Not_Found");
+	}
+
+	[CDTest(Assert.LessOREquals, "|ABPlugin| Should Assign Buckets Based On Percentages", "20660", 0.01f)]
+	[CDTest(UnityVersion.Unity56_above)]
+	public float ShouldAssignBucketsBasedOnPercentages()
+	{
+		Type type = typeof(ABTestingWrapper);
+		FieldInfo bucket = type.GetField("PlayerBucket", BindingFlags.NonPublic | BindingFlags.Static);
+		bucket.SetValue(null, "");
+		FieldInfo percentA = type.GetField("percentage_a", BindingFlags.NonPublic | BindingFlags.Static);
+		percentA.SetValue(null, 0.25f);
+		FieldInfo percentB = type.GetField("percentage_b", BindingFlags.NonPublic | BindingFlags.Static);
+		percentB.SetValue(null, 0.25f);
+
+		int countA = 0;
+		int countB = 0;
+		int countC = 0;
+		int runs = 10000;
+
+		for (int i = 0; i < runs; i++)
+		{
+			bucket.SetValue(null, "");
+			string result = ABTestingWrapper.GetString("player_clan", "Not_Found");
+
+			if (result.Contains("super_a_clan")) 
+			{
+				countA++;
+			} 
+			else if (result.Contains("super_b_clan"))
+			{
+				countB++;
+			} 
+			else 
+			{
+				countC++;
+			}
+		}
+
+		float percentCountA = ((float)countA / (float)runs);
+		float differenceA = Math.Abs(0.25f - (float)Math.Round(percentCountA, 2));
+
+		float percentCountB = ((float)countB / (float)runs);
+		float differenceB = Math.Abs(0.25f - (float)Math.Round(percentCountB, 2));
+
+		float percentCountC = ((float)countC / (float)runs);
+		float differenceC = Math.Abs(0.5f - (float)Math.Round(percentCountC, 2));
+
+		return differenceA + differenceB + differenceC;
 	}
 }
