@@ -135,7 +135,6 @@ public static class ABTestingWrapper
 
 		throw new InvalidOperationException("Invalid percentage_a and percentage_b values");
 	}
-
 	#endif
 }
 

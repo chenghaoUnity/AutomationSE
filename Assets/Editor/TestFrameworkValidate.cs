@@ -19,7 +19,7 @@ public class TestFrameworkValidate
 
 			if (attr != null)
 			{
-				if (attr.title.Contains(".") || attr.title.Contains("/"))
+				if (attr.title != null && attr.title.Contains(".") || attr.title.Contains("/"))
 				{
 					throw new Exception(string.Format("Cannot have ./\\ in the title (Method :{0})", mInfo.Name));
 				}

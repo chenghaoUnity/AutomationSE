@@ -49,6 +49,7 @@
      <Compile Include="Assets\QA\TestCase.cs" />
      <Compile Include="Assets\QA\TestFramework.cs" />
      <Compile Include="Assets\QA\TestSuite.cs" />
+     <Compile Include="Assets\Services\ABTesting\ABTestingWrapper.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEvents\AnalyticsEvent.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEvents\Enums\AcquisitionSource.cs" />
      <Compile Include="Assets\Services\Analytics\StandardEvents\Enums\AcquisitionType.cs" />
