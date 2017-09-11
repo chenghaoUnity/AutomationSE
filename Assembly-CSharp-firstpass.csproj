@@ -6,10 +6,10 @@
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
 	<RootNamespace></RootNamespace>
-	<ProjectGuid>{39DE9591-023B-BE39-9E35-3CA87B824EFF}</ProjectGuid>
+	<ProjectGuid>{7FD760A5-1DCD-AEDA-4754-A522B7972B35}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
 	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
 	<BaseDirectory>Assets</BaseDirectory>
@@ -45,37 +45,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\QA\JsonNetwork.cs" />
-     <Compile Include="Assets\QA\TestCase.cs" />
-     <Compile Include="Assets\QA\TestFramework.cs" />
-     <Compile Include="Assets\QA\TestSuite.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEvents\AnalyticsEvent.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEvents\Enums\AcquisitionSource.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEvents\Enums\AcquisitionType.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEvents\Enums\AdvertisingNetwork.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEvents\Enums\AuthorizationNetwork.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEvents\Enums\ScreenName.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEvents\Enums\ShareType.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEvents\Enums\SocialNetwork.cs" />
-     <Compile Include="Assets\Services\Analytics\StandardEvents\Enums\StoreType.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\AnalyticsEventTracker.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\AnalyticsEventTrackerSettings.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\Payload\AnalyticsEventParam.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\Payload\StandardEvents\CustomEventPayload.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\Payload\StandardEvents\StandardEventPayload.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\TrackableProperty\TrackableField.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\TrackableProperty\TrackableProperty.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\TrackableProperty\ValueProperty.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\Attributes\ExposedToAnalyticsAttribute.cs.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\Enums\TriggerBool.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\Enums\TriggerLifecycleEvent.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\Enums\TriggerOperator.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\Enums\TriggerType.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\EventTrigger.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\TrackableTrigger.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\TriggerMethod.cs" />
-     <Compile Include="Assets\Services\Analytics\Tracker\Trigger\TriggerRule.cs" />
-     <Compile Include="Assets\Services\CloudBuild\BuildManifestObject.cs" />
+     <Compile Include="Assets\Plugins\ABTesting\ABTestingWrapper.cs" />
      <None Include="Assets\Resources\branchInfo.txt" />
      <None Include="Assets\Plugins\Android\Firebase\res\values\google-services.xml" />
      <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-auth-unity\maven-metadata.xml" />
@@ -124,10 +94,6 @@
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity 5.2.5/Unity.app/Contents/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{7FD760A5-1DCD-AEDA-4754-A522B7972B35}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

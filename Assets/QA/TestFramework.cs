@@ -36,7 +36,7 @@ public class CDTest : Attribute
 	public string title;
 	public List<object> expectedResult = new List<object> ();
 	public string testrail_CaseNumber;
-	public UnityVersion unityVersion = UnityVersion.Defalut;
+	public UnityVersion unityVersion;
 
 	/// <summary>
 	/// CDTest custom attribute. 
@@ -48,11 +48,12 @@ public class CDTest : Attribute
 	/// <param name="Title">The title of the test.</param>
 	/// <param name="Testrail_CaseNumber">The case number in the http://qatestrail.hq.unity3d.com/</param>
 	/// <param name="Expected_Result">Expected return value(s), which are used for comparing with the true return value(s).</param>
-	public CDTest(Assert compareType, string title, string testrail_CaseNumber, params string[] Result)  
+	public CDTest(Assert compareType, UnityVersion unityVersion, string title, string testrail_CaseNumber, params string[] Result)  
 	{
 		this.compareType = compareType;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
+		this.unityVersion = unityVersion;
 
 		foreach (string value in Result) 
 		{
@@ -70,11 +71,12 @@ public class CDTest : Attribute
 	/// <param name="Title">The title of the test.</param>
 	/// <param name="Testrail_CaseNumber">The case number in the http://qatestrail.hq.unity3d.com/</param>
 	/// <param name="Expected_Result">Expected return value(s), which are used for comparing with the true return value(s).</param>
-	public CDTest(Assert compareType, string title, string testrail_CaseNumber, params int[] Result)  
+	public CDTest(Assert compareType, UnityVersion unityVersion, string title, string testrail_CaseNumber, params int[] Result)  
 	{
 		this.compareType = compareType;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
+		this.unityVersion = unityVersion;
 		
 		foreach (int value in Result) 
 		{
@@ -92,11 +94,12 @@ public class CDTest : Attribute
 	/// <param name="Title">The title of the test.</param>
 	/// <param name="Testrail_CaseNumber">The case number in the http://qatestrail.hq.unity3d.com/</param>
 	/// <param name="Expected_Result">Expected return value(s), which are used for comparing with the true return value(s).</param>
-	public CDTest(Assert compareType, string title, string testrail_CaseNumber, params float[] Result)  
+	public CDTest(Assert compareType, UnityVersion unityVersion, string title, string testrail_CaseNumber, params float[] Result)  
 	{
 		this.compareType = compareType;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
+		this.unityVersion = unityVersion;
 		
 		foreach (float value in Result) 
 		{
@@ -114,11 +117,12 @@ public class CDTest : Attribute
 	/// <param name="Title">The title of the test.</param>
 	/// <param name="Testrail_CaseNumber">The case number in the http://qatestrail.hq.unity3d.com/</param>
 	/// <param name="Expected_Result">Expected return value(s), which are used for comparing with the true return value(s).</param>
-	public CDTest(Assert compareType, string title, string testrail_CaseNumber, params bool[] Result)  
+	public CDTest(Assert compareType, UnityVersion unityVersion, string title, string testrail_CaseNumber, params bool[] Result)  
 	{
 		this.compareType = compareType;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
+		this.unityVersion = unityVersion;
 		
 		foreach (bool value in Result) 
 		{
@@ -136,28 +140,17 @@ public class CDTest : Attribute
 	/// <param name="Title">The title of the test.</param>
 	/// <param name="Testrail_CaseNumber">The case number in the http://qatestrail.hq.unity3d.com/</param>
 	/// <param name="Expected_Result">Expected return value(s), which are used for comparing with the true return value(s).</param>
-	public CDTest(Assert compareType, string title, string testrail_CaseNumber, params Type[] Result)  
+	public CDTest(Assert compareType, UnityVersion unityVersion, string title, string testrail_CaseNumber, params Type[] Result)  
 	{
 		this.compareType = Assert.DoThrowException;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
+		this.unityVersion = unityVersion;
 		
 		foreach (Type value in Result) 
 		{
 			this.expectedResult.Add(value);
 		}
-	}
-
-	/// <summary>
-	/// CDTest custom attribute. Requriment for min version.
-	/// </summary>
-	/// <remarks>
-	/// Any questions please slack @Chenghao
-	/// </remarks>
-	/// <param name="UnityVersion">The min unity version you wanna it works on.</param>
-	public CDTest(UnityVersion version)  
-	{
-		this.unityVersion = version;
 	}
 }
 
@@ -231,14 +224,14 @@ public class TestFramework : MonoBehaviour
 				{
 					// Check if user enter the min version of unity, 
 					// and see if the cur unity meets it, if not, skip this method
-					if (attr.unityVersion != UnityVersion.Defalut
-					    && !isCurrentUnityVersionSupported (attr.unityVersion)) {
+					if (attr.unityVersion != UnityVersion.Defalut && !isCurrentUnityVersionSupported (attr.unityVersion)) {
 						break;
-					} 
+					}
 
-					// Check if it's only unityVersion, if so, continue
-					if (attr.unityVersion != UnityVersion.Defalut) 
+					// If the type if eventPayload, save it later
+					if (attr.compareType == Assert.EventPayload) 
 					{
+						EventPayloadList.Add (attr);
 						continue;
 					}
 
@@ -289,13 +282,8 @@ public class TestFramework : MonoBehaviour
 							Debug.Log ("I am here!!!");
 						}
 
-						// If the type if eventPayload, save it later
-						if (attr.compareType == Assert.EventPayload) 
-						{
-							EventPayloadList.Add (attr);
-							continue;
-						}
-						else if (attr.compareType == Assert.DoNotThrowException)
+
+						if (attr.compareType == Assert.DoNotThrowException)
 						{
 							Debug.Log ("I assigned it!");
 							IfPass = true;

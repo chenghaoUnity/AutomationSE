@@ -1,9 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Services/ABTesting/ABTestingWrapper.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QA/TestSuite.cs">
     <Files>
-      <File FileName="Assets/QA/TestSuite.cs" Line="949" Column="12" />
-      <File FileName="Assets/Services/ABTesting/ABTestingWrapper.cs" Line="137" Column="3" />
+      <File FileName="Assets/QA/TestFramework.cs" Line="282" Column="7" />
+      <File FileName="Assets/QA/TestSuite.cs" Line="874" Column="8" />
+      <File FileName="Assets/QA/JsonNetwork.cs" Line="1" Column="1" />
+      <File FileName="Assets/Editor/TestFrameworkValidate.cs" Line="21" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
