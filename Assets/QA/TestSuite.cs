@@ -821,7 +821,7 @@ public class TestSuite
 		var status = AnalyticsEvent.SocialShareAccept (ShareType.Invite, SocialNetwork.Zhihu);
 		return status.ToString();
 	}
-		
+	
 	[CDTest(Assert.AreEquals, UnityVersion.Unity55_above, "|ABPlugin| Should Place User In Bucket If No Bucket Assigned", "20660", "default", "_a", "_b")]
 	public string ShouldPlaceUserInBucketIfNoBucketAssigned()
 	{
@@ -833,7 +833,7 @@ public class TestSuite
 		return null;
 		#endif
 	}
-
+	
 	[CDTest(Assert.AreEquals, UnityVersion.Unity55_above, "|ABPlugin| Should Retrieve Correct Bucket Key For User_A", "20660", true)]
 	public bool ShouldRetrieveCorrectBucketKeyForUser_A()
 	{
@@ -841,13 +841,13 @@ public class TestSuite
 		Type type = typeof(ABTestingWrapper);
 		FieldInfo bucket = type.GetField("PlayerBucket", BindingFlags.NonPublic | BindingFlags.Static);
 		bucket.SetValue(null, "_a");
-
+		
 		return RemoteSettings.GetString("player_clan_a") == ABTestingWrapper.GetString("player_clan", "Not_Found");
 		#else
 		return true;
 		#endif
 	}
-		
+	
 	[CDTest(Assert.AreEquals, UnityVersion.Unity55_above, "|ABPlugin| Should Retrieve Correct Bucket Key For User_B", "20660", true)]
 	public bool ShouldRetrieveCorrectBucketKeyForUser_B()
 	{
@@ -855,13 +855,13 @@ public class TestSuite
 		Type type = typeof(ABTestingWrapper);
 		FieldInfo bucket = type.GetField("PlayerBucket", BindingFlags.NonPublic | BindingFlags.Static);
 		bucket.SetValue(null, "_b");
-
+		
 		return RemoteSettings.GetString("player_clan_b") == ABTestingWrapper.GetString("player_clan", "Not_Found");
 		#else
 		return true;
 		#endif
 	}
-		
+	
 	[CDTest(Assert.AreEquals, UnityVersion.Unity55_above, "|ABPlugin| Should Retrieve Correct Bucket Key For User_Default", "20660", true)]
 	public bool ShouldRetrieveCorrectBucketKeyForUser_Default()
 	{
@@ -869,13 +869,13 @@ public class TestSuite
 		Type type = typeof(ABTestingWrapper);
 		FieldInfo bucket = type.GetField("PlayerBucket", BindingFlags.NonPublic | BindingFlags.Static);
 		bucket.SetValue(null, "default");
-
+		
 		return RemoteSettings.GetString("player_clan") == ABTestingWrapper.GetString("player_clan", "Not_Found");
 		#else
 		return true;
 		#endif
 	}
-		
+	
 	[CDTest(Assert.DoThrowException, UnityVersion.Unity55_above, "|ABPlugin| Should Throw Exception With Invalid Percentages", "20660", typeof(InvalidOperationException))]
 	public void ShouldThrowExceptionWithInvalidPercentages()
 	{
@@ -887,11 +887,11 @@ public class TestSuite
 		percentA.SetValue(null, 78);
 		FieldInfo percentB = type.GetField("percentage_b", BindingFlags.NonPublic | BindingFlags.Static);
 		percentB.SetValue(null, 4453);
-
+		
 		ABTestingWrapper.GetString ("player_clan", "Not_Found");
 		#endif
 	}
-
+	
 	[CDTest(Assert.LessOREquals, UnityVersion.Unity55_above, "|ABPlugin| Should Assign Buckets Based On Percentages", "20660", 0.01f)]
 	public float ShouldAssignBucketsBasedOnPercentages()
 	{
@@ -903,17 +903,17 @@ public class TestSuite
 		percentA.SetValue(null, 0.25f);
 		FieldInfo percentB = type.GetField("percentage_b", BindingFlags.NonPublic | BindingFlags.Static);
 		percentB.SetValue(null, 0.25f);
-
+		
 		int countA = 0;
 		int countB = 0;
 		int countC = 0;
 		int runs = 10000;
-
+		
 		for (int i = 0; i < runs; i++)
 		{
 			bucket.SetValue(null, "");
 			string result = ABTestingWrapper.GetString("player_clan", "Not_Found");
-
+			
 			if (result.Contains("super_a_clan")) 
 			{
 				countA++;
@@ -927,18 +927,18 @@ public class TestSuite
 				countC++;
 			}
 		}
-
+		
 		float percentCountA = ((float)countA / (float)runs);
 		float differenceA = Math.Abs(0.25f - (float)Math.Round(percentCountA, 2));
-
+		
 		float percentCountB = ((float)countB / (float)runs);
 		float differenceB = Math.Abs(0.25f - (float)Math.Round(percentCountB, 2));
-
+		
 		float percentCountC = ((float)countC / (float)runs);
 		float differenceC = Math.Abs(0.5f - (float)Math.Round(percentCountC, 2));
-
+		
 		return differenceA + differenceB + differenceC;
-
+		
 		#else
 		return 0f;
 		#endif

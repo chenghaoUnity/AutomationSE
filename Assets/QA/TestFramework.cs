@@ -160,7 +160,7 @@ public class TestFramework : MonoBehaviour
 	{
 		StartCoroutine(StartTest());
 	}
-
+	
 	/// <summary>
 	/// Start test main method.
 	/// </summary>
@@ -277,56 +277,42 @@ public class TestFramework : MonoBehaviour
 
 					if (!HasException)
 					{
-						if (attr.compareType == Assert.DoNotThrowException) 
+						for (int i = 0; i < (attr.expectedResult).Count; i++)
 						{
-							Debug.Log ("I am here!!!");
-						}
-
-
-						if (attr.compareType == Assert.DoNotThrowException)
-						{
-							Debug.Log ("I assigned it!");
-							IfPass = true;
-						}
-						else
-						{
-							for (int i = 0; i < (attr.expectedResult).Count; i++)
+							if (attr.compareType == Assert.AreEquals)
 							{
-								if (attr.compareType == Assert.AreEquals)
-								{
-									IfPass = Result.Equals(attr.expectedResult[i]);
-									if (IfPass) break;
-								}
-								else if (attr.compareType == Assert.AreNotEquals)
-								{
-									IfPass = !Result.Equals(attr.expectedResult[i]);
-									if (!IfPass) break;
-								}
-								else if (attr.compareType == Assert.Less)
-								{
-									IfPass = (float)(Result) < (float) attr.expectedResult[i];
-									if (!IfPass) break;
-								}
-								else if (attr.compareType == Assert.LessOREquals)
-								{
-									IfPass = (float)(Result) <= (float) attr.expectedResult[i];
-									if (!IfPass) break;
-								}
-								else if (attr.compareType == Assert.Greater)
-								{
-									IfPass = (float)(Result) > (float) attr.expectedResult[i];
-									if (!IfPass) break;
-								}
-								else if (attr.compareType == Assert.GreaterOrEquals)
-								{
-									IfPass = (float)(Result) >= (float) attr.expectedResult[i];
-									if (!IfPass) break;
-								}
+								IfPass = Result.Equals(attr.expectedResult[i]);
+								if (IfPass) break;
+							}
+							else if (attr.compareType == Assert.AreNotEquals)
+							{
+								IfPass = !Result.Equals(attr.expectedResult[i]);
+								if (!IfPass) break;
+							}
+							else if (attr.compareType == Assert.Less)
+							{
+								IfPass = (float)(Result) < (float) attr.expectedResult[i];
+								if (!IfPass) break;
+							}
+							else if (attr.compareType == Assert.LessOREquals)
+							{
+								IfPass = (float)(Result) <= (float) attr.expectedResult[i];
+								if (!IfPass) break;
+							}
+							else if (attr.compareType == Assert.Greater)
+							{
+								IfPass = (float)(Result) > (float) attr.expectedResult[i];
+								if (!IfPass) break;
+							}
+							else if (attr.compareType == Assert.GreaterOrEquals)
+							{
+								IfPass = (float)(Result) >= (float) attr.expectedResult[i];
+								if (!IfPass) break;
 							}
 						}
 					}
 
-					// Debug.Log(string.Format("{0}, status is [{1}] with exception {2}", attr.title, IfPass, HasException));
+					Debug.Log(string.Format("{0}, status is [{1}] with exception {2}", attr.title, IfPass, HasException));
 
 					string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ConvertToString(attr.expectedResult), Result, attr.compareType);
 					TestResultTable.Add(IfPass);
@@ -361,6 +347,12 @@ public class TestFramework : MonoBehaviour
 				// Show progress on the screen.
 				PushScreen(string.Format("Running Test {0} '{1}'", TestResultTable.Count + 1, string.Format("|EventPayload| Verify {0}|{1}", attr.title, Payloads [attr.title])));
 
+				// Start the timeout timer
+				float timer = 0f;
+				StartCoroutine(TimedoutTimer(timer_ => {
+					timer = timer_;
+				}));
+
 				// Check if the server is ready for this event
 				serverResult = "none";
 
@@ -382,11 +374,20 @@ public class TestFramework : MonoBehaviour
 					{
 						yield return new WaitForSeconds (2f);
 					}
+
+					if (timer > 5f)
+					{
+						break;
+					}
 				}
 
-				bool IfPass = VerifyServerPayload(serverResult, attr.expectedResult);
+				bool IfPass = false;
+				if (timer < 5f)
+				{
+					IfPass = VerifyServerPayload(serverResult, attr.expectedResult);
+				}
 
-				string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", JsonMapper.ToJson(attr.expectedResult), serverResult, attr.compareType);
+				string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ConvertToString(attr.expectedResult), serverResult, attr.compareType);
 				TestResultTable.Add(IfPass);
 				TestCase testResult = new TestCase(string.Format("|EventPayload| Verify {0}|{1}", attr.title, Payloads [attr.title]), IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
 				JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);
@@ -407,6 +408,18 @@ public class TestFramework : MonoBehaviour
 		
 		if (!GameObject.Find("TurnOff").GetComponent<Toggle>().isOn)
 			Application.Quit ();
+	}
+
+	private IEnumerator TimedoutTimer(Action<float> callback)
+	{
+		float timer = 0;
+
+		while (true) 
+		{
+			yield return new WaitForSeconds(1f);
+			timer += 1f;
+			callback(timer);
+		}
 	}
 
 	/// <summary>
