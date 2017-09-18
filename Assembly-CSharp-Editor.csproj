@@ -132,9 +132,6 @@
  <Reference Include="Google.JarResolver_v1.2.45.0">
  <HintPath>/Users/chenghao/GO/src/github.com/UnityTech/AutomationSE/Assets/PlayServicesResolver/Editor/Google.JarResolver_v1.2.45.0.dll</HintPath>
  </Reference>
- <Reference Include="Google.VersionHandler 1">
- <HintPath>/Users/chenghao/GO/src/github.com/UnityTech/AutomationSE/Assets/PlayServicesResolver/Editor/Google.VersionHandler 1.dll</HintPath>
- </Reference>
  <Reference Include="Google.VersionHandler">
  <HintPath>/Users/chenghao/GO/src/github.com/UnityTech/AutomationSE/Assets/PlayServicesResolver/Editor/Google.VersionHandler.dll</HintPath>
  </Reference>
