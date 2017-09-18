@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: cf36e8bbedf14bc786dfcf542e5c0275
-time_created: 1480838400
+labels:
+- gvh
+- gvh_version-4.1.0
 PluginImporter:
   serializedVersion: 1
   iconMap: {}
@@ -65,5 +67,8 @@ PluginImporter:
     iOS:
       enabled: 0
       settings:
-        CompileFlags:
-        FrameworkDependencies:
+        CompileFlags: 
+        FrameworkDependencies: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

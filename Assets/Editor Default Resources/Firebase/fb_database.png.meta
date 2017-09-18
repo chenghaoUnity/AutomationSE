@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 3eea7b558c67b48e18acf3c278392e3d
+labels:
+- gvh
 timeCreated: 1476203961
 licenseType: Free
 TextureImporter:
@@ -46,7 +48,6 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 0
-  spriteTessellationDetail: -1
   textureType: -1
   buildTargetSettings: []
   spriteSheet:
