@@ -1,6 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2008
 
+Project("{B3135E0F-AD35-0D4E-F75B-F3198F6B4467}") = "AutomationSE", "Assembly-CSharp-firstpass.csproj", "{7FD760A5-1DCD-AEDA-4754-A522B7972B35}"
+EndProject
 Project("{B3135E0F-AD35-0D4E-F75B-F3198F6B4467}") = "AutomationSE", "Assembly-CSharp.csproj", "{39DE9591-023B-BE39-9E35-3CA87B824EFF}"
 EndProject
 Project("{B3135E0F-AD35-0D4E-F75B-F3198F6B4467}") = "AutomationSE", "Assembly-CSharp-Editor.csproj", "{2CA71427-D02E-AB0A-71D2-09D1D501E0A5}"
@@ -11,6 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7FD760A5-1DCD-AEDA-4754-A522B7972B35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FD760A5-1DCD-AEDA-4754-A522B7972B35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FD760A5-1DCD-AEDA-4754-A522B7972B35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FD760A5-1DCD-AEDA-4754-A522B7972B35}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39DE9591-023B-BE39-9E35-3CA87B824EFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{39DE9591-023B-BE39-9E35-3CA87B824EFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39DE9591-023B-BE39-9E35-3CA87B824EFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -23,7 +29,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																																																																																																																																																							GlobalSection(MonoDevelopProperties) = preSolution
+																																																																																																																																																																																							GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 	EndGlobalSection
 

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 using UnityEngine.UI;
-using LitJson;
 
 public enum Assert 
 {
@@ -317,7 +316,7 @@ public class TestFramework : MonoBehaviour
 					string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ConvertToString(attr.expectedResult), Result, attr.compareType);
 					TestResultTable.Add(IfPass);
 					TestCase testResult = new TestCase(attr.title, IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
-					JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);
+					StartCoroutine(JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult));
 				}
 			}
 		}
@@ -527,13 +526,13 @@ public class TestFramework : MonoBehaviour
 		if (expectedResult.Count == 0 && JsonString.Length == 0)
 			return true;
 
-		JsonData Json = JsonMapper.ToObject (JsonString);
+		Dictionary<string, object> Json = MiniJSON.Json.Deserialize (JsonString) as Dictionary<string, object>;
 
 		for (int i = 0; i < expectedResult.Count; i++)
 		{
 			string key = expectedResult[i].ToString();
 
-			if (!Json.Keys.Contains(key))
+			if (!Json.ContainsKey(key))
 			{
 				return false;
 			}
