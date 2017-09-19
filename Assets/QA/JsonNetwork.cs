@@ -73,7 +73,7 @@ public class JsonNetwork : MonoBehaviour
 		}
 	}
 	
-	public IEnumerator PushResultToServer(string BranchInfo, TestCase testCase) 
+	public void PushResultToServer(string BranchInfo, TestCase testCase) 
 	{
 		string systemTime = System.DateTime.Now.ToString ("MMM d, yyyy");
 		string unity = Application.unityVersion.Replace ('.', ' ');
@@ -87,16 +87,18 @@ public class JsonNetwork : MonoBehaviour
 		string operatingSystem = SystemInfo.operatingSystem;
 
 		string json = "{\"Result\": \"" + result + "\",\"UnityVersion\": \"" + unityVersions + "\", \"FailReason\": \"" + failReason + "\",\"TestrailLink\": \"" + testrailLink + "\",\"operatingSystem\": \"" + operatingSystem + "\"}";
+		string url = "https://standard-event.firebaseio.com/QAReport/{0}/{1}/{2}/{3}/{4}.json";
+		url = string.Format (url, WWW.EscapeURL(systemTime), WWW.EscapeURL(BranchInfo), WWW.EscapeURL(unity), WWW.EscapeURL(systemInfo), WWW.EscapeURL(testTitle));
 
+		StartCoroutine (PUT (url, json));
+	}
+
+	private IEnumerator PUT(string url, string content)
+	{
 		var headers = new Dictionary<string, string>();
 		headers.Add("X-HTTP-Method-Override", "PUT");
 
-		string url = "https://standard-event.firebaseio.com/QAReport/{0}/{1}/{2}/{3}/{4}.json";
-		url = string.Format (url, systemTime, BranchInfo, unity, systemInfo, testTitle);
-
-		WWW www = new WWW(url, System.Text.Encoding.Default.GetBytes(json), headers);
+		WWW www = new WWW(url, System.Text.Encoding.Default.GetBytes(content), headers);
 		yield return www;
-
-		Debug.Log (json + " :" + url);
 	}
 }

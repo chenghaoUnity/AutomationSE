@@ -166,7 +166,8 @@ public class TestFramework : MonoBehaviour
 	private IEnumerator StartTest()
 	{
 		// Get the branch information.
-		string branchInfo = Resources.Load ("branchInfo").ToString ().Trim ().Replace ("/", " ").Replace(".", " ");
+		string branchInfo = Resources.Load<TextAsset> ("branchInfo").ToString();
+		branchInfo = branchInfo.Trim ().Replace ("/", " ").Replace(".", " ");
 		PushBranch (branchInfo);
 
 		// Create an instance of the TestSuite class.
@@ -316,7 +317,7 @@ public class TestFramework : MonoBehaviour
 					string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ConvertToString(attr.expectedResult), Result, attr.compareType);
 					TestResultTable.Add(IfPass);
 					TestCase testResult = new TestCase(attr.title, IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
-					StartCoroutine(JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult));
+					JsonNetwork.GetInstance ().PushResultToServer(branchInfo, testResult);
 				}
 			}
 		}
