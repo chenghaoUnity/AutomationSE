@@ -73,22 +73,21 @@ public class JsonNetwork : MonoBehaviour
 		}
 	}
 	
-	public void PushResultToServer(string BranchInfo, TestCase testCase) 
+	public void PushResultToServer(string BranchInfo, string guid, TestCase testCase) 
 	{
 		string systemTime = System.DateTime.Now.ToString ("MMM d, yyyy");
 		string unity = Application.unityVersion.Replace ('.', ' ');
-		string systemInfo = SystemInfo.operatingSystem.Replace (".", " ").Replace ("/", " ");
 		string testTitle = testCase.getDescitpion ();
 
 		string result = testCase.getResult () == true ? "Pass" : "Fail";
 		string unityVersions = Application.unityVersion;
 		string failReason = testCase.getFailReason ();
 		string testrailLink = testCase.getCaseLink ();
-		string operatingSystem = SystemInfo.operatingSystem;
+		string operatingSystem = Application.platform.ToString();
 
 		string json = "{\"Result\": \"" + result + "\",\"UnityVersion\": \"" + unityVersions + "\", \"FailReason\": \"" + failReason + "\",\"TestrailLink\": \"" + testrailLink + "\",\"operatingSystem\": \"" + operatingSystem + "\"}";
 		string url = "https://standard-event.firebaseio.com/QAReport/{0}/{1}/{2}/{3}/{4}.json";
-		url = string.Format (url, WWW.EscapeURL(systemTime), WWW.EscapeURL(BranchInfo), WWW.EscapeURL(unity), WWW.EscapeURL(systemInfo), WWW.EscapeURL(testTitle));
+		url = string.Format (url, WWW.EscapeURL(systemTime), WWW.EscapeURL(BranchInfo), WWW.EscapeURL(unity), WWW.EscapeURL(guid), WWW.EscapeURL(testTitle));
 
 		GameObject.Find ("Server").GetComponent<Text> ().text = url;
 
