@@ -318,6 +318,7 @@ public class TestFramework : MonoBehaviour
 					string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ConvertToString(attr.expectedResult), Result, attr.compareType);
 					TestResultTable.Add(IfPass);
 					TestCase testResult = new TestCase(attr.title, IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
+
 					JsonNetwork.GetInstance ().PushResultToServer(branchInfo, guid, testResult);
 				}
 			}
