@@ -397,6 +397,9 @@ public class TestFramework : MonoBehaviour
 			#endif
 		}
 
+		PushScreen ("Finish sending test result");
+		yield return new WaitForSeconds (20f);
+
 		// Remove all history from the server
 		JsonNetwork.GetInstance ().RunServerCommand ("reset", isDone =>{});
 			
