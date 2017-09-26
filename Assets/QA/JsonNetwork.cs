@@ -98,6 +98,7 @@ public class JsonNetwork : MonoBehaviour
 	{
 		var headers = new Dictionary<string, string>();
 		headers.Add("X-HTTP-Method-Override", "PUT");
+		headers.Add ("Access-Control-Allow-Origin", "*");
 
 		WWW www = new WWW(url, System.Text.Encoding.Default.GetBytes(content), headers);
 		yield return www;

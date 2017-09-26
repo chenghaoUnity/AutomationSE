@@ -77,9 +77,6 @@
      <Compile Include="Assets\Services\Analytics\Tracker\Trigger\TriggerRule.cs" />
      <Compile Include="Assets\Services\CloudBuild\BuildManifestObject.cs" />
      <None Include="Assets\Resources\branchInfo.txt" />
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>/Applications/Unity 5.2.5/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity 5.2.5/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -92,6 +89,10 @@
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity 5.2.5/Unity.app/Contents/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{7FD760A5-1DCD-AEDA-4754-A522B7972B35}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
