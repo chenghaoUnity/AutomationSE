@@ -62,6 +62,7 @@
      <Compile Include="Assets\Services\Analytics\Tracker\Trigger\Editor\TriggerListContainerDrawer.cs" />
      <Compile Include="Assets\Services\Analytics\Tracker\Trigger\Editor\TriggerRuleDrawer.cs" />
      <None Include="Assets\Resources\branchInfo.txt" />
+     <None Include="Assets\Resources\ClientID.txt" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>/Applications/Unity 5.2.5/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>

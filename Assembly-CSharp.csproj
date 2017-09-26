@@ -77,6 +77,7 @@
      <Compile Include="Assets\Services\Analytics\Tracker\Trigger\TriggerRule.cs" />
      <Compile Include="Assets\Services\CloudBuild\BuildManifestObject.cs" />
      <None Include="Assets\Resources\branchInfo.txt" />
+     <None Include="Assets\Resources\ClientID.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity 5.2.5/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
