@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Analytics.Experimental;
 using UnityEngine.Analytics;
 using System.Reflection;
 
@@ -470,14 +469,6 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, UnityVersion.Defalut, "|Standard Event| Verify level_start Event Status (Format 3)", "20858", "Ok", "TooManyRequests")]
-	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "level_start", "20858", "level_index", "0", "level_name", "level_name_server")]
-	public string level_start03()
-	{
-		var status = AnalyticsEvent.LevelStart (0, "level_name_server");
-		return status.ToString();
-	}
-
 	[CDTest(Assert.AreEquals, UnityVersion.Defalut, "|Standard Event| Verify level_complete Event Status (Format 1)", "20859", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "level_complete", "20859", "level_index", "0")]
 	public string level_complete01()
@@ -491,14 +482,6 @@ public class TestSuite
 	public string level_complete02()
 	{
 		var status = AnalyticsEvent.LevelComplete ("level_name_server");
-		return status.ToString();
-	}
-
-	[CDTest(Assert.AreEquals, UnityVersion.Defalut, "|Standard Event| Verify level_complete Event Status (Format 3)", "20859", "Ok", "TooManyRequests")]
-	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "level_complete", "20859", "level_index", "0", "level_name", "level_name_server")]
-	public string level_complete03()
-	{
-		var status = AnalyticsEvent.LevelComplete (0, "level_name_server");
 		return status.ToString();
 	}
 
@@ -518,14 +501,6 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, UnityVersion.Defalut, "|Standard Event| Verify level_fail Event Status (Format 3)", "20860", "Ok", "TooManyRequests")]
-	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "level_fail", "20860", "level_index", "0", "level_name", "level_name_server")]
-	public string level_fail03()
-	{
-		var status = AnalyticsEvent.LevelFail (0, "level_name_server");
-		return status.ToString();
-	}
-
 	[CDTest(Assert.AreEquals, UnityVersion.Defalut, "|Standard Event| Verify level_quit Event Status (Format 1)", "20861", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "level_quit", "20861", "level_index", "0")]
 	public string level_quit01()
@@ -541,15 +516,7 @@ public class TestSuite
 		var status = AnalyticsEvent.LevelQuit ("level_name_server");
 		return status.ToString();
 	}
-
-	[CDTest(Assert.AreEquals, UnityVersion.Defalut, "|Standard Event| Verify level_quit Event Status (Format 3)", "20861", "Ok", "TooManyRequests")]
-	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "level_quit", "20861", "level_index", "0", "level_name", "level_name_server")]
-	public string level_quit03()
-	{
-		var status = AnalyticsEvent.LevelQuit (0, "level_name_server");
-		return status.ToString();
-	}
-
+	
 	[CDTest(Assert.AreEquals, UnityVersion.Defalut, "|Standard Event| Verify level_skip Event Status (Format 1)", "20862", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "level_skip", "20862", "level_index", "0")]
 	public string level_skip01()
@@ -566,27 +533,11 @@ public class TestSuite
 		return status.ToString();
 	}
 
-	[CDTest(Assert.AreEquals, UnityVersion.Defalut, "|Standard Event| Verify level_skip Event Status (Format 3)", "20862", "Ok", "TooManyRequests")]
-	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "level_skip", "20862", "level_index", "0", "level_name", "level_name_server")]
-	public string level_skip03()
-	{
-		var status = AnalyticsEvent.LevelSkip (0, "level_name_server");
-		return status.ToString();
-	}
-
 	[CDTest(Assert.AreEquals, UnityVersion.Defalut, "|Standard Event| Verify level_up Event Status (Format 1)", "20863", "Ok", "TooManyRequests")]
 	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "level_up", "20863", "new_level_name", "new_level_name_server")]
 	public string level_up01()
 	{
 		var status = AnalyticsEvent.LevelUp ("new_level_name_server");
-		return status.ToString();
-	}
-
-	[CDTest(Assert.AreEquals, UnityVersion.Defalut, "|Standard Event| Verify level_up Event Status (Format 2)", "20863", "Ok", "TooManyRequests")]
-	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "level_up", "20863", "new_level_index", "1", "new_level_name", "new_level_name_server")]
-	public string level_up02()
-	{
-		var status = AnalyticsEvent.LevelUp (1, "new_level_name_server");
 		return status.ToString();
 	}
 
@@ -807,10 +758,10 @@ public class TestSuite
 	}
 
 	[CDTest(Assert.AreEquals, UnityVersion.Defalut, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork Weibo)", "20871", "Ok", "TooManyRequests")]
-	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "social_share_accept", "20871", "share_type", "invite", "social_network", "weibo")]
+	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "social_share_accept", "20871", "share_type", "invite", "social_network", "sinaweibo")]
 	public string social_share_accept11()
 	{
-		var status = AnalyticsEvent.SocialShareAccept (ShareType.Invite, SocialNetwork.Weibo);
+		var status = AnalyticsEvent.SocialShareAccept (ShareType.Invite, SocialNetwork.SinaWeibo);
 		return status.ToString();
 	}
 

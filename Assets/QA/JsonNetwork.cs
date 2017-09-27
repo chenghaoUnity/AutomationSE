@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.IO;
-using UnityEngine.Analytics.Experimental;
 using System;
 using UnityEngine.Networking;
 
