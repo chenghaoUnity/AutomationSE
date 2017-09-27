@@ -63,7 +63,7 @@ namespace UnityEngine.Analytics.Experimental.Tracker
 
         public string name
         {
-            get { return m_Name; }
+            get { return m_Name.Trim(); }
         }
 
         public object value

@@ -18,7 +18,7 @@ namespace UnityEngine.Analytics.Experimental
     /// </remarks>
     public static class AnalyticsEvent
     {
-        static readonly string k_SdkVersion = "0.3.0";
+        static readonly string k_SdkVersion = "0.4.0";
 
         static readonly string k_ErrorFormat_RequiredParamNotSet = "Required param not set ({0}).";
 

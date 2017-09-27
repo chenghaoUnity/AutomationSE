@@ -204,6 +204,12 @@ namespace UnityEngine.Analytics.Experimental.Tracker
                 return;
 
             int index = Array.IndexOf (eventTypes, eventType);
+
+            if (index < 0 || index >= EventPayloads.s_EventTypes.Length)
+            {
+                return;
+            }
+
             Type t = EventPayloads.s_EventTypes [index];
             if (t != null)
             {
@@ -357,12 +363,15 @@ namespace UnityEngine.Analytics.Experimental.Tracker
                 
                 if (lineCount > 0)
                 {
-                    warningMsg = warningMsg.Trim('\n');
+                    warningMsg = warningMsg.Replace("\n", " ").Trim();
                     int oldFontSize = EditorStyles.helpBox.fontSize;
                     EditorStyles.helpBox.fontSize = 11;
 
                     rect.y += height - EditorGUIUtility.singleLineHeight / 2.0f;
-                    rect.height += (Math.Max(lineCount, 2)- 0.5f) * EditorStyles.helpBox.lineHeight;
+                    rect.yMax += EditorStyles.helpBox.CalcHeight(
+                        new GUIContent(warningMsg, EditorGUIUtility.IconContent("SpeedScale").image), 
+                        rect.width
+                    );
                     height += rect.height;
 
                     EditorGUI.HelpBox(rect, warningMsg, MessageType.Warning);

@@ -42,6 +42,9 @@ namespace UnityEngine.Analytics.Experimental.Tracker
                 state.m_ReorderableList.onReorderCallback = EndDragChild;
                 state.m_ReorderableList.onAddCallback = AddElement;
                 state.m_ReorderableList.onRemoveCallback = RemoveButton;
+#if UNITY_5_3_OR_NEWER
+                state.m_ReorderableList.elementHeightCallback = GetElementHeight;
+#endif
                 // Two standard lines with standard spacing between and extra spacing below to better separate items visually.
                 state.m_ReorderableList.elementHeight = GetElementHeight();
                 // The index should be -1 if the array size is 0.
@@ -57,6 +60,10 @@ namespace UnityEngine.Analytics.Experimental.Tracker
             return EditorGUIUtility.singleLineHeight * 2 + EditorGUIUtility.standardVerticalSpacing + kExtraSpacing;
         }
 
+        protected virtual float GetElementHeight(int index)
+        {
+            return GetElementHeight();
+        }
 
         private State RestoreState(SerializedProperty prop)
         {

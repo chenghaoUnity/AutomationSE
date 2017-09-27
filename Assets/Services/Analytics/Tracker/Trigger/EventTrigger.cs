@@ -112,7 +112,7 @@ namespace UnityEngine.Analytics.Experimental.Tracker
         public EventTrigger ()
         {
             m_Rules = new TriggerListContainer();
-            m_Rules.rules.Add(new TriggerRule());
+            //m_Rules.rules.Add(new TriggerRule());
         }
 
         public void AddRule()
@@ -126,7 +126,7 @@ namespace UnityEngine.Analytics.Experimental.Tracker
             m_Rules.rules.RemoveAt (index);
         }
 
-        public bool Test()
+        public bool Test(GameObject gameObject = null)
         {
             // If no rules, pass test.
             if (!m_ApplyRules) {
@@ -145,9 +145,20 @@ namespace UnityEngine.Analytics.Experimental.Tracker
             // Do we meet the terms of the rules?
             foreach(TriggerRule rule in m_Rules.rules)
             {
+                bool error;
+                string message;
                 count++;
-                if (rule.Test ()) {
+                if (rule.Test (out error, out message)) {
                     passCount ++;
+                }
+                else if (error)
+                {
+                    Debug.LogWarningFormat(
+                        "Event trigger rule {0}{2} is incomplete ({1}). Result is false.", 
+                        count, 
+                        message,
+                        gameObject == null ? null : string.Format(" on GameObject '{0}'", gameObject.name)
+                    );
                 }
                 switch (m_TriggerBool) {
                 case TriggerBool.All:

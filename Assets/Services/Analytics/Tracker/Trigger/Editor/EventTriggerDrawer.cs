@@ -57,11 +57,20 @@ namespace UnityEngine.Analytics.Experimental.Tracker
                 position.width,
                 EditorGUIUtility.singleLineHeight
             );
-            height += rect.height;
 
-            if (draw) {
+            if (draw)
+            {
+                var cachedWordWrap = EditorStyles.foldout.wordWrap;
+                EditorStyles.foldout.wordWrap = true;
+                EditorStyles.foldout.fixedWidth = rect.width;
+                var foldoutHeight = EditorStyles.foldout.CalcHeight(new GUIContent(triggerFoldoutText), rect.width);
+                rect.height = foldoutHeight;
                 m_IsTriggerExpanded.boolValue = EditorGUI.Foldout (rect, m_IsTriggerExpanded.boolValue, triggerFoldoutText, true);
+                EditorStyles.foldout.wordWrap = cachedWordWrap;
+                EditorStyles.foldout.fixedWidth = 0;
             }
+            
+            height += rect.height;
 
             if (m_IsTriggerExpanded.boolValue)
             {

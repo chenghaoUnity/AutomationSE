@@ -27,9 +27,9 @@ namespace UnityEngine.Analytics.Experimental.Tracker
         public override void OnInspectorGUI()
         {
             // Assume true for older versions
-            bool analyticsEnabled = true;
-            #if UNITY_5_5_OR_NEWER
-            analyticsEnabled = UnityEditor.Analytics.AnalyticsSettings.enabled;
+            var analyticsEnabled = true;
+            #if (UNITY_5_3 || UNITY_5_3_OR_NEWER) && !UNITY_ANALYTICS
+            analyticsEnabled = false;
             #endif
 
             if (analyticsEnabled) {
@@ -41,7 +41,7 @@ namespace UnityEngine.Analytics.Experimental.Tracker
                 EditorStyles.textArea.wordWrap = cachedWordWrap;
                 serializedObject.ApplyModifiedProperties ();
             } else {
-                EditorGUILayout.HelpBox ("This Component is designed to work with Unity Analytics, which is not currently enabled.\nTo enable Analytics, go to Window/Services, select Analytics and click the 'Enable Analytics' button.", MessageType.Warning);
+                EditorGUILayout.HelpBox ("This Component is designed to work with Unity Analytics, which is not currently enabled. To enable Analytics, go to Window/Services, select Analytics and click the 'Enable Analytics' button.", MessageType.Warning);
             }
         }
 

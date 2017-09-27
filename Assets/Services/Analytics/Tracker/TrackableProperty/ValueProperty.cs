@@ -64,9 +64,10 @@ namespace UnityEngine.Analytics.Experimental.Tracker
             get {
                 if (m_PropertyType == PropertyType.Dynamic && m_Target != null)
                 {
-                    return m_Target.GetValue().ToString();
+                    var value = m_Target.GetValue();
+                    return value == null ? null : value.ToString().Trim();
                 }
-                return m_Value;
+                return m_Value == null ? null : m_Value.Trim();
             }
         }
 
