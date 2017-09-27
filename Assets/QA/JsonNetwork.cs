@@ -53,7 +53,7 @@ public class JsonNetwork : MonoBehaviour
 
 	private IEnumerator PostText(string methodName, string POST, Action<string> callback) 
 	{	
-		WWW www = new WWW("https://obscure-shelf-46410.herokuapp.com/events/" + methodName, System.Text.Encoding.Default.GetBytes(POST));
+		WWW www = new WWW("https://obscure-shelf-46410.herokuapp.com/events/" + methodName, System.Text.Encoding.UTF8.GetBytes(POST));
 		yield return www;
 		
 		if (www.error == null) 
