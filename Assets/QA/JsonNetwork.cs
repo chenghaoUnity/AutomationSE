@@ -52,8 +52,11 @@ public class JsonNetwork : MonoBehaviour
 	}
 
 	private IEnumerator PostText(string methodName, string POST, Action<string> callback) 
-	{	
-		WWW www = new WWW("https://obscure-shelf-46410.herokuapp.com/events/" + methodName, System.Text.Encoding.UTF8.GetBytes(POST));
+	{
+		var headers = new Dictionary<string, string>();
+		headers.Add("content-type", "text/plain");
+
+		WWW www = new WWW("https://obscure-shelf-46410.herokuapp.com/events/" + methodName, System.Text.Encoding.UTF8.GetBytes(POST), headers);
 		yield return www;
 		
 		if (www.error == null) 
@@ -99,7 +102,7 @@ public class JsonNetwork : MonoBehaviour
 		var headers = new Dictionary<string, string>();
 		headers.Add("X-HTTP-Method-Override", "PUT");
 
-		WWW www = new WWW(url, System.Text.Encoding.Default.GetBytes(content), headers);
+		WWW www = new WWW(url, System.Text.Encoding.UTF8.GetBytes(content), headers);
 		yield return www;
 	}
 }
