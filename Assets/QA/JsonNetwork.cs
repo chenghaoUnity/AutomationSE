@@ -92,8 +92,6 @@ public class JsonNetwork : MonoBehaviour
 		string url = "https://standard-event.firebaseio.com/QAReport/{0}/{1}/{2}/{3}/{4}.json";
 		url = string.Format (url, WWW.EscapeURL(systemTime), WWW.EscapeURL(BranchInfo), WWW.EscapeURL(unity), WWW.EscapeURL(guid), WWW.EscapeURL(testTitle));
 
-		GameObject.Find ("Server").GetComponent<Text> ().text = url;
-
 		StartCoroutine (PUT (url, json));
 	}
 

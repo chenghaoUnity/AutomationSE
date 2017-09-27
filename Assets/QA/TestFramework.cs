@@ -170,6 +170,10 @@ public class TestFramework : MonoBehaviour
 		string ClientID = Resources.Load<TextAsset> ("ClientID").ToString();
 
 		branchInfo = branchInfo.Trim ().Replace ("/", " ").Replace(".", " ");
+		ClientID = ClientID.Trim ();
+
+		GameObject.Find ("Server").GetComponent<Text> ().text = string.Format ("guid:|{0}|", ClientID);
+
 		PushBranch (branchInfo);
 
 		// Create an instance of the TestSuite class.

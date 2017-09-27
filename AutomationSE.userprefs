@@ -1,9 +1,10 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QA/JsonNetwork.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Resources/ClientID.txt">
     <Files>
       <File FileName="Assets/QA/JsonNetwork.cs" Line="57" Column="42" />
       <File FileName="Assets/QA/TestFramework.cs" Line="1" Column="1" />
+      <File FileName="Assets/Resources/ClientID.txt" Line="1" Column="10" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
