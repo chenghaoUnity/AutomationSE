@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Analytics;
+using UnityEngine.Analytics.Experimental;
 using System.Reflection;
 
 public class TestSuite
@@ -758,10 +759,10 @@ public class TestSuite
 	}
 
 	[CDTest(Assert.AreEquals, UnityVersion.Defalut, "|Standard Event| Verify social_share_accept Event Status (SocialNetwork Weibo)", "20871", "Ok", "TooManyRequests")]
-	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "social_share_accept", "20871", "share_type", "invite", "social_network", "sinaweibo")]
+	[CDTest(Assert.EventPayload, UnityVersion.Defalut, "social_share_accept", "20871", "share_type", "invite", "social_network", "weibo")]
 	public string social_share_accept11()
 	{
-		var status = AnalyticsEvent.SocialShareAccept (ShareType.Invite, SocialNetwork.SinaWeibo);
+		var status = AnalyticsEvent.SocialShareAccept (ShareType.Invite, SocialNetwork.Weibo);
 		return status.ToString();
 	}
 
