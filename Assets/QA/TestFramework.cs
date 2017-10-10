@@ -405,7 +405,7 @@ public class TestFramework : MonoBehaviour
 		yield return new WaitForSeconds (20f);
 
 		// Remove all history from the server
-		JsonNetwork.GetInstance ().PostServerCommand ("finish", ClientID, isDone => {Debug.Log(isDone);});
+		JsonNetwork.GetInstance ().PostServerCommand ("finish", string.Format("{0}:{1}:{2}", ClientID, TestResultTable.FindAll(PassTest).Count, TestResultTable.Count), isDone => {Debug.Log(isDone);});
 			
 		// Shut down in 5 seconds after test run.
 		for (int i = 5; i > 0; i--) 
