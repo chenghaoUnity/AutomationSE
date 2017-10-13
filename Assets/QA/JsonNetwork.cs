@@ -102,4 +102,31 @@ public class JsonNetwork : MonoBehaviour
 		WWW www = new WWW(url, System.Text.Encoding.UTF8.GetBytes(content), headers);
 		yield return www;
 	}
+
+	//================================
+	//hacking to work with new backend
+	//================================
+	public Boolean RegisterDevice(String deviceId) {
+		var headers = new Dictionary<string, string>();
+		WWW www = new WWW("http://localhost:8080/admin/register-device?device=" + deviceId);
+		yield return www;
+
+		if (www.error == null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public Boolean UnRegisterDevice(String deviceId) {
+		var headers = new Dictionary<string, string>();
+		WWW www = new WWW("http://localhost:8080/admin/unregister-device?device=" + deviceId);
+		yield return www;
+
+		if (www.error == null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

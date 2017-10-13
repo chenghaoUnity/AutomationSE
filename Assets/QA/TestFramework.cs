@@ -198,10 +198,12 @@ public class TestFramework : MonoBehaviour
 		{
 			bool callbackCompleted = false;
 			
-			JsonNetwork.GetInstance ().PostServerCommand ("request", ClientID, callback => {
-				serverResult = callback;
-				callbackCompleted = true;
-			});
+			//JsonNetwork.GetInstance ().PostServerCommand ("request", ClientID, callback => {
+			//	serverResult = callback;
+			//	callbackCompleted = true;
+			//});
+
+			serverResult = JsonNetwork.GetInstance ().RegisterDevice ("9E135C84-03E2-5925-8529-EFFEBF00BD1D");
 			
 			while (!callbackCompleted)
 			{
