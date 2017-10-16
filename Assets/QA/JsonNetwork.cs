@@ -106,27 +106,22 @@ public class JsonNetwork : MonoBehaviour
 	//================================
 	//hacking to work with new backend
 	//================================
-	public Boolean RegisterDevice(String deviceId) {
-		var headers = new Dictionary<string, string>();
-		WWW www = new WWW("http://localhost:8080/admin/register-device?device=" + deviceId);
-		yield return www;
-
-		if (www.error == null) {
-			return true;
-		} else {
-			return false;
-		}
+	public IEnumerator RegisterDevice(string deviceId, Action<string> callback) {
+		return sendGetRequest ("http://localhost:8080/admin/register-device?device=" + deviceId, callback);
 	}
 
-	public Boolean UnRegisterDevice(String deviceId) {
-		var headers = new Dictionary<string, string>();
-		WWW www = new WWW("http://localhost:8080/admin/unregister-device?device=" + deviceId);
+	public IEnumerator UnRegisterDevice(String deviceId, Action<string> callback) {
+		return sendGetRequest ("http://localhost:8080/admin/unregister-device?device=" + deviceId, callback);
+	}
+
+	private IEnumerator sendGetRequest(String url, Action<string> callback) {
+		WWW www = new WWW(url);
 		yield return www;
 
 		if (www.error == null) {
-			return true;
+			callback (www.text);
 		} else {
-			return false;
+			callback(www.error);
 		}
 	}
 }
