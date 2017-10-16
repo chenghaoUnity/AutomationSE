@@ -203,7 +203,7 @@ public class TestFramework : MonoBehaviour
 			//	callbackCompleted = true;
 			//});
 
-			serverResult = JsonNetwork.GetInstance ().RegisterDevice ("9E135C84-03E2-5925-8529-EFFEBF00BD1D", callback => {
+			JsonNetwork.GetInstance ().RegisterDevice ("9E135C84-03E2-5925-8529-EFFEBF00BD1D", callback => {
 				serverResult = callback;
 				callbackCompleted = true;
 			});

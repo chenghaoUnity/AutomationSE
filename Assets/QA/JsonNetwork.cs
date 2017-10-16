@@ -110,7 +110,7 @@ public class JsonNetwork : MonoBehaviour
 		return sendGetRequest ("http://localhost:8080/admin/register-device?device=" + deviceId, callback);
 	}
 
-	public IEnumerator UnRegisterDevice(String deviceId, Action<string> callback) {
+	public IEnumerator UnRegisterDevice(string deviceId, Action<string> callback) {
 		return sendGetRequest ("http://localhost:8080/admin/unregister-device?device=" + deviceId, callback);
 	}
 
