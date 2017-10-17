@@ -155,6 +155,9 @@ public class CDTest : Attribute
 
 public class TestFramework : MonoBehaviour
 {
+
+
+
 	public void Start()
 	{
 		StartCoroutine(StartTest());
@@ -198,15 +201,15 @@ public class TestFramework : MonoBehaviour
 		{
 			bool callbackCompleted = false;
 			
-			//JsonNetwork.GetInstance ().PostServerCommand ("request", ClientID, callback => {
-			//	serverResult = callback;
-			//	callbackCompleted = true;
-			//});
-
-			JsonNetwork.GetInstance ().RegisterDevice ("9E135C84-03E2-5925-8529-EFFEBF00BD1D", callback => {
+			JsonNetwork.GetInstance ().PostServerCommand ("request", ClientID, callback => {
 				serverResult = callback;
 				callbackCompleted = true;
 			});
+
+//			JsonNetwork.GetInstance ().RegisterDevice ("9E135C84-03E2-5925-8529-EFFEBF00BD1D", callback => {
+//				serverResult = callback;
+//				callbackCompleted = true;
+//			});
 			
 			while (!callbackCompleted)
 			{
@@ -395,6 +398,8 @@ public class TestFramework : MonoBehaviour
 				if (timer < 5f)
 				{
 					IfPass = VerifyServerPayload(serverResult, attr.expectedResult);
+				} else {
+					Debug.Log("Hit timeout");
 				}
 
 				string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ConvertToString(attr.expectedResult), serverResult, attr.compareType);
@@ -411,6 +416,9 @@ public class TestFramework : MonoBehaviour
 
 		// Remove all history from the server
 		JsonNetwork.GetInstance ().PostServerCommand ("finish", string.Format("{0}:{1}:{2}", ClientID, TestResultTable.FindAll(PassTest).Count, TestResultTable.Count), isDone => {Debug.Log(isDone);});
+//		JsonNetwork.GetInstance ().UnRegisterDevice ("9E135C84-03E2-5925-8529-EFFEBF00BD1D", callback => {
+//			serverResult = callback;
+//		});
 			
 		// Shut down in 5 seconds after test run.
 		for (int i = 5; i > 0; i--) 

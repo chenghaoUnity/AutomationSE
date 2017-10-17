@@ -30,7 +30,7 @@ public class JsonNetwork : MonoBehaviour
 
 	private IEnumerator GetText(string methodName, Action<string> callback) 
 	{	
-		WWW www = new WWW("https://obscure-shelf-46410.herokuapp.com/events/" + methodName);
+		WWW www = new WWW("http://localhost:9000/events/" + methodName);
 		yield return www;
 
 		if (www.error == null) 
@@ -55,7 +55,7 @@ public class JsonNetwork : MonoBehaviour
 		var headers = new Dictionary<string, string>();
 		headers.Add("content-type", "text/plain");
 
-		WWW www = new WWW("https://obscure-shelf-46410.herokuapp.com/events/" + methodName, System.Text.Encoding.UTF8.GetBytes(POST), headers);
+		WWW www = new WWW("http://localhost:9000/events/" + methodName, System.Text.Encoding.UTF8.GetBytes(POST), headers);
 		yield return www;
 		
 		if (www.error == null) 
@@ -106,12 +106,12 @@ public class JsonNetwork : MonoBehaviour
 	//================================
 	//hacking to work with new backend
 	//================================
-	public IEnumerator RegisterDevice(string deviceId, Action<string> callback) {
-		return sendGetRequest ("http://localhost:8080/admin/register-device?device=" + deviceId, callback);
+	public void RegisterDevice(string deviceId, Action<string> callback) {
+		StartCoroutine(sendGetRequest ("http://localhost:9000/admin/register-device?device=" + deviceId, callback));
 	}
 
-	public IEnumerator UnRegisterDevice(string deviceId, Action<string> callback) {
-		return sendGetRequest ("http://localhost:8080/admin/unregister-device?device=" + deviceId, callback);
+	public void UnRegisterDevice(string deviceId, Action<string> callback) {
+		StartCoroutine(sendGetRequest ("http://localhost:9000/admin/unregister-device?device=" + deviceId, callback));
 	}
 
 	private IEnumerator sendGetRequest(String url, Action<string> callback) {
