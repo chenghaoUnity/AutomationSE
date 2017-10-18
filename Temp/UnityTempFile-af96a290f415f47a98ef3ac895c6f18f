@@ -72,6 +72,7 @@
 -define:UNITY_TEAM_LICENSE
 -define:UNITY_PRO_LICENSE
 'Assets/QA/JsonNetwork.cs'
+'Assets/QA/RemoteSettingsTest.cs'
 'Assets/QA/TestCase.cs'
 'Assets/QA/TestFramework.cs'
 'Assets/QA/TestSuite.cs'

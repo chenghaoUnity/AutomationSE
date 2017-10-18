@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\QA\JsonNetwork.cs" />
+     <Compile Include="Assets\QA\RemoteSettingsTest.cs" />
      <Compile Include="Assets\QA\TestCase.cs" />
      <Compile Include="Assets\QA\TestFramework.cs" />
      <Compile Include="Assets\QA\TestSuite.cs" />

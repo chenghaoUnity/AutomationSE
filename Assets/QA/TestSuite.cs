@@ -46,61 +46,55 @@ public class TestSuite
 	[CDTest(Assert.DoThrowException, UnityVersion.Unity55_above, "|ABPlugin| Should Throw Exception With Invalid Percentages", "20660", typeof(InvalidOperationException))]
 	public void ShouldThrowExceptionWithInvalidPercentages()
 	{
-		Type type = typeof(ABTestingWrapper);
-		FieldInfo bucket = type.GetField("PlayerBucket", BindingFlags.NonPublic | BindingFlags.Static);
-		bucket.SetValue(null, "");
-		FieldInfo percentA = type.GetField("percentage_a", BindingFlags.NonPublic | BindingFlags.Static);
-		percentA.SetValue(null, 78);
-		FieldInfo percentB = type.GetField("percentage_b", BindingFlags.NonPublic | BindingFlags.Static);
-		percentB.SetValue(null, 4453);
-
-		ABTestingWrapper.GetString ("player_clan", "Not_Found");
+		Debug.Log(ABTestingWrapper.GetString ("player_clan", "Not_Found"));
 	}
 
-	[CDTest(Assert.LessOREquals, UnityVersion.Unity55_above, "|ABPlugin| Should Assign Buckets Based On Percentages", "20660", 0.01f)]
-	public float ShouldAssignBucketsBasedOnPercentages()
-	{
-		Type type = typeof(ABTestingWrapper);
-		FieldInfo bucket = type.GetField("PlayerBucket", BindingFlags.NonPublic | BindingFlags.Static);
-		bucket.SetValue(null, "");
-		FieldInfo percentA = type.GetField("percentage_a", BindingFlags.NonPublic | BindingFlags.Static);
-		percentA.SetValue(null, 0.25f);
-		FieldInfo percentB = type.GetField("percentage_b", BindingFlags.NonPublic | BindingFlags.Static);
-		percentB.SetValue(null, 0.25f);
-
-		int countA = 0;
-		int countB = 0;
-		int countC = 0;
-		int runs = 10000;
-
-		for (int i = 0; i < runs; i++)
-		{
-			bucket.SetValue(null, "");
-			string result = ABTestingWrapper.GetString("player_clan", "Not_Found");
-
-			if (result.Contains("super_a_clan")) 
-			{
-				countA++;
-			} 
-			else if (result.Contains("super_b_clan"))
-			{
-				countB++;
-			} 
-			else 
-			{
-				countC++;
-			}
-		}
-
-		float percentCountA = ((float)countA / (float)runs);
-		float differenceA = Math.Abs(0.25f - (float)Math.Round(percentCountA, 2));
-
-		float percentCountB = ((float)countB / (float)runs);
-		float differenceB = Math.Abs(0.25f - (float)Math.Round(percentCountB, 2));
-
-		float percentCountC = ((float)countC / (float)runs);
-		float differenceC = Math.Abs(0.5f - (float)Math.Round(percentCountC, 2));
-
-		return differenceA + differenceB + differenceC;
-	}
+//	[CDTest(Assert.AreEquals, UnityVersion.Unity55_above, "|ABPlugin| Should Assign Buckets Based On Percentages  (Case1)", "20660", 0.25f)]
+//	public float ShouldAssignBucketsBasedOnPercentagesA()
+//	{
+//		float precentageA = 0.25f;
+//		float precentageB = 0.25f;
+//
+//		Type type = typeof(ABTestingWrapper);
+//		FieldInfo bucket = type.GetField("PlayerBucket", BindingFlags.NonPublic | BindingFlags.Static);
+//		bucket.SetValue(null, "");
+//		FieldInfo percentA = type.GetField("percentage_a", BindingFlags.NonPublic | BindingFlags.Static);
+//		percentA.SetValue(null, precentageA);
+//		FieldInfo percentB = type.GetField("percentage_b", BindingFlags.NonPublic | BindingFlags.Static);
+//		percentB.SetValue(null, precentageB);
+//
+//		int countA = 0;
+//		int countB = 0;
+//		int countC = 0;
+//		int runs = 10000;
+//
+//		for (int i = 0; i < runs; i++)
+//		{
+//			bucket.SetValue(null, "");
+//			string result = ABTestingWrapper.GetString("player_clan", "Not_Found");
+//
+//			if (result.Contains("super_a_clan")) 
+//			{
+//				countA++;
+//			} 
+//			else if (result.Contains("super_b_clan"))
+//			{
+//				countB++;
+//			} 
+//			else 
+//			{
+//				countC++;
+//			}
+//		}
+//
+//		float percentCountA = (float) Math.Round(((float)countA / (float)runs), 2);
+//		float percentCountB = (float) Math.Round(((float)countB / (float)runs), 2);
+//		float percentCountC = (float) Math.Round(((float)countC / (float)runs), 2);
+//
+//		Debug.Log (percentCountA);
+//		Debug.Log (percentCountB);
+//		Debug.Log (percentCountC);
+//
+//		return percentCountA;
+//	}
 }

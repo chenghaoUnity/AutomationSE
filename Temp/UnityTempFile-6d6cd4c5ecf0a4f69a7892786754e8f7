@@ -2,8 +2,9 @@
 -target:library
 -nowarn:0169
 -langversion:4
--out:'Temp/Assembly-CSharp-firstpass.dll'
+-out:'Temp/Assembly-CSharp.dll'
 -r:'/Applications/Unity 5.5.2f1/Unity.app/Contents/Managed/UnityEngine.dll'
+-r:'Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll'
 -r:'/Applications/Unity 5.5.2f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll'
 -r:'/Applications/Unity 5.5.2f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll'
 -r:'/Applications/Unity 5.5.2f1/Unity.app/Contents/UnityExtensions/Unity/PlaymodeTestsRunner/UnityEngine.PlaymodeTestsRunner.dll'
@@ -70,8 +71,11 @@
 -define:UNITY_EDITOR_OSX
 -define:UNITY_TEAM_LICENSE
 -define:UNITY_PRO_LICENSE
-'Assets/Plugins/ABTesting/ABTestingWrapper.cs'
-'Assets/Plugins/MiniJSON.cs'
+'Assets/QA/JsonNetwork.cs'
+'Assets/QA/RemoteSettingsTest.cs'
+'Assets/QA/TestCase.cs'
+'Assets/QA/TestFramework.cs'
+'Assets/QA/TestSuite.cs'
 -r:'/Applications/Unity 5.5.2f1/Unity.app/Contents/MonoBleedingEdge/lib/mono/2.0-api/System.Runtime.Serialization.dll'
 -r:'/Applications/Unity 5.5.2f1/Unity.app/Contents/MonoBleedingEdge/lib/mono/2.0-api/System.Xml.Linq.dll'
 -r:'/Applications/Unity 5.5.2f1/Unity.app/Contents/MonoBleedingEdge/lib/mono/2.0-api/UnityScript.dll'
