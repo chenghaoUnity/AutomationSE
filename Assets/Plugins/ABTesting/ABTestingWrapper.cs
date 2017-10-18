@@ -145,6 +145,7 @@ public static class ABTestingWrapper
             percentage_a = 0.0f;
             percentage_b = 0.0f;
             percentage_default = 1.0f;
+			Debug.Log ("thowing!!!");
             throw new InvalidOperationException("Invalid percentage_a and percentage_b values");
         }
         else
@@ -182,11 +183,18 @@ public static class ABTestingWrapper
     // Validates if sum of double1 + double2 values OR individual values are less than 0d or greater than 1d.
     private static bool AreNotValidPercentages(double double1, double double2)
     {
+		Debug.Log ("double1: " + double1 + " double2: " + double2);
+		Debug.Log("111111 " + (Math.Abs(double1 + double2) < doubleZero));
+		Debug.Log("2222: " + (Math.Abs(double1 + double2) > doubleOne));
+		Debug.Log("33333: " +  (Math.Abs(double1) < doubleZero));
+		Debug.Log("44444: " + (Math.Abs(double2) < 0f));
+		Debug.Log("555555: " + (Math.Abs(double1) > doubleOne));
+		Debug.Log("666666: " + (Math.Abs(double2) > doubleOne));
         // Using a hard coded value instead of Epsilon due to a precision error when getting the target value.
         // For instance, the target value property of 2.3 is actually 2.29999995231628
         return (
                  (Math.Abs(double1 + double2) < doubleZero) || (Math.Abs(double1 + double2) > doubleOne) ||
-                 (Math.Abs(double1) < doubleZero) || (Math.Abs(double2) < doubleZero) ||
+                 (Math.Abs(double1) < doubleZero) || (Math.Abs(double2) < 0f) ||
                  (Math.Abs(double1) > doubleOne) || (Math.Abs(double2) > doubleOne)
                );
 

@@ -254,6 +254,9 @@ public class TestFramework : MonoBehaviour
 					}
 					catch (Exception e)
 					{
+
+						Debug.Log ("Exception catched: " + e);
+
 						HasException = true;
 						Result = e;
 
