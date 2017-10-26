@@ -157,7 +157,18 @@ public class TestFramework : MonoBehaviour
 {
 	public void Start()
 	{
-		StartCoroutine(StartTest());
+		Debug.Log("Initilizing");
+		RemoteSettingsFake.Initilize (isDone => {
+			Debug.Log("Initilized");
+			RemoteSettingsFake.SetString("fake_string", "string");
+			RemoteSettingsFake.SetBool("fake_bool", true);
+			RemoteSettingsFake.SetFloat("fake_float", 2.0f);
+			RemoteSettingsFake.SetInt("fake_int", 6);
+			RemoteSettingsFake.Save();
+
+		});
+
+		// StartCoroutine(StartTest());
 	}
 	
 	/// <summary>
@@ -557,3 +568,72 @@ public class TestFramework : MonoBehaviour
 		return true;
 	}
 }
+
+public class RemoteSettingsFake
+{
+	static Dictionary<string, object> hashmap;
+
+	public static void Initilize(Action<bool> isDone)
+	{
+		hashmap = new Dictionary<string, object>();
+		JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings/initilize", "", callback => {isDone(true);});
+	}
+
+	public static void SetString(string key, string value)
+	{
+		hashmap [key] = value;
+	}
+
+	public static void SetFloat(string key, float value)
+	{
+		hashmap [key] = value;
+	}
+
+	public static void SetInt(string key, int value)
+	{
+		hashmap [key] = value;
+	}
+
+	public static void SetBool(string key, bool value)
+	{
+		hashmap [key] = value;
+	}
+
+	public static void Save()
+	{
+		foreach (string key in hashmap.Keys) 
+		{
+			string postContent = "";
+			postContent += key + "&&";
+
+			if (hashmap[key].GetType() == typeof(int))
+			{
+				postContent += "Int" + "&&";
+			}
+			else if (hashmap[key].GetType() == typeof(float))
+			{
+				postContent += "Float" + "&&";
+			}
+			else if (hashmap[key].GetType() == typeof(string))
+			{
+				postContent += "String" + "&&";
+			}
+			else if (hashmap[key].GetType() == typeof(bool))
+			{
+				postContent += "Bool" + "&&";
+			}
+			else
+			{
+				continue;
+			}
+
+			postContent += hashmap[key];
+
+			JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings", postContent, callback => {Debug.Log("done");});
+		}
+	}
+}
+
+
+
+

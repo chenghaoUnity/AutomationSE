@@ -1,13 +1,9 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Services/Analytics/Tracker/AnalyticsEventTracker.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QA/TestSuite.cs">
     <Files>
-      <File FileName="Assets/QA/JsonNetwork.cs" Line="6" Column="17" />
-      <File FileName="Assets/QA/TestFramework.cs" Line="193" Column="1" />
-      <File FileName="Assets/Resources/ClientID.txt" Line="1" Column="1" />
-      <File FileName="Assets/QA/TestSuite.cs" Line="548" Column="27" />
-      <File FileName="Assets/Services/Analytics/Tracker/AnalyticsEventTrackerSettings.cs" Line="1" Column="1" />
-      <File FileName="Assets/Services/Analytics/Tracker/AnalyticsEventTracker.cs" Line="12" Column="25" />
+      <File FileName="Assets/QA/TestSuite.cs" Line="778" Column="37" />
+      <File FileName="Assets/QA/TestFramework.cs" Line="335" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
