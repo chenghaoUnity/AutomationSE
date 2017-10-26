@@ -631,6 +631,10 @@ public class RemoteSettingsFake
 
 			JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings", postContent, callback => {Debug.Log("done");});
 		}
+
+#if UNITY_2017_1_OR_NEWER
+		RemoteSettings.ForceUpdate ();
+#endif
 	}
 }
 
