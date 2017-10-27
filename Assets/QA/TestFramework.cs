@@ -599,6 +599,11 @@ public class RemoteSettingsFake
 		hashmap [key] = value;
 	}
 
+	public static void RemoveKey(string key)
+	{
+		JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings/" + key, "", callback => {});
+	}
+
 	public static void Save()
 	{
 		foreach (string key in hashmap.Keys) 
@@ -629,7 +634,7 @@ public class RemoteSettingsFake
 
 			postContent += hashmap[key];
 
-			JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings", postContent, callback => {Debug.Log("done");});
+			JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings", postContent, callback => {});
 		}
 
 #if UNITY_2017_1_OR_NEWER
