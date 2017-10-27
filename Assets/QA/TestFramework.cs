@@ -18,16 +18,6 @@ public enum Assert
 	EventPayload
 }
 
-public enum UnityVersion
-{
-	Defalut,
-	Unity52_above,
-	Unity53_above,
-	Unity54_above,
-	Unity55_above,
-	Unity56_above,
-}
-
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public class CDTest : Attribute   
 {
@@ -35,7 +25,6 @@ public class CDTest : Attribute
 	public string title;
 	public List<object> expectedResult = new List<object> ();
 	public string testrail_CaseNumber;
-	public UnityVersion unityVersion;
 
 	/// <summary>
 	/// CDTest custom attribute. 
@@ -47,12 +36,11 @@ public class CDTest : Attribute
 	/// <param name="Title">The title of the test.</param>
 	/// <param name="Testrail_CaseNumber">The case number in the http://qatestrail.hq.unity3d.com/</param>
 	/// <param name="Expected_Result">Expected return value(s), which are used for comparing with the true return value(s).</param>
-	public CDTest(Assert compareType, UnityVersion unityVersion, string title, string testrail_CaseNumber, params string[] Result)  
+	public CDTest(Assert compareType, string title, string testrail_CaseNumber, params string[] Result)  
 	{
 		this.compareType = compareType;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
-		this.unityVersion = unityVersion;
 
 		foreach (string value in Result) 
 		{
@@ -70,12 +58,11 @@ public class CDTest : Attribute
 	/// <param name="Title">The title of the test.</param>
 	/// <param name="Testrail_CaseNumber">The case number in the http://qatestrail.hq.unity3d.com/</param>
 	/// <param name="Expected_Result">Expected return value(s), which are used for comparing with the true return value(s).</param>
-	public CDTest(Assert compareType, UnityVersion unityVersion, string title, string testrail_CaseNumber, params int[] Result)  
+	public CDTest(Assert compareType, string title, string testrail_CaseNumber, params int[] Result)  
 	{
 		this.compareType = compareType;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
-		this.unityVersion = unityVersion;
 		
 		foreach (int value in Result) 
 		{
@@ -93,12 +80,11 @@ public class CDTest : Attribute
 	/// <param name="Title">The title of the test.</param>
 	/// <param name="Testrail_CaseNumber">The case number in the http://qatestrail.hq.unity3d.com/</param>
 	/// <param name="Expected_Result">Expected return value(s), which are used for comparing with the true return value(s).</param>
-	public CDTest(Assert compareType, UnityVersion unityVersion, string title, string testrail_CaseNumber, params float[] Result)  
+	public CDTest(Assert compareType, string title, string testrail_CaseNumber, params float[] Result)  
 	{
 		this.compareType = compareType;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
-		this.unityVersion = unityVersion;
 		
 		foreach (float value in Result) 
 		{
@@ -116,12 +102,11 @@ public class CDTest : Attribute
 	/// <param name="Title">The title of the test.</param>
 	/// <param name="Testrail_CaseNumber">The case number in the http://qatestrail.hq.unity3d.com/</param>
 	/// <param name="Expected_Result">Expected return value(s), which are used for comparing with the true return value(s).</param>
-	public CDTest(Assert compareType, UnityVersion unityVersion, string title, string testrail_CaseNumber, params bool[] Result)  
+	public CDTest(Assert compareType, string title, string testrail_CaseNumber, params bool[] Result)  
 	{
 		this.compareType = compareType;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
-		this.unityVersion = unityVersion;
 		
 		foreach (bool value in Result) 
 		{
@@ -139,12 +124,11 @@ public class CDTest : Attribute
 	/// <param name="Title">The title of the test.</param>
 	/// <param name="Testrail_CaseNumber">The case number in the http://qatestrail.hq.unity3d.com/</param>
 	/// <param name="Expected_Result">Expected return value(s), which are used for comparing with the true return value(s).</param>
-	public CDTest(Assert compareType, UnityVersion unityVersion, string title, string testrail_CaseNumber, params Type[] Result)  
+	public CDTest(Assert compareType, string title, string testrail_CaseNumber, params Type[] Result)  
 	{
 		this.compareType = Assert.DoThrowException;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
-		this.unityVersion = unityVersion;
 		
 		foreach (Type value in Result) 
 		{
@@ -164,8 +148,9 @@ public class TestFramework : MonoBehaviour
 			RemoteSettingsFake.SetBool("fake_bool", true);
 			RemoteSettingsFake.SetFloat("fake_float", 2.0f);
 			RemoteSettingsFake.SetInt("fake_int", 6);
-			RemoteSettingsFake.Save();
-
+			RemoteSettingsFake.Save(isDone2 => {
+				
+			});
 		});
 
 		// StartCoroutine(StartTest());
@@ -238,12 +223,6 @@ public class TestFramework : MonoBehaviour
 			{
 				if (attr != null)
 				{
-					// Check if user enter the min version of unity, 
-					// and see if the cur unity meets it, if not, skip this method
-					if (attr.unityVersion != UnityVersion.Defalut && !isCurrentUnityVersionSupported (attr.unityVersion)) {
-						break;
-					}
-
 					// If the type if eventPayload, save it later
 					if (attr.compareType == Assert.EventPayload) 
 					{
@@ -455,65 +434,7 @@ public class TestFramework : MonoBehaviour
 
 		return converted;
 	}
-
-	/// <summary>
-	/// Check if the current system is supported
-	/// </summary>
-	private bool isCurrentUnityVersionSupported (UnityVersion version)
-	{
-		if (version == UnityVersion.Defalut) 
-		{
-			return true;
-		}
-
-		if (version == UnityVersion.Unity52_above) 
-		{
-			#if UNITY_5_2_OR_NEWER
-			return true;
-			#else
-			return false;
-			#endif
-		}
-
-		if (version == UnityVersion.Unity53_above) 
-		{
-			#if UNITY_5_3_OR_NEWER
-			return true;
-			#else
-			return false;
-			#endif
-		}
-
-		if (version == UnityVersion.Unity54_above) 
-		{
-			#if UNITY_5_4_OR_NEWER
-			return true;
-			#else
-			return false;
-			#endif
-		}
-
-		if (version == UnityVersion.Unity55_above) 
-		{
-			#if UNITY_5_5_OR_NEWER
-			return true;
-			#else
-			return false;
-			#endif
-		}
-
-		if (version == UnityVersion.Unity56_above) 
-		{
-			#if UNITY_5_6_OR_NEWER
-			return true;
-			#else
-			return false;
-			#endif
-		}
-
-		return false;
-	}
-
+		
 	/// <summary>
 	/// Show branchInfo to the UI.
 	/// </summary>
@@ -576,7 +497,7 @@ public class RemoteSettingsFake
 	public static void Initilize(Action<bool> isDone)
 	{
 		hashmap = new Dictionary<string, object>();
-		JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings/initilize", "", callback => {isDone(true);});
+		JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings/initilize", "initilize", callback => {isDone(true);});
 	}
 
 	public static void SetString(string key, string value)
@@ -601,14 +522,15 @@ public class RemoteSettingsFake
 
 	public static void RemoveKey(string key)
 	{
-		JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings/" + key, "", callback => {});
+		JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings/remove", key, callback => {});
 	}
 
-	public static void Save()
+	public static void Save(Action<bool> isDone)
 	{
+		string postContent = "";
+		
 		foreach (string key in hashmap.Keys) 
 		{
-			string postContent = "";
 			postContent += key + "&&";
 
 			if (hashmap[key].GetType() == typeof(int))
@@ -632,14 +554,16 @@ public class RemoteSettingsFake
 				continue;
 			}
 
-			postContent += hashmap[key];
-
-			JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings", postContent, callback => {});
+			postContent += hashmap[key] + "%%";
 		}
-
+			
+		JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings", postContent, callback => {
+			
 #if UNITY_2017_1_OR_NEWER
-		RemoteSettings.ForceUpdate ();
+			RemoteSettings.ForceUpdate ();
 #endif
+			isDone (true);
+		});
 	}
 }
 
