@@ -46,7 +46,8 @@ public class JsonNetwork : MonoBehaviour
 		} 
 		else 
 		{
-			callback(www.error);
+			Debug.Log(www.error);
+
 		}
 	}
 
@@ -71,7 +72,8 @@ public class JsonNetwork : MonoBehaviour
 		} 
 		else 
 		{
-			callback(www.error);
+			Debug.Log(www.error);
+
 		}
 	}
 	
