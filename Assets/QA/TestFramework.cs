@@ -63,7 +63,7 @@ public class CDTest : Attribute
 		this.compareType = compareType;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
-		
+
 		foreach (int value in Result) 
 		{
 			this.expectedResult.Add(value);
@@ -85,7 +85,7 @@ public class CDTest : Attribute
 		this.compareType = compareType;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
-		
+
 		foreach (float value in Result) 
 		{
 			this.expectedResult.Add(value);
@@ -107,7 +107,7 @@ public class CDTest : Attribute
 		this.compareType = compareType;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
-		
+
 		foreach (bool value in Result) 
 		{
 			this.expectedResult.Add(value);
@@ -129,7 +129,7 @@ public class CDTest : Attribute
 		this.compareType = Assert.DoThrowException;
 		this.title = title;
 		this.testrail_CaseNumber = testrail_CaseNumber;
-		
+
 		foreach (Type value in Result) 
 		{
 			this.expectedResult.Add(value);
@@ -141,21 +141,21 @@ public class TestFramework : MonoBehaviour
 {
 	public void Start()
 	{
-		Debug.Log("Initilizing");
-		RemoteSettingsFake.Initilize (isDone => {
-			Debug.Log("Initilized");
-			RemoteSettingsFake.SetString("fake_string", "string");
-			RemoteSettingsFake.SetBool("fake_bool", true);
-			RemoteSettingsFake.SetFloat("fake_float", 2.0f);
-			RemoteSettingsFake.SetInt("fake_int", 6);
-			RemoteSettingsFake.Save(isDone2 => {
-				
-			});
-		});
+		//		Debug.Log("Initilizing");
+		//		RemoteSettingsFake.Initilize (isDone => {
+		//			Debug.Log("Initilized");
+		//			RemoteSettingsFake.SetString("fake_string", "string");
+		//			RemoteSettingsFake.SetBool("fake_bool", true);
+		//			RemoteSettingsFake.SetFloat("fake_float", 2.0f);
+		//			RemoteSettingsFake.SetInt("fake_int", 6);
+		//			RemoteSettingsFake.Save(isDone2 => {
+		//				
+		//			});
+		//		});
 
-		// StartCoroutine(StartTest());
+		StartCoroutine(StartTest());
 	}
-	
+
 	/// <summary>
 	/// Start test main method.
 	/// </summary>
@@ -193,12 +193,12 @@ public class TestFramework : MonoBehaviour
 		while (serverResult == "deny")
 		{
 			bool callbackCompleted = false;
-			
+
 			JsonNetwork.GetInstance ().PostServerCommand ("request", ClientID, callback => {
 				serverResult = callback;
 				callbackCompleted = true;
 			});
-			
+
 			while (!callbackCompleted)
 			{
 				yield return new WaitForSeconds (0.1f);
@@ -215,7 +215,7 @@ public class TestFramework : MonoBehaviour
 		foreach (MethodInfo mInfo in type.GetMethods()) 
 		{
 			yield return new WaitForSeconds (0.1f);
-			
+
 			// Get custom attribute from each method.
 			CDTest[] attrs = mInfo.GetCustomAttributes(typeof(CDTest), false) as CDTest[];
 
@@ -223,7 +223,7 @@ public class TestFramework : MonoBehaviour
 			{
 				if (attr != null)
 				{
-					// If the type if eventPayload, save it later
+					// If the type is eventPayload, save it later
 					if (attr.compareType == Assert.EventPayload) 
 					{
 						EventPayloadList.Add (attr);
@@ -245,7 +245,7 @@ public class TestFramework : MonoBehaviour
 					catch (Exception e)
 					{
 						HasException = true;
-						Result = e;
+						Result = e.GetBaseException().Message;
 
 						if (attr.compareType == Assert.DoThrowException)
 						{
@@ -382,7 +382,9 @@ public class TestFramework : MonoBehaviour
 					IfPass = VerifyServerPayload(serverResult, attr.expectedResult);
 				}
 
-				string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ConvertToString(attr.expectedResult), serverResult, attr.compareType);
+				Debug.Log(string.Format("{0}, status is [{1}]", attr.title, IfPass));
+
+				string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ConvertToString(attr.expectedResult), ConverJsonToString(serverResult), attr.compareType);
 				TestResultTable.Add(IfPass);
 				TestCase testResult = new TestCase(string.Format("|EventPayload| Verify {0}|{1}", attr.title, Payloads [attr.title]), IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
 				JsonNetwork.GetInstance ().PushResultToServer(branchInfo, ClientID, testResult);
@@ -396,14 +398,14 @@ public class TestFramework : MonoBehaviour
 
 		// Remove all history from the server
 		JsonNetwork.GetInstance ().PostServerCommand ("finish", string.Format("{0}:{1}:{2}", ClientID, TestResultTable.FindAll(PassTest).Count, TestResultTable.Count), isDone => {Debug.Log(isDone);});
-			
+
 		// Shut down in 5 seconds after test run.
 		for (int i = 5; i > 0; i--) 
 		{
 			PushScreen(string.Format("Completed, {0}/{1} Passed. Shut down in {2} seconds", TestResultTable.FindAll(PassTest).Count, TestResultTable.Count, i));
 			yield return new WaitForSeconds (1f);
 		}
-		
+
 		if (!GameObject.Find("TurnOff").GetComponent<Toggle>().isOn)
 			Application.Quit ();
 	}
@@ -425,16 +427,33 @@ public class TestFramework : MonoBehaviour
 	/// </summary>
 	private string ConvertToString(List<object> Result)
 	{
+		if (Result == null || Result.Count == 0) 
+		{
+			return "";
+		}
+
 		string converted = null;
+		int index = 1;
 
 		foreach (object o in Result) 
 		{
-			converted += o.ToString () + ",";
+			converted += o.ToString ();
+
+			if (index % 2 == 0)
+			{
+				converted += ";";
+			}
+			else
+			{
+				converted += ",";
+			}
+
+			index++;
 		}
 
 		return converted;
 	}
-		
+
 	/// <summary>
 	/// Show branchInfo to the UI.
 	/// </summary>
@@ -488,6 +507,27 @@ public class TestFramework : MonoBehaviour
 
 		return true;
 	}
+
+	/// <summary>
+	/// Conver json to normal string
+	/// </summary>
+	private string ConverJsonToString(string JsonString)
+	{
+		if (JsonString == null || JsonString.Length == 0 || JsonString.Equals("none")) 
+		{
+			return "";
+		}
+
+		Dictionary<string, object> Json = MiniJSON.Json.Deserialize (JsonString) as Dictionary<string, object>;
+		string result = "";
+
+		foreach (string str in Json.Keys) 
+		{
+			result += str + "," + Json[str] + ";"; 
+		}
+
+		return result;
+	}
 }
 
 public class RemoteSettingsFake
@@ -528,7 +568,7 @@ public class RemoteSettingsFake
 	public static void Save(Action<bool> isDone)
 	{
 		string postContent = "";
-		
+
 		foreach (string key in hashmap.Keys) 
 		{
 			postContent += key + "&&";
@@ -556,17 +596,13 @@ public class RemoteSettingsFake
 
 			postContent += hashmap[key] + "%%";
 		}
-			
+
 		JsonNetwork.GetInstance ().PostServerCommand ("remoteSettings", postContent, callback => {
-			
-#if UNITY_2017_1_OR_NEWER
+
+			#if UNITY_2017_1_OR_NEWER
 			RemoteSettings.ForceUpdate ();
-#endif
+			#endif
 			isDone (true);
 		});
 	}
 }
-
-
-
-
