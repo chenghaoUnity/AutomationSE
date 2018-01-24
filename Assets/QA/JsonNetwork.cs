@@ -5,7 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System.IO;
 using System;
+using System.Threading.Tasks;
 using UnityEngine.Networking;
+using System.Globalization;
 
 public class JsonNetwork : MonoBehaviour 
 {
@@ -77,7 +79,7 @@ public class JsonNetwork : MonoBehaviour
 	
 	public void PushResultToServer(string BranchInfo, string guid, TestCase testCase) 
 	{
-		string systemTime = System.DateTime.Now.ToString ("MMM d, yyyy");
+        string systemTime = System.DateTime.Now.ToString ("MMM d, yyyy", new CultureInfo("en-US"));
 		string unity = Application.unityVersion.Replace ('.', ' ');
 		string testTitle = testCase.getDescitpion ();
 

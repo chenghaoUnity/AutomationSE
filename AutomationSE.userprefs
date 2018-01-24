@@ -1,14 +1,20 @@
-﻿<Properties StartupItem="Assembly-CSharp.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QA/TestFramework.cs">
+﻿<Properties StartupConfiguration="{DD0AD1EA-702E-76BC-ACF5-0379512C46BA}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QA/TestSuite.cs">
     <Files>
-      <File FileName="Assets/QA/TestSuite.cs" Line="777" Column="1" />
-      <File FileName="Assets/QA/TestFramework.cs" Line="635" Column="3" />
-      <File FileName="Assets/QA/JsonNetwork.cs" Line="24" Column="31" />
+      <File FileName="../analytics-video-heatmaps/Assets/AssetStorePackage/Plugins/RawDataExportImporter/RawDataClient.cs" Line="107" Column="16" />
+      <File FileName="Assets/QA/TestCase.cs" Line="1" Column="1" />
+      <File FileName="Assets/QA/TestFramework.cs" Line="232" Column="22" />
+      <File FileName="Assets/QA/TestSuite.cs" Line="781" Column="23" />
+      <File FileName="Assets/QA/JsonNetwork.cs" Line="16" Column="53" />
+      <File FileName="Assets/QA/RemoteSettingsFake.cs" Line="82" Column="30" />
     </Files>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.AutomationSE PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp-firstpass PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
 </Properties>
