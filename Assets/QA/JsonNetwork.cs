@@ -35,21 +35,14 @@ public class JsonNetwork : MonoBehaviour
 		WWW www = new WWW("https://obscure-shelf-46410.herokuapp.com/events/" + methodName);
 		yield return www;
 
-		if (www.error == null) 
-		{
-			if (www.text == null) 
-			{
-				callback (null);
-			} 
-			else 
-			{
-				callback (www.text);
-			}
-		} 
-		else 
-		{
-			callback(www.error);
-		}
+        if (www.error == null || www.error.Length == 0)
+        {
+            callback(www.text);
+        }
+        else
+        {
+            callback(www.error);
+        }
 	}
 
 	private IEnumerator PostText(string methodName, string POST, Action<string> callback) 
@@ -59,17 +52,10 @@ public class JsonNetwork : MonoBehaviour
 
 		WWW www = new WWW("https://obscure-shelf-46410.herokuapp.com/events/" + methodName, System.Text.Encoding.UTF8.GetBytes(POST), headers);
 		yield return www;
-		
-		if (www.error == null) 
+
+        if (www.error == null || www.error.Length == 0) 
 		{
-			if (www.text == null) 
-			{
-				callback (null);
-			} 
-			else 
-			{
-				callback (www.text);
-			}
+            callback(www.text);
 		} 
 		else 
 		{
@@ -94,6 +80,7 @@ public class JsonNetwork : MonoBehaviour
 		url = string.Format (url, WWW.EscapeURL(systemTime), WWW.EscapeURL(BranchInfo), WWW.EscapeURL(unity), WWW.EscapeURL(guid), WWW.EscapeURL(testTitle));
 
 		StartCoroutine (PUT (url, json));
+        GameObject.Find("InputField").GetComponent<InputField>().text += Environment.NewLine + Environment.NewLine + string.Format("{0} [{1}] {2}", testTitle, result, failReason);
 	}
 
 	private IEnumerator PUT(string url, string content)

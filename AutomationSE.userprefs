@@ -1,12 +1,12 @@
 ﻿<Properties StartupConfiguration="{DD0AD1EA-702E-76BC-ACF5-0379512C46BA}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QA/TestSuite.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QA/JsonNetwork.cs">
     <Files>
-      <File FileName="../analytics-video-heatmaps/Assets/AssetStorePackage/Plugins/RawDataExportImporter/RawDataClient.cs" Line="107" Column="16" />
-      <File FileName="Assets/QA/TestCase.cs" Line="1" Column="1" />
-      <File FileName="Assets/QA/TestFramework.cs" Line="232" Column="22" />
-      <File FileName="Assets/QA/TestSuite.cs" Line="781" Column="23" />
-      <File FileName="Assets/QA/JsonNetwork.cs" Line="16" Column="53" />
-      <File FileName="Assets/QA/RemoteSettingsFake.cs" Line="82" Column="30" />
+      <File FileName="Assets/QA/TestSuite.cs" Line="813" Column="50" />
+      <File FileName="Assets/TutorialManager/Runtime/TutorialManager.cs" Line="19" Column="47" />
+      <File FileName="Assets/QA/RemoteSettingsFake.cs" Line="151" Column="11" />
+      <File FileName="Assets/QA/TestFramework.cs" Line="404" Column="65" />
+      <File FileName="Assets/TutorialManager/Runtime/ABTestingWrapper.cs" Line="178" Column="9" />
+      <File FileName="Assets/QA/JsonNetwork.cs" Line="67" Column="14" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

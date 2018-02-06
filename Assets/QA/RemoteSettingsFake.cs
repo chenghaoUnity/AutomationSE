@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class RemoteSettingsFake : MonoBehaviour
 {
-    #if UNITY_2017_1_OR_NEWER
+#if UNITY_2017_1_OR_NEWER
     public static RemoteSettingsFake GetInstance()
     {
         return GameObject.FindObjectOfType<RemoteSettingsFake>();
@@ -83,6 +83,7 @@ public class RemoteSettingsFake : MonoBehaviour
 
         JsonNetwork.GetInstance().PostServerCommand("remoteSettings/remove", key, callback =>
         {
+            hashmap.Remove(key);
             _removeAction = false;
         });
     }
@@ -124,15 +125,28 @@ public class RemoteSettingsFake : MonoBehaviour
             postContent += hashmap[key] + "%%";
         }
 
-        _saveAction = true;
-        JsonNetwork.GetInstance().PostServerCommand("remoteSettings/set", postContent, callback =>
+
+        if (postContent != "" && postContent.Length != 0)
         {
+            _saveAction = true;
+            JsonNetwork.GetInstance().PostServerCommand("remoteSettings/set", postContent, callback =>
+            {
+                RemoteSettings.ForceUpdate();
+                RemoteSettings.Updated += () =>
+                {
+                    _saveAction = false;
+                };
+            });
+        }
+        else
+        {
+            _saveAction = true;
             RemoteSettings.ForceUpdate();
             RemoteSettings.Updated += () =>
             {
                 _saveAction = false;
             };
-        });
+        }
     }
     #endif
 }

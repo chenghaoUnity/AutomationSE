@@ -5,6 +5,7 @@ using System;
 using System.Reflection;
 using UnityEngine.UI;
 using System.Threading;
+using System.Diagnostics.Contracts;
 
 public enum Assert
 {
@@ -141,7 +142,7 @@ public class CDTest : Attribute
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 public class RemoteSettingsPreSet : Attribute
 {
-    public RemoteSettingsPreSet(){}
+    public RemoteSettingsPreSet() { }
 }
 
 public class TestFramework : MonoBehaviour
@@ -156,6 +157,11 @@ public class TestFramework : MonoBehaviour
     /// </summary>
     private IEnumerator StartTest()
     {
+        // Force to send all reminding/ old events
+#if UNITY_5_5_OR_NEWER
+        UnityEngine.Analytics.Analytics.FlushEvents();
+#endif
+
         // Get the branch information.
         string branchInfo = Resources.Load<TextAsset>("branchInfo").ToString();
         string ClientID = Resources.Load<TextAsset>("ClientID").ToString();
@@ -176,9 +182,6 @@ public class TestFramework : MonoBehaviour
 
         // Create Dictionary for storing the payload info
         Dictionary<string, int> Payloads = new Dictionary<string, int>();
-
-        // Create List for storing the Assert.EventPayload
-        List<CDTest> EventPayloadList = new List<CDTest>();
 
         // Request server, wait if server is busy
         bool isServerReady = false;
@@ -212,16 +215,40 @@ public class TestFramework : MonoBehaviour
         {
             yield return new WaitForSeconds(0.1f);
 
+#if UNITY_2017_1_OR_NEWER
+            while (!RemoteSettingsFake.GetInstance().Ready())
+            {
+                yield return new WaitForSeconds(0.5f);
+            }
+#endif
+
+            // Define all the common varibles.
+            bool HasException = false;
+            object Result;
+            Exception Exception = new KeyNotFoundException();
+
+            // Run the method once.
+            try
+            {
+                Result = mInfo.Invoke(testSuite, null);
+#if UNITY_5_5_OR_NEWER
+                UnityEngine.Analytics.Analytics.FlushEvents();
+#endif
+            }
+            catch (Exception e)
+            {
+                Exception = e;
+                HasException = true;
+                Result = e.GetBaseException().Message;
+            }
+
             // Get custom attribute from each method.
             object[] attrs = mInfo.GetCustomAttributes(false);
-
-            // CDTest[] attrs = mInfo.GetCustomAttributes(typeof(CDTest), false) as CDTest[];
 
             foreach (object attrubution in attrs)
             {
                 if (attrubution != null)
                 {
-                    
 #if UNITY_2017_1_OR_NEWER
                     while (!RemoteSettingsFake.GetInstance().Ready())
                     {
@@ -234,101 +261,143 @@ public class TestFramework : MonoBehaviour
                         continue;
                     }
 #endif
+
+                    // Define local result varible.
                     CDTest attr = (CDTest)attrubution;
-
-                    // If the type is eventPayload, save it later
-                    if (attr.compareType == Assert.EventPayload)
-                    {
-                        EventPayloadList.Add(attr);
-                        continue;
-                    }
-
-                    // Define all the varibles
-                    bool IfPass = false;
-                    bool HasException = false;
-                    object Result;
+                    bool IfPass = true;
 
                     // Showing progress on the screen.
                     PushScreen(string.Format("Running Test {0} '{1}'", TestResultTable.Count + 1, attr.title));
 
-                    try
+                    // If the type is eventPayload...
+                    if (attr.compareType == Assert.EventPayload)
                     {
-                        Result = mInfo.Invoke(testSuite, null);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.Log(e);
-
-                        HasException = true;
-                        Result = e.GetBaseException().Message;
-
-                        if (attr.compareType == Assert.DoThrowException)
+                        // Add count to the Dictionary
+                        if (!Payloads.ContainsKey(attr.title))
                         {
-                            IfPass = true;
-
-                            for (int i = 0; i < (attr.expectedResult).Count; i++)
-                            {
-                                IfPass = e.InnerException.GetType().Equals(attr.expectedResult[i]);
-                                if (IfPass) break;
-                            }
-                        }
-
-                        if (attr.compareType == Assert.DoNotThrowException)
-                        {
-                            IfPass = false;
-
-                            for (int i = 0; i < (attr.expectedResult).Count; i++)
-                            {
-                                IfPass = !e.InnerException.GetType().Equals(attr.expectedResult[i]);
-                                if (!IfPass) break;
-                            }
-                        }
-                    }
-
-                    if (!HasException)
-                    {
-                        if (attr.compareType == Assert.DoThrowException)
-                        {
-                            IfPass = false;
-                        }
-                        else if (attr.compareType == Assert.DoNotThrowException)
-                        {
-                            IfPass = true;
+                            Payloads.Add(attr.title, 0);
                         }
                         else
                         {
-                            for (int i = 0; i < (attr.expectedResult).Count; i++)
+                            Payloads[attr.title] = Payloads[attr.title] + 1;
+                        }
+
+                        // Show progress on the screen.
+                        PushScreen(string.Format("Running Test {0} '{1}'", TestResultTable.Count + 1, string.Format("|EventPayload| Verify {0}|{1}", attr.title, Payloads[attr.title])));
+
+                        // Start the timeout timer
+                        float timer = 0f;
+                        StartCoroutine(TimedoutTimer(timer_ =>
+                        {
+                            // Debug.Log("timer: " + timer);
+                            timer = timer_;
+                        }));
+
+                        // Check if the server is ready for this event
+                        serverResult = "none";
+
+                        while (serverResult == "none" || serverResult == "")
+                        {
+                            bool callbackCompleted = false;
+
+                            JsonNetwork.GetInstance().RunServerCommand(string.Format("{0}/{1}", attr.title, Payloads[attr.title]), callback =>
                             {
-                                if (attr.compareType == Assert.AreEquals)
-                                {
-                                    IfPass = Result.Equals(attr.expectedResult[i]);
-                                    if (IfPass) break;
-                                }
-                                else if (attr.compareType == Assert.AreNotEquals)
-                                {
-                                    IfPass = !Result.Equals(attr.expectedResult[i]);
-                                    if (!IfPass) break;
-                                }
-                                else if (attr.compareType == Assert.Less)
-                                {
-                                    IfPass = (float)(Result) < (float)attr.expectedResult[i];
-                                    if (!IfPass) break;
-                                }
-                                else if (attr.compareType == Assert.LessOREquals)
-                                {
-                                    IfPass = (float)(Result) <= (float)attr.expectedResult[i];
-                                    if (!IfPass) break;
-                                }
-                                else if (attr.compareType == Assert.Greater)
-                                {
-                                    IfPass = (float)(Result) > (float)attr.expectedResult[i];
-                                    if (!IfPass) break;
-                                }
-                                else if (attr.compareType == Assert.GreaterOrEquals)
-                                {
-                                    IfPass = (float)(Result) >= (float)attr.expectedResult[i];
-                                    if (!IfPass) break;
-                                }
+                                serverResult = callback;
+                                callbackCompleted = true;
+                            });
+
+                            while (!callbackCompleted)
+                            {
+                                yield return new WaitForSeconds(0.1f);
+                            }
+
+                            if (serverResult == "none" || serverResult == "")
+                            {
+                                yield return new WaitForSeconds(2f);
+                            }
+
+                            if (timer > 5f)
+                            {
+                                break;
+                            }
+                        }
+
+                        IfPass = false;
+                        if (timer < 5f)
+                        {
+                            IfPass = VerifyServerPayload(serverResult, attr.expectedResult);
+                        }
+
+                        Debug.Log(string.Format("[{0}], status is [{1}]", attr.title, IfPass));
+
+                        string _FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ConvertToString(attr.expectedResult), ConverJsonToString(serverResult), attr.compareType);
+                        TestResultTable.Add(IfPass);
+                        TestCase _testResult = new TestCase(string.Format("|EventPayload| Verify {0}|{1}", attr.title, Payloads[attr.title]), IfPass, _FailedReason, DateTime.Now, attr.testrail_CaseNumber);
+                        JsonNetwork.GetInstance().PushResultToServer(branchInfo, ClientID, _testResult);
+                        continue;
+                    }
+
+                    if (attr.compareType == Assert.DoThrowException)
+                    {
+                        IfPass = true;
+
+                        for (int i = 0; i < (attr.expectedResult).Count; i++)
+                        {
+                            IfPass = Exception.InnerException.GetType().Equals(attr.expectedResult[i]);
+                            if (IfPass) break;
+                        }
+                    }
+                    else if (attr.compareType == Assert.DoNotThrowException)
+                    {
+                        IfPass = false;
+
+                        for (int i = 0; i < (attr.expectedResult).Count; i++)
+                        {
+                            IfPass = !Exception.InnerException.GetType().Equals(attr.expectedResult[i]);
+                            if (!IfPass) break;
+                        }
+                    }
+                    else if (!HasException && attr.compareType == Assert.DoThrowException)
+                    {
+                        IfPass = false;
+                    }
+                    else if (!HasException && attr.compareType == Assert.DoNotThrowException)
+                    {
+                        IfPass = true;
+                    }
+                    else if (!HasException && attr.compareType != Assert.DoThrowException && attr.compareType != Assert.DoNotThrowException)
+                    {
+                        for (int i = 0; i < (attr.expectedResult).Count; i++)
+                        {
+                            if (attr.compareType == Assert.AreEquals)
+                            {
+                                IfPass = Result.Equals(attr.expectedResult[i]);
+                                if (IfPass) break;
+                            }
+                            else if (attr.compareType == Assert.AreNotEquals)
+                            {
+                                IfPass = !Result.Equals(attr.expectedResult[i]);
+                                if (!IfPass) break;
+                            }
+                            else if (attr.compareType == Assert.Less)
+                            {
+                                IfPass = (float)(Result) < (float)attr.expectedResult[i];
+                                if (!IfPass) break;
+                            }
+                            else if (attr.compareType == Assert.LessOREquals)
+                            {
+                                IfPass = (float)(Result) <= (float)attr.expectedResult[i];
+                                if (!IfPass) break;
+                            }
+                            else if (attr.compareType == Assert.Greater)
+                            {
+                                IfPass = (float)(Result) > (float)attr.expectedResult[i];
+                                if (!IfPass) break;
+                            }
+                            else if (attr.compareType == Assert.GreaterOrEquals)
+                            {
+                                IfPass = (float)(Result) >= (float)attr.expectedResult[i];
+                                if (!IfPass) break;
                             }
                         }
                     }
@@ -341,83 +410,6 @@ public class TestFramework : MonoBehaviour
                     JsonNetwork.GetInstance().PushResultToServer(branchInfo, ClientID, testResult);
                 }
             }
-        }
-
-        // If there are test regarding Payload verify
-        if (EventPayloadList.Count != 0)
-        {
-            // Force to send the events
-#if UNITY_5_5_OR_NEWER
-            UnityEngine.Analytics.Analytics.FlushEvents();
-
-            // Run through all Assert.EventPayload methods
-            foreach (CDTest attr in EventPayloadList)
-            {
-                yield return new WaitForSeconds(0.1f);
-
-                // Add count to the Dictionary
-                if (!Payloads.ContainsKey(attr.title))
-                {
-                    Payloads.Add(attr.title, 0);
-                }
-                else
-                {
-                    Payloads[attr.title] = Payloads[attr.title] + 1;
-                }
-
-                // Show progress on the screen.
-                PushScreen(string.Format("Running Test {0} '{1}'", TestResultTable.Count + 1, string.Format("|EventPayload| Verify {0}|{1}", attr.title, Payloads[attr.title])));
-
-                // Start the timeout timer
-                float timer = 0f;
-                StartCoroutine(TimedoutTimer(timer_ =>
-                {
-                    timer = timer_;
-                }));
-
-                // Check if the server is ready for this event
-                serverResult = "none";
-
-                while (serverResult == "none")
-                {
-                    bool callbackCompleted = false;
-
-                    JsonNetwork.GetInstance().RunServerCommand(string.Format("{0}/{1}", attr.title, Payloads[attr.title]), callback =>
-                    {
-                        serverResult = callback;
-                        callbackCompleted = true;
-                    });
-
-                    while (!callbackCompleted)
-                    {
-                        yield return new WaitForSeconds(0.1f);
-                    }
-
-                    if (serverResult == "none")
-                    {
-                        yield return new WaitForSeconds(2f);
-                    }
-
-                    if (timer > 5f)
-                    {
-                        break;
-                    }
-                }
-
-                bool IfPass = false;
-                if (timer < 5f)
-                {
-                    IfPass = VerifyServerPayload(serverResult, attr.expectedResult);
-                }
-
-                Debug.Log(string.Format("[{0}], status is [{1}]", attr.title, IfPass));
-
-                string FailedReason = IfPass == true ? null : string.Format("Expected result is {0} while real result is {1}. The compare type is {2}", ConvertToString(attr.expectedResult), ConverJsonToString(serverResult), attr.compareType);
-                TestResultTable.Add(IfPass);
-                TestCase testResult = new TestCase(string.Format("|EventPayload| Verify {0}|{1}", attr.title, Payloads[attr.title]), IfPass, FailedReason, DateTime.Now, attr.testrail_CaseNumber);
-                JsonNetwork.GetInstance().PushResultToServer(branchInfo, ClientID, testResult);
-            }
-#endif
         }
 
         PushScreen("Finish sending test result");

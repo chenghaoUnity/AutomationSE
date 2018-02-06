@@ -779,13 +779,39 @@ public class TestSuite
     public void RemoteSettingsPreSet01()
     {
         RemoteSettingsFake.GetInstance().Initilize();
-        RemoteSettingsFake.GetInstance().SetString("_string", "_stringValue");
+        RemoteSettingsFake.GetInstance().SetBool("show_tutorial", true);
+        RemoteSettingsFake.GetInstance().SetBool("show_tutorial_a", true);
+        RemoteSettingsFake.GetInstance().SetBool("show_tutorial_b", false);
+        RemoteSettingsFake.GetInstance().SetFloat("percentage_a", 0.0f);
+        RemoteSettingsFake.GetInstance().SetFloat("percentage_b", 1.0f);
+        RemoteSettingsFake.GetInstance().SetString("ab_test_name", "test_name_value");
         RemoteSettingsFake.GetInstance().Save();
     }
 
-    [CDTest(Assert.AreEquals, "Test Remote Setting GetString()", "000010", "_stringValue")]
-    public string testRemoteSettingsGetString()
+    [CDTest(Assert.AreEquals, "|Tutorial Manager| when precentage_b is 1f, show tutorial should be false", "20859", false)]
+    public bool TutorialManager01()
     {
-        return RemoteSettings.GetString("_string");
+        PlayerPrefs.DeleteKey("unity_analytics_ab_test_bucket");
+        return TutorialManager.ShowTutorial();
+    }
+
+    [RemoteSettingsPreSet]
+    public void RemoteSettingsPreSet02()
+    {
+        RemoteSettingsFake.GetInstance().Initilize();
+        RemoteSettingsFake.GetInstance().SetBool("show_tutorial", true);
+        RemoteSettingsFake.GetInstance().SetBool("show_tutorial_a", true);
+        RemoteSettingsFake.GetInstance().SetBool("show_tutorial_b", false);
+        RemoteSettingsFake.GetInstance().SetFloat("percentage_a", 1.0f);
+        RemoteSettingsFake.GetInstance().SetFloat("percentage_b", 0.0f);
+        RemoteSettingsFake.GetInstance().SetString("ab_test_name", "test_name_value2");
+        RemoteSettingsFake.GetInstance().Save();
+    }
+
+    [CDTest(Assert.AreEquals, "|Tutorial Manager| when precentage_b is 0f, show tutorial should be true", "20859", true)]
+    public bool TutorialManager02()
+    {
+        PlayerPrefs.DeleteKey("unity_analytics_ab_test_bucket");
+        return TutorialManager.ShowTutorial();
     }
 }

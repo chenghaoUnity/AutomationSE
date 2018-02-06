@@ -675,7 +675,7 @@ PlayerSettings:
     UNet: 1
     Unity_Ads: 0
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 01f61529-f322-493d-8580-4b65bb4f4653
   projectName: SE Demo
   organizationId: unity-turnalan
