@@ -249,18 +249,10 @@ public class TestFramework : MonoBehaviour
             {
                 if (attrubution != null)
                 {
-#if UNITY_2017_1_OR_NEWER
-                    while (!RemoteSettingsFake.GetInstance().Ready())
+                    if (attrubution.GetType() != typeof(CDTest))
                     {
-                        yield return new WaitForSeconds(0.5f);
-                    }
-
-                    if (attrubution.GetType() == typeof(RemoteSettingsPreSet))
-                    {
-                        mInfo.Invoke(testSuite, null);
                         continue;
                     }
-#endif
 
                     // Define local result varible.
                     CDTest attr = (CDTest)attrubution;
