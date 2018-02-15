@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using UnityEngine.UI;
 using System.Threading;
-using System.Diagnostics.Contracts;
+// using System.Diagnostics.Contracts;
 
 public enum Assert
 {
@@ -183,6 +183,9 @@ public class TestFramework : MonoBehaviour
         // Create Dictionary for storing the payload info
         Dictionary<string, int> Payloads = new Dictionary<string, int>();
 
+		PushScreen("Initializing...");
+		yield return new WaitForSeconds (5f);
+
         // Request server, wait if server is busy
         bool isServerReady = false;
         PushScreen("Requesting access to the server");
@@ -288,7 +291,7 @@ public class TestFramework : MonoBehaviour
                         // Check if the server is ready for this event
                         serverResult = "none";
 
-                        while (serverResult == "none" || serverResult == "")
+                        while (serverResult == "none")
                         {
                             bool callbackCompleted = false;
 
@@ -303,19 +306,19 @@ public class TestFramework : MonoBehaviour
                                 yield return new WaitForSeconds(0.1f);
                             }
 
-                            if (serverResult == "none" || serverResult == "")
+                            if (serverResult == "none")
                             {
                                 yield return new WaitForSeconds(2f);
                             }
 
-                            if (timer > 5f)
+                            if (timer > 10f)
                             {
                                 break;
                             }
                         }
 
                         IfPass = false;
-                        if (timer < 5f)
+                        if (timer < 10f)
                         {
                             IfPass = VerifyServerPayload(serverResult, attr.expectedResult);
                         }

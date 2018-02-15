@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System.IO;
 using System;
-using System.Threading.Tasks;
 using UnityEngine.Networking;
 using System.Globalization;
 
@@ -80,7 +79,20 @@ public class JsonNetwork : MonoBehaviour
 		url = string.Format (url, WWW.EscapeURL(systemTime), WWW.EscapeURL(BranchInfo), WWW.EscapeURL(unity), WWW.EscapeURL(guid), WWW.EscapeURL(testTitle));
 
 		StartCoroutine (PUT (url, json));
-        GameObject.Find("InputField").GetComponent<InputField>().text += Environment.NewLine + Environment.NewLine + string.Format("{0} [{1}] {2}", testTitle, result, failReason);
+
+		GameObject TestResultTemplates = GameObject.Find ("Result").transform.Find ("Content").Find ("Text").gameObject;
+		GameObject Instance = Instantiate (TestResultTemplates, GameObject.Find ("Result").transform.Find ("Content").transform).gameObject;
+		Instance.transform.Find("Text").GetComponent<Text>().text = string.Format("{0}, {1}", testTitle, failReason);
+		Instance.SetActive (true);
+
+		if (result == "Pass")
+		{
+			Instance.GetComponent<Image> ().color = Color.green;
+		}
+		else
+		{
+			Instance.GetComponent<Image> ().color = Color.red;
+		}
 	}
 
 	private IEnumerator PUT(string url, string content)
