@@ -29,7 +29,7 @@ namespace UnityEngine.Analytics.Experimental.Tracker
 
         AnalyticsResult SendEvent ()
         {
-            if (m_Trigger.Test())
+            if (m_Trigger.Test(gameObject))
             {
                 return payload.Send();
             }

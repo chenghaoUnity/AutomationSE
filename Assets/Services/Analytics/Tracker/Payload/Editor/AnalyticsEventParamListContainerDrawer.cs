@@ -2,7 +2,6 @@
 using UnityEditor;
 using System.Collections.Generic;
 using System.Reflection;
-using Mono.Security.Cryptography;
 using UnityEditorInternal;
 
 namespace UnityEngine.Analytics.Experimental.Tracker
@@ -213,21 +212,31 @@ namespace UnityEngine.Analytics.Experimental.Tracker
             
             if (m_FieldsArray.arraySize - GetDisabledFieldCount() >= AnalyticsEventTrackerSettings.paramCountMax)
             {
-                SerializedProperty m_Value = field.FindPropertyRelative("m_Value");
-                SerializedProperty m_PropertyType = m_Value.FindPropertyRelative("m_PropertyType");
-                ValueProperty.PropertyType propertyType = (ValueProperty.PropertyType)m_PropertyType.enumValueIndex;
+                var m_Value = field.FindPropertyRelative("m_Value");
+                var m_PropertyType = m_Value.FindPropertyRelative("m_PropertyType");
+                var propertyType = (ValueProperty.PropertyType)m_PropertyType.enumValueIndex;
+                var enabled = propertyType != ValueProperty.PropertyType.Disabled;
+                var content = new GUIContent(k_RemoveParameter, EditorGUIUtility.IconContent("SpeedScale").image);
 
-                bool enabled = propertyType != ValueProperty.PropertyType.Disabled;
+                
                 GUI.enabled = enabled;
                 EditorGUI.PropertyField(rect, field);
                 GUI.enabled = true;
-
+                
                 if (!enabled)
                 {
-                    rect.yMax -= 2.0f * AnalyticsEventTrackerEditor.k_LineMargin;
-                    rect.yMin = rect.yMax - EditorGUIUtility.singleLineHeight - 2.0f * AnalyticsEventTrackerEditor.k_LineMargin;
-                    rect.xMin += AnalyticsEventTrackerEditor.k_LineMargin + AnalyticsEventTrackerEditor.k_LeftListMargin;
-                    EditorGUI.HelpBox(rect, k_RemoveParameter, MessageType.Warning);
+                    rect.xMin += AnalyticsEventTrackerEditor.k_LeftListMargin;
+                    var helpBoxHeight = EditorStyles.helpBox.CalcHeight(content, rect.width);
+                    rect.height = helpBoxHeight;
+                    //rect.yMax -= 2.0f * AnalyticsEventTrackerEditor.k_LineMargin;
+                    //rect.yMin = rect.yMax - helpBoxHeight - AnalyticsEventTrackerEditor.k_LineMargin;
+                    rect.yMin += EditorGUIUtility.singleLineHeight * 2f + AnalyticsEventTrackerEditor.k_LineMargin * 4f;
+                    rect.yMax = rect.yMin + helpBoxHeight;
+                    EditorGUI.HelpBox(
+                        rect, 
+                        k_RemoveParameter, 
+                        MessageType.Warning
+                    );
                 }
             }
             else
@@ -275,6 +284,29 @@ namespace UnityEngine.Analytics.Experimental.Tracker
         protected override float GetElementHeight()
         {
             return EditorGUIUtility.singleLineHeight * 4f;
+        }
+
+        protected override float GetElementHeight(int index)
+        {
+            if (m_FieldsArray.arraySize - GetDisabledFieldCount() >= AnalyticsEventTrackerSettings.paramCountMax)
+            {
+                var field = m_FieldsArray.GetArrayElementAtIndex(index);
+                var m_Value = field.FindPropertyRelative("m_Value");
+                var m_PropertyType = m_Value.FindPropertyRelative("m_PropertyType");
+                var propertyType = (ValueProperty.PropertyType)m_PropertyType.enumValueIndex;
+                var enabled = propertyType != ValueProperty.PropertyType.Disabled;
+
+                if (!enabled)
+                {
+                    var helpBoxHeight = EditorStyles.helpBox.CalcHeight(
+                        new GUIContent(k_RemoveParameter, EditorGUIUtility.IconContent("SpeedScale").image), 
+                        EditorGUIUtility.currentViewWidth - 86
+                    );
+                    return EditorGUIUtility.singleLineHeight * 3f + helpBoxHeight;
+                }
+            }
+
+            return GetElementHeight();
         }
 
         protected override void DrawHeader(Rect headerRect)

@@ -88,7 +88,7 @@ namespace UnityEngine.Analytics.Experimental.Tracker
                 );
             }
 
-            return AnalyticsEvent.Custom(name, GetParameters());
+            return AnalyticsEvent.Custom(name.Trim(), GetParameters());
         }
 
         IDictionary<string, object> GetParameters()

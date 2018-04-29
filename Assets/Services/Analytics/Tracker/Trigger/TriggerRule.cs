@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 
 namespace UnityEngine.Analytics.Experimental.Tracker
 {
@@ -28,20 +27,28 @@ namespace UnityEngine.Analytics.Experimental.Tracker
 
         public bool Test()
         {
-            // the rule was not set properly, so return true
-            if(m_Value.valueType == null)
-            {
-                return true;
-            }
+            bool error;
+            string message;
+            return Test(out error, out message);
+        }
 
-            // target does not exist
+        public bool Test (out bool error, out string message)
+        {
+            error = false;
+            message = null;
+            // Rule 'target' is not specified, or is missing
             if (m_Target == null || m_Target.GetValue() == null)
             {
+                error = true;
+                message = "rule target is not set";
                 return false;
             }
-            // target does not have specified property
-            if (m_Value == null || m_Value.propertyValue == null)
+
+            // Rule 'value' is not specified, or is missing
+            if (m_Value == null || m_Value.target == null || m_Value.propertyValue == null)
             {
+                error = true;
+                message = "rule value is not set";
                 return false;
             }
 
